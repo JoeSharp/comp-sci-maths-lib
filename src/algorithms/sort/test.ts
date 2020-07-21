@@ -1,4 +1,7 @@
-import bubbleSort from "./bubble";
+import bubbleSort from "./bubbleSort";
+import mergeSort from "./mergeSort";
+import quickSort from "./quickSort";
+import insertionSort from "./insertionSort";
 import { SortFunction } from "../types";
 import { generateRandomNumbers, arithmeticComparator } from "../common";
 
@@ -7,7 +10,15 @@ interface NamedSort {
   name: string;
   sort: SortFunction;
 }
-const algorithms: NamedSort[] = [{ name: "Bubble Sort", sort: bubbleSort }];
+const algorithms: NamedSort[] = [
+  { name: "Bubble Sort", sort: bubbleSort },
+  {
+    name: "Merge Sort",
+    sort: mergeSort,
+  },
+  { name: "Insertion Sort", sort: insertionSort },
+  { name: "Quick Sort", sort: quickSort },
+];
 
 // Create a test for each algorithm
 algorithms.forEach(({ name, sort }) => {

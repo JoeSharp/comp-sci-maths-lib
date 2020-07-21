@@ -1,5 +1,5 @@
-import { SortFunction } from "../../types";
-import { swap } from "../../common";
+import { SortFunction } from "../types";
+import { swap } from "../common";
 
 const bubbleSort: SortFunction = <T>(
   inputList: T[],
