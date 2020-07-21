@@ -4,3 +4,10 @@ export type SortFunction = <T>(
   inputList: T[],
   comparator: Comparator<T>
 ) => T[];
+
+export type MatchComparator<T> = (a: T) => number;
+
+export type SearchFunction = <T>(
+  inputList: T[],
+  match: MatchComparator<T>
+) => number;

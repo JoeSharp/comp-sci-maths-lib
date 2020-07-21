@@ -1,5 +1,5 @@
-/* 
-    This code was lifted from 
+/*
+    This code was lifted from
     https://www.geeksforgeeks.org/quick-sort/
 
     And converted from pseudo code to JavaScript.
