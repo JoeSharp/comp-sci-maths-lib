@@ -1,4 +1,4 @@
-import { SortFunction, Comparator } from "../../types";
+import { Comparator } from "../../types";
 
 function mergeSortRecurse<T>(
   inputList: T[],
@@ -51,10 +51,7 @@ function mergeSortRecurse<T>(
   return outputList;
 }
 
-const mergeSort: SortFunction = <T>(
-  inputList: T[],
-  comparator: Comparator<T>
-): T[] => {
+const mergeSort = <T>(inputList: T[], comparator: Comparator<T>): T[] => {
   if (inputList.length < 2) {
     return inputList;
   }

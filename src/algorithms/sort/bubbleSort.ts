@@ -1,10 +1,7 @@
-import { SortFunction } from "../../types";
+import { Comparator } from "../../types";
 import { swap } from "../common";
 
-const bubbleSort: SortFunction = <T>(
-  inputList: T[],
-  comparator: (a: T, b: T) => number
-): T[] => {
+const bubbleSort = <T>(inputList: T[], comparator: Comparator<T>): T[] => {
   const outputList: T[] = [...inputList];
 
   for (let top: number = outputList.length - 1; top > 0; top--) {

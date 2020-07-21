@@ -4,7 +4,9 @@ export type Optional<T> = T | undefined;
 
 export type Comparator<T> = (a: T, b: T) => number;
 
-export type SortFunction = <T>(
+export type VisitFunction<T> = (n: T) => any;
+
+export type SortFunction<T> = (
   inputList: T[],
   comparator: Comparator<T>
 ) => T[];

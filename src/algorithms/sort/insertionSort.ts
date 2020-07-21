@@ -1,10 +1,7 @@
-import { SortFunction, Comparator } from "../../types";
+import { Comparator } from "../../types";
 import { swap } from "../common";
 
-const insertionSort: SortFunction = <T>(
-  inputList: T[],
-  comparator: Comparator<T>
-): T[] => {
+const insertionSort = <T>(inputList: T[], comparator: Comparator<T>): T[] => {
   if (inputList.length < 2) {
     return inputList;
   }

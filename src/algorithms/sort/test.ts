@@ -8,7 +8,7 @@ import { generateRandomNumbers, arithmeticComparator } from "../common";
 // Associate each sort algorithm with a name so they can all be tested in same function
 interface NamedSort {
   name: string;
-  sort: SortFunction;
+  sort: SortFunction<any>;
 }
 const algorithms: NamedSort[] = [
   { name: "Bubble Sort", sort: bubbleSort },

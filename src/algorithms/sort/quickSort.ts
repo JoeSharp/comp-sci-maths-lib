@@ -4,7 +4,7 @@
 
     And converted from pseudo code to JavaScript.
 */
-import { SortFunction, Comparator } from "../../types";
+import { Comparator } from "../../types";
 import { swap } from "../common";
 
 /* This function takes last element as pivot, places
@@ -50,10 +50,7 @@ function quickSortRecurse<T>(
   }
 }
 
-const quickSort: SortFunction = <T>(
-  inputList: T[],
-  comparator: Comparator<T>
-): T[] => {
+const quickSort = <T>(inputList: T[], comparator: Comparator<T>): T[] => {
   if (inputList.length < 2) {
     return inputList;
   }

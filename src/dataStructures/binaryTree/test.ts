@@ -1,9 +1,7 @@
 import BinaryTree from "./BinaryTree";
 
 test("Binary Tree - Contains", () => {
-  const myTree = new BinaryTree<string>(undefined, (a, b) =>
-    a.localeCompare(b)
-  );
+  const myTree = new BinaryTree<string>((a, b) => a.localeCompare(b));
 
   myTree.add("B");
   myTree.add("A");

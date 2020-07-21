@@ -154,5 +154,3 @@ export default class LinkedList<T> {
     return arr.join(" ");
   }
 }
-
-module.exports = LinkedList;
