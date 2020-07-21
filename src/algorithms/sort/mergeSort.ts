@@ -1,4 +1,4 @@
-import { SortFunction, Comparator } from "../types";
+import { SortFunction, Comparator } from "../../types";
 
 function mergeSortRecurse<T>(
   inputList: T[],

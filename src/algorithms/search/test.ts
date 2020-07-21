@@ -1,4 +1,4 @@
-import { SearchFunction } from "../types";
+import { SearchFunction } from "../../types";
 
 import binarySearch from "./binarySearch";
 import linearSearch from "./linearSearch";

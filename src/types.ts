@@ -1,3 +1,7 @@
+export type MatchFunction<T> = (a: T) => boolean;
+
+export type Optional<T> = T | undefined;
+
 export type Comparator<T> = (a: T, b: T) => number;
 
 export type SortFunction = <T>(

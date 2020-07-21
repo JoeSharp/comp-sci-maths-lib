@@ -1,4 +1,4 @@
-import { SortFunction } from "../types";
+import { SortFunction } from "../../types";
 import { swap } from "../common";
 
 const bubbleSort: SortFunction = <T>(

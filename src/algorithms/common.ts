@@ -1,4 +1,4 @@
-import { Comparator } from "./types";
+import { Comparator } from "../types";
 
 function swap<T>(arr: T[], from: number, to: number) {
   const swapItem: T = arr[from];

@@ -1,4 +1,4 @@
-import { SortFunction, Comparator } from "../types";
+import { SortFunction, Comparator } from "../../types";
 import { swap } from "../common";
 
 const insertionSort: SortFunction = <T>(

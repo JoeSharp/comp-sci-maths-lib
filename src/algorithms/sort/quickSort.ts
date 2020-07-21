@@ -4,7 +4,7 @@
 
     And converted from pseudo code to JavaScript.
 */
-import { SortFunction, Comparator } from "../types";
+import { SortFunction, Comparator } from "../../types";
 import { swap } from "../common";
 
 /* This function takes last element as pivot, places

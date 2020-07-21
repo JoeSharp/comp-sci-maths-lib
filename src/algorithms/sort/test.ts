@@ -2,7 +2,7 @@ import bubbleSort from "./bubbleSort";
 import mergeSort from "./mergeSort";
 import quickSort from "./quickSort";
 import insertionSort from "./insertionSort";
-import { SortFunction } from "../types";
+import { SortFunction } from "../../types";
 import { generateRandomNumbers, arithmeticComparator } from "../common";
 
 // Associate each sort algorithm with a name so they can all be tested in same function

@@ -1,5 +1,5 @@
 import { NO_MATCH } from "./common";
-import { MatchComparator, SearchFunction } from "../types";
+import { MatchComparator, SearchFunction } from "../../types";
 
 /**
  * perform a linear search on an array
