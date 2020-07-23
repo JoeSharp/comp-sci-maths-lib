@@ -20,6 +20,19 @@ export default class Graph {
   }
 
   /**
+   * Register the existence of a page,
+   * this might be done to represent disconnected nodes,
+   * or to simply prepare the list of nodes before links are known.
+   *
+   * @param page The page to add
+   * @returns this, to allow method chaining
+   */
+  addPage(page: string): Graph {
+    this.pages.add(page);
+    return this;
+  }
+
+  /**
    * Add a new link to the graph, one direction only
    * @param {string} from The source node
    * @param {string} to The destination node
@@ -62,6 +75,12 @@ export default class Graph {
     return this;
   }
 
+  /**
+   * Find a link between a specific source and destination node.
+   * @param from The source node
+   * @param to The destination node
+   * @returns The link if one exists
+   */
   getLink(from: string, to: string): Optional<Link> {
     return this.links.find((l) => l.from === from && l.to === to);
   }
