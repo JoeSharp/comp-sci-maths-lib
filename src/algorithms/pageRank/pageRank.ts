@@ -75,13 +75,13 @@ export const iteratePageRank = ({
   const newRanks: PageRanks = { ...ranks };
 
   graph.getAllVertices().forEach((page) => {
-    const rank: number = graph.links
-      .filter((link) => link.to === page)
-      .map((link) => link.from)
+    const rank: number = graph.edges
+      .filter((edge) => edge.to === page)
+      .map((edge) => edge.from)
       .map(
         (incoming) =>
           newRanks[incoming] /
-          graph.links.filter((l) => l.from === incoming).length
+          graph.edges.filter((l) => l.from === incoming).length
       )
       .reduce((acc, curr) => acc + curr, 0);
 

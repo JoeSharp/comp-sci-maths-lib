@@ -2,72 +2,96 @@ import { Optional } from "../../types";
 
 /**
  * This class encapsulates a weighted directional graph.
- * Each link is stored as a separate object in an array
+ * Each Edge is stored as a separate object in an array
  */
-interface Link {
+interface Edge {
   from: string;
   to: string;
   weight: number;
 }
 
 export default class Graph {
-  pages: Set<string>;
-  links: Link[];
+  vertices: Set<string>;
+  edges: Edge[];
 
   constructor() {
-    this.pages = new Set();
-    this.links = [];
+    this.vertices = new Set();
+    this.edges = [];
   }
 
   /**
    * Register the existence of a page,
-   * this might be done to represent disconnected nodes,
-   * or to simply prepare the list of nodes before links are known.
+   * this might be done to represent disconnected vertexs,
+   * or to simply prepare the list of vertexs before edges are known.
    *
    * @param page The page to add
    * @returns this, to allow method chaining
    */
   addPage(page: string): Graph {
-    this.pages.add(page);
+    this.vertices.add(page);
     return this;
   }
 
   /**
-   * Add a new link to the graph, one direction only
-   * @param {string} from The source node
-   * @param {string} to The destination node
+   * Remove the existence of a page,
+   * will also remove any edges from/to the given page.
+   * @param page The page to remove
+   */
+  removePage(page: string): Graph {
+    this.vertices.delete(page);
+    this.edges = this.edges.filter(
+      ({ from, to }) => from === page || to === page
+    );
+
+    return this;
+  }
+
+  /**
+   *
+   * @param from The source vertex
+   * @param to The destination vertex
+   */
+  removeEdge(from: string, to: string): Graph {
+    this.edges = this.edges.filter((l) => !(l.from === from && l.to === to));
+    return this;
+  }
+
+  /**
+   * Add a new Edge to the graph, one direction only
+   * @param {string} from The source vertex
+   * @param {string} to The destination vertex
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addUnidirectionalLink(from: string, to: string, weight: number = 1.0) {
-    this.pages.add(from);
-    this.pages.add(to);
-    this.links = [
-      ...this.links.filter((l) => !(l.from === from && l.to === to)), // filter any existing link in this direction
+  addUnidirectionalEdge(from: string, to: string, weight: number = 1.0) {
+    this.vertices.add(from);
+    this.vertices.add(to);
+    this.edges = [
+      ...this.edges.filter((l) => !(l.from === from && l.to === to)), // filter any existing Edge in this direction
       { from, to, weight },
     ];
     return this;
   }
 
   /**
-   * Add a new link to the graph, add both directions
-   * @param {string} from The source node
-   * @param {string} to The destination node
+   * Add a new Edge to the graph, add both directions
+   * @param {string} from The source vertex
+   * @param {string} to The destination vertex
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addBiDirectionalLink(from: string, to: string, weight: number = 1.0) {
-    this.pages.add(from);
-    this.pages.add(to);
+  addBiDirectionalEdge(from: string, to: string, weight: number = 1.0) {
+    this.vertices.add(from);
+    this.vertices.add(to);
 
-    this.links = [
-      ...this.links.filter(
+    this.edges = [
+      ...this.edges.filter(
         (l) =>
           !(
             (l.from === from && l.to === to) ||
             (l.from === to && l.to === from)
           )
-      ), // filter any existing link in both directions
+      ), // filter any existing Edge in both directions
       { from, to, weight },
       { from: to, to: from, weight }, // add the other direction
     ];
@@ -76,47 +100,50 @@ export default class Graph {
   }
 
   /**
-   * Find a link between a specific source and destination node.
-   * @param from The source node
-   * @param to The destination node
-   * @returns The link if one exists
+   * Find a Edge between a specific source and destination vertex.
+   * @param from The source vertex
+   * @param to The destination vertex
+   * @returns The Edge if one exists
    */
-  getLink(from: string, to: string): Optional<Link> {
-    return this.links.find((l) => l.from === from && l.to === to);
+  getEdge(from: string, to: string): Optional<Edge> {
+    return this.edges.find((l) => l.from === from && l.to === to);
   }
 
   /**
-   * Access links coming into a specific vertex
+   * Access edges coming into a specific vertex
    * @param vertex The from vertex
    */
-  getIncoming(vertex: string): Link[] {
-    return this.links.filter((l) => l.to === vertex);
+  getIncoming(vertex: string): Edge[] {
+    return this.edges.filter((l) => l.to === vertex);
   }
 
   /**
-   * Access the links from a specific vertex
+   * Access the edges from a specific vertex
    * @param {string} vertex The from vertex
    */
-  getOutgoing(vertex: string): Link[] {
-    return this.links.filter((l) => l.from === vertex);
+  getOutgoing(vertex: string): Edge[] {
+    return this.edges.filter((l) => l.from === vertex);
   }
 
   /**
-   * This function will look for a link between the two nodes (in that specific direction)
-   * It will return the weight of the link between the two.
-   * If there is no link, it will return Infinity.
+   * This function will look for a Edge between the two vertexs (in that specific direction)
+   * It will return the weight of the Edge between the two.
+   * If there is no Edge, it will return Infinity.
    *
-   * @param {string} from The source node
-   * @param {string} to The destination node
-   * @return The weight of the link, or Infinity if there is no link.
+   * @param {string} from The source vertex
+   * @param {string} to The destination vertex
+   * @return The weight of the Edge, or Infinity if there is no Edge.
    */
-  getLinkWeight(from: string, to: string): number {
-    const link = this.getLink(from, to);
-    return !!link ? link.weight : Infinity;
+  getEdgeWeight(from: string, to: string): number {
+    const edge = this.getEdge(from, to);
+    return !!edge ? edge.weight : Infinity;
   }
 
+  /**
+   * Get a list of all the vertices in the graph
+   */
   getAllVertices(): string[] {
-    return [...this.pages];
+    return [...this.vertices];
   }
 
   /**
@@ -126,13 +153,13 @@ export default class Graph {
     return `Graph\n${this.getAllVertices()
       .map((page) => ({
         from: page,
-        links: this.getOutgoing(page),
+        edges: this.getOutgoing(page),
       })) // make the entries into a nicer looking object
       .map(
-        ({ from, links }) =>
-          `From: ${from}\n${links
-            .map((link) => `\tTo: ${link.to} (${link.weight})`)
-            .join("\n")}` // each outgoing link should be represented on it's own line
+        ({ from, edges }) =>
+          `From: ${from}\n${edges
+            .map(({ to, weight }) => `\tTo: ${to} (${weight})`)
+            .join("\n")}` // each outgoing Edge should be represented on it's own line
       )
       .join("\n")}`; // Each section will be separated by a newline
   }

@@ -25,23 +25,23 @@ test("Routing Algorithms - A*", () => {
   };
 
   const myGraph = new Graph()
-    .addBiDirectionalLink("S", "A", 7)
-    .addBiDirectionalLink("S", "B", 2)
-    .addBiDirectionalLink("S", "C", 3)
-    .addBiDirectionalLink("A", "D", 4)
-    .addBiDirectionalLink("A", "B", 3)
-    .addBiDirectionalLink("B", "D", 4)
-    .addBiDirectionalLink("B", "H", 1)
-    .addBiDirectionalLink("C", "L", 2)
-    .addBiDirectionalLink("D", "F", 5)
-    .addBiDirectionalLink("E", "K", 5)
-    .addBiDirectionalLink("E", "G", 2)
-    .addBiDirectionalLink("F", "H", 3)
-    .addBiDirectionalLink("G", "H", 2)
-    .addBiDirectionalLink("I", "L", 4)
-    .addBiDirectionalLink("I", "K", 4)
-    .addBiDirectionalLink("J", "L", 4)
-    .addBiDirectionalLink("J", "K", 4);
+    .addBiDirectionalEdge("S", "A", 7)
+    .addBiDirectionalEdge("S", "B", 2)
+    .addBiDirectionalEdge("S", "C", 3)
+    .addBiDirectionalEdge("A", "D", 4)
+    .addBiDirectionalEdge("A", "B", 3)
+    .addBiDirectionalEdge("B", "D", 4)
+    .addBiDirectionalEdge("B", "H", 1)
+    .addBiDirectionalEdge("C", "L", 2)
+    .addBiDirectionalEdge("D", "F", 5)
+    .addBiDirectionalEdge("E", "K", 5)
+    .addBiDirectionalEdge("E", "G", 2)
+    .addBiDirectionalEdge("F", "H", 3)
+    .addBiDirectionalEdge("G", "H", 2)
+    .addBiDirectionalEdge("I", "L", 4)
+    .addBiDirectionalEdge("I", "K", 4)
+    .addBiDirectionalEdge("J", "L", 4)
+    .addBiDirectionalEdge("J", "K", 4);
   const shortestPathTreeStoE: ShortestPathTree = dijstraks({
     graph: myGraph,
     sourceNode: "S",
@@ -56,20 +56,20 @@ test("Routing Algorithms - A*", () => {
 // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
 test("Routing Algorithms - Dijkstra", () => {
   const myGraph: Graph = new Graph()
-    .addBiDirectionalLink("0", "1", 4)
-    .addBiDirectionalLink("0", "7", 8)
-    .addBiDirectionalLink("1", "2", 8)
-    .addBiDirectionalLink("1", "7", 11)
-    .addBiDirectionalLink("2", "3", 7)
-    .addBiDirectionalLink("2", "8", 2)
-    .addBiDirectionalLink("2", "5", 4)
-    .addBiDirectionalLink("3", "4", 9)
-    .addBiDirectionalLink("3", "5", 14)
-    .addBiDirectionalLink("4", "5", 10)
-    .addBiDirectionalLink("5", "6", 2)
-    .addBiDirectionalLink("6", "7", 1)
-    .addBiDirectionalLink("6", "8", 6)
-    .addBiDirectionalLink("7", "8", 7);
+    .addBiDirectionalEdge("0", "1", 4)
+    .addBiDirectionalEdge("0", "7", 8)
+    .addBiDirectionalEdge("1", "2", 8)
+    .addBiDirectionalEdge("1", "7", 11)
+    .addBiDirectionalEdge("2", "3", 7)
+    .addBiDirectionalEdge("2", "8", 2)
+    .addBiDirectionalEdge("2", "5", 4)
+    .addBiDirectionalEdge("3", "4", 9)
+    .addBiDirectionalEdge("3", "5", 14)
+    .addBiDirectionalEdge("4", "5", 10)
+    .addBiDirectionalEdge("5", "6", 2)
+    .addBiDirectionalEdge("6", "7", 1)
+    .addBiDirectionalEdge("6", "8", 6)
+    .addBiDirectionalEdge("7", "8", 7);
 
   const viaNode = "0";
   const shortestPathTreeAll: ShortestPathTree = dijstraks({

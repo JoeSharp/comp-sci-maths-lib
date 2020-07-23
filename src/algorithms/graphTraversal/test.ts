@@ -4,15 +4,15 @@ import Graph from "../../dataStructures/graph/Graph";
 
 function createTestGraph() {
   return new Graph()
-    .addBiDirectionalLink("S", "A")
-    .addBiDirectionalLink("S", "B")
-    .addBiDirectionalLink("S", "C")
-    .addBiDirectionalLink("A", "D")
-    .addBiDirectionalLink("D", "G")
-    .addBiDirectionalLink("B", "E")
-    .addBiDirectionalLink("E", "G")
-    .addBiDirectionalLink("C", "F")
-    .addBiDirectionalLink("F", "G");
+    .addBiDirectionalEdge("S", "A")
+    .addBiDirectionalEdge("S", "B")
+    .addBiDirectionalEdge("S", "C")
+    .addBiDirectionalEdge("A", "D")
+    .addBiDirectionalEdge("D", "G")
+    .addBiDirectionalEdge("B", "E")
+    .addBiDirectionalEdge("E", "G")
+    .addBiDirectionalEdge("C", "F")
+    .addBiDirectionalEdge("F", "G");
 }
 
 test("Graph - Breadth First Search", () => {
@@ -20,10 +20,10 @@ test("Graph - Breadth First Search", () => {
 
   const items = breadthFirstSearch(myGraph, "S");
 
-  const directlyLinked = ["A", "B", "C"];
-  const transitivelyLinked = ["D", "E", "F", "G"];
-  directlyLinked.forEach((i) =>
-    transitivelyLinked.forEach((t) => {
+  const directlyEdgeed = ["A", "B", "C"];
+  const transitivelyEdgeed = ["D", "E", "F", "G"];
+  directlyEdgeed.forEach((i) =>
+    transitivelyEdgeed.forEach((t) => {
       const indexOfI = items.indexOf(i);
       const indexOfT = items.indexOf(t);
       expect(indexOfI).not.toBe(-1);

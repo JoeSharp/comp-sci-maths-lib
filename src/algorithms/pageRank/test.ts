@@ -16,11 +16,11 @@ import { PageRankState } from "./types";
 
 test("Page Rank", () => {
   const graph = new Graph()
-    .addUnidirectionalLink("a", "b")
-    .addUnidirectionalLink("b", "a")
-    .addUnidirectionalLink("b", "c")
-    .addUnidirectionalLink("b", "d")
-    .addUnidirectionalLink("d", "a");
+    .addUnidirectionalEdge("a", "b")
+    .addUnidirectionalEdge("b", "a")
+    .addUnidirectionalEdge("b", "c")
+    .addUnidirectionalEdge("b", "d")
+    .addUnidirectionalEdge("d", "a");
 
   let pageRankState: PageRankState = initialisePageRank(graph);
 
