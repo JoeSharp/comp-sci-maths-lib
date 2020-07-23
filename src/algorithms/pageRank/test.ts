@@ -7,12 +7,12 @@ const logger = winston.createLogger({
 });
 
 import {
-  PageRankState,
   initialisePageRank,
   iteratePageRank,
   extractPageRank,
 } from "./pageRank";
 import Graph from "../../dataStructures/graph/Graph";
+import { PageRankState } from "./types";
 
 test("Page Rank", () => {
   const graph = new Graph()
