@@ -2,7 +2,6 @@ import PriorityQueue from "../../dataStructures/queue/PriorityQueue";
 import Graph from "../../dataStructures/graph/Graph";
 import {
   ShortestPathTree,
-  ShortestPathForNode,
   ShortestPathWithNode,
   HeuristicCostFunction,
 } from "./types";

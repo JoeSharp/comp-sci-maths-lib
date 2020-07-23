@@ -16,11 +16,11 @@ import Graph from "../../dataStructures/graph/Graph";
 
 test("Page Rank", () => {
   const graph = new Graph()
-    .addLink("a", "b", false)
-    .addLink("b", "a", false)
-    .addLink("b", "c", false)
-    .addLink("b", "d", false)
-    .addLink("d", "a", false);
+    .addUnidirectionalLink("a", "b")
+    .addUnidirectionalLink("b", "a")
+    .addUnidirectionalLink("b", "c")
+    .addUnidirectionalLink("b", "d")
+    .addUnidirectionalLink("d", "a");
 
   let pageRankState: PageRankState = initialisePageRank(graph);
 

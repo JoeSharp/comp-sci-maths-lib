@@ -20,41 +20,44 @@ export default class Graph {
   }
 
   /**
-   *
+   * Add a new link to the graph, one direction only
    * @param {string} from The source node
    * @param {string} to The destination node
-   * @param {bool} biDirectional If this new link works in both directions
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addLink(
-    from: string,
-    to: string,
-    biDirectional: boolean = true,
-    weight: number = 1.0
-  ) {
+  addUnidirectionalLink(from: string, to: string, weight: number = 1.0) {
+    this.pages.add(from);
+    this.pages.add(to);
+    this.links = [
+      ...this.links.filter((l) => !(l.from === from && l.to === to)), // filter any existing link in this direction
+      { from, to, weight },
+    ];
+    return this;
+  }
+
+  /**
+   * Add a new link to the graph, add both directions
+   * @param {string} from The source node
+   * @param {string} to The destination node
+   * @param {number} weight The weighting to attach
+   * @returns this to allow method chaining
+   */
+  addBiDirectionalLink(from: string, to: string, weight: number = 1.0) {
     this.pages.add(from);
     this.pages.add(to);
 
-    if (biDirectional) {
-      this.links = [
-        ...this.links.filter(
-          (l) =>
-            !(
-              (l.from === from && l.to === to) ||
-              (l.from === to && l.to === from)
-            )
-        ), // filter any existing link in both directions
-        { from, to, weight },
-        { from: to, to: from, weight }, // add the other direction
-      ];
-    } else {
-      // Just add the forward link
-      this.links = [
-        ...this.links.filter((l) => !(l.from === from && l.to === to)), // filter any existing link in this direction
-        { from, to, weight },
-      ];
-    }
+    this.links = [
+      ...this.links.filter(
+        (l) =>
+          !(
+            (l.from === from && l.to === to) ||
+            (l.from === to && l.to === from)
+          )
+      ), // filter any existing link in both directions
+      { from, to, weight },
+      { from: to, to: from, weight }, // add the other direction
+    ];
 
     return this;
   }

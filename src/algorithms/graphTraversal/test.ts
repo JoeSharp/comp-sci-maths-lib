@@ -4,15 +4,15 @@ import Graph from "../../dataStructures/graph/Graph";
 
 function createTestGraph() {
   return new Graph()
-    .addLink("S", "A")
-    .addLink("S", "B")
-    .addLink("S", "C")
-    .addLink("A", "D")
-    .addLink("D", "G")
-    .addLink("B", "E")
-    .addLink("E", "G")
-    .addLink("C", "F")
-    .addLink("F", "G");
+    .addBiDirectionalLink("S", "A")
+    .addBiDirectionalLink("S", "B")
+    .addBiDirectionalLink("S", "C")
+    .addBiDirectionalLink("A", "D")
+    .addBiDirectionalLink("D", "G")
+    .addBiDirectionalLink("B", "E")
+    .addBiDirectionalLink("E", "G")
+    .addBiDirectionalLink("C", "F")
+    .addBiDirectionalLink("F", "G");
 }
 
 test("Graph - Breadth First Search", () => {
