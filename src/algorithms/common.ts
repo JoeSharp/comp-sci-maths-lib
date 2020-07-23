@@ -6,6 +6,12 @@ function swap<T>(arr: T[], from: number, to: number) {
   arr[to] = swapItem;
 }
 
+export function objToString(o: object) {
+  return Object.entries(o)
+    .map((k) => `${k[0]}=${k[1]}`)
+    .join(" ");
+}
+
 /**
  * Comparator function that uses simple arithmetic comparison.
  * based on https://www.w3schools.com/js/js_array_sort.asp

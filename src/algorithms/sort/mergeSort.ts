@@ -1,11 +1,14 @@
-import { Comparator } from "../../types";
+import { Comparator, SortObserver, EMPTY_OBSERVER } from "../../types";
 
 function mergeSortRecurse<T>(
   inputList: T[],
   comparator: Comparator<T>,
+  observer: SortObserver<T>,
   leftPointer: number,
   rightPointer: number
 ): T[] {
+  observer("Recursing", inputList, { leftPointer, rightPointer });
+
   if (leftPointer === rightPointer) {
     return [inputList[leftPointer]];
   }
@@ -17,12 +20,14 @@ function mergeSortRecurse<T>(
   const firstHalf = mergeSortRecurse(
     inputList,
     comparator,
+    observer,
     leftPointer,
     middle
   );
   const secondHalf = mergeSortRecurse(
     inputList,
     comparator,
+    observer,
     middle + 1,
     rightPointer
   );
@@ -51,12 +56,22 @@ function mergeSortRecurse<T>(
   return outputList;
 }
 
-const mergeSort = <T>(inputList: T[], comparator: Comparator<T>): T[] => {
+const mergeSort = <T>(
+  inputList: T[],
+  comparator: Comparator<T>,
+  observer: SortObserver<T> = EMPTY_OBSERVER
+): T[] => {
   if (inputList.length < 2) {
     return inputList;
   }
 
-  return mergeSortRecurse(inputList, comparator, 0, inputList.length - 1);
+  return mergeSortRecurse(
+    inputList,
+    comparator,
+    observer,
+    0,
+    inputList.length - 1
+  );
 };
 
 export default mergeSort;

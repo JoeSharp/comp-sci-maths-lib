@@ -6,9 +6,19 @@ export type Comparator<T> = (a: T, b: T) => number;
 
 export type VisitFunction<T> = (n: T) => any;
 
+export type SortObserver<T> = (
+  stageName: string,
+  data: T[],
+  positionVars: { [k: string]: number }
+) => void;
+
+// tslint:disable-next-line: no-empty
+export const EMPTY_OBSERVER: SortObserver<any> = () => {};
+
 export type SortFunction<T> = (
   inputList: T[],
-  comparator: Comparator<T>
+  comparator: Comparator<T>,
+  observer?: SortObserver<T>
 ) => T[];
 
 export type MatchComparator<T> = (a: T) => number;
