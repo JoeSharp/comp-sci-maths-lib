@@ -14,8 +14,8 @@ function depthFirstSearch(graph: Graph, startVertex: string): string[] {
 
     // get the relate edges which are also in the unvisited set
     const related: string[] = graph
-      .getRelated(vertex)
-      .map(({ node }) => node)
+      .getOutgoing(vertex)
+      .map(({ to }) => to)
       .filter((i) => !items.includes(i));
 
     if (related.length > 0) {

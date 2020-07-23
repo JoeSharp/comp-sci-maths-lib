@@ -13,8 +13,8 @@ function breadthFirstSearch<T>(graph: Graph, startVertex: string): string[] {
   do {
     // Get the related edges which are also in the invisited set
     const related: string[] = graph
-      .getRelated(vertex)
-      .map(({ node }) => node)
+      .getOutgoing(vertex)
+      .map(({ to }) => to)
       .filter((i) => !items.includes(i));
 
     // If we have related edges, add them all to the items

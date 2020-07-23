@@ -1,30 +1,22 @@
+import { Optional } from "../../types";
+
 /**
  * This class encapsulates a weighted directional graph.
- * It uses an adjacency list to store the links.
- * Nodes are just strings.
+ * Each link is stored as a separate object in an array
  */
 interface Link {
-  node: string;
+  from: string;
+  to: string;
   weight: number;
 }
 
-interface AdjacencyList {
-  [n: string]: Link[];
-}
-
 export default class Graph {
-  adjacencyList: AdjacencyList;
+  pages: Set<string>;
+  links: Link[];
 
-  /**
-   * A new graph will have an empty adjacency list
-   */
   constructor() {
-    /**
-     * This will be an object
-     * each key will be a node in the graph
-     * The associated object will be a list of destination nodes and their weightings (node, weight)
-     */
-    this.adjacencyList = {};
+    this.pages = new Set();
+    this.links = [];
   }
 
   /**
@@ -41,30 +33,50 @@ export default class Graph {
     biDirectional: boolean = true,
     weight: number = 1.0
   ) {
-    const fromAdjacencyList: Link[] = this.ensureAdjacencyExists(from);
-    const toAdjacencyList: Link[] = this.ensureAdjacencyExists(to);
+    this.pages.add(from);
+    this.pages.add(to);
 
-    // Add this new forward link
-    fromAdjacencyList.push({
-      node: to,
-      weight,
-    });
     if (biDirectional) {
-      toAdjacencyList.push({
-        node: from,
-        weight,
-      });
+      this.links = [
+        ...this.links.filter(
+          (l) =>
+            !(
+              (l.from === from && l.to === to) ||
+              (l.from === to && l.to === from)
+            )
+        ), // filter any existing link in both directions
+        { from, to, weight },
+        { from: to, to: from, weight }, // add the other direction
+      ];
+    } else {
+      // Just add the forward link
+      this.links = [
+        ...this.links.filter((l) => !(l.from === from && l.to === to)), // filter any existing link in this direction
+        { from, to, weight },
+      ];
     }
 
     return this;
   }
 
+  getLink(from: string, to: string): Optional<Link> {
+    return this.links.find((l) => l.from === from && l.to === to);
+  }
+
+  /**
+   * Access links coming into a specific vertex
+   * @param vertex The from vertex
+   */
+  getIncoming(vertex: string): Link[] {
+    return this.links.filter((l) => l.to === vertex);
+  }
+
   /**
    * Access the links from a specific vertex
-   * @param {string} from The from vertex
+   * @param {string} vertex The from vertex
    */
-  getRelated(from: string): Link[] {
-    return this.adjacencyList[from];
+  getOutgoing(vertex: string): Link[] {
+    return this.links.filter((l) => l.from === vertex);
   }
 
   /**
@@ -77,44 +89,27 @@ export default class Graph {
    * @return The weight of the link, or Infinity if there is no link.
    */
   getLinkWeight(from: string, to: string): number {
-    const list = this.adjacencyList[from];
-
-    if (!list) return Infinity;
-
-    const link = list.find((l) => l.node === to);
-
+    const link = this.getLink(from, to);
     return !!link ? link.weight : Infinity;
   }
 
-  /**
-   * Used internally to ensure that a particular node appears on the graph.
-   * This method acts as an internal accessor for the list of links for that node.
-   * The list returned is a reference to the class member, so any changes made will persist.
-   * @param {string} node
-   * @return List of adjacencies for that node
-   */
-  ensureAdjacencyExists(node: string): Link[] {
-    if (this.adjacencyList[node] === undefined) {
-      this.adjacencyList[node] = [];
-    }
-
-    return this.adjacencyList[node];
-  }
-
-  getAllVertices() {
-    return Object.keys(this.adjacencyList);
+  getAllVertices(): string[] {
+    return [...this.pages];
   }
 
   /**
    * Represent the graph as a string, it will use tabs and newlines to space things out.
    */
   toString() {
-    return `Graph\n${Object.entries(this.adjacencyList)
-      .map((k) => ({ from: k[0], links: k[1] })) // make the entries into a nicer looking object
+    return `Graph\n${this.getAllVertices()
+      .map((page) => ({
+        from: page,
+        links: this.getOutgoing(page),
+      })) // make the entries into a nicer looking object
       .map(
         ({ from, links }) =>
           `From: ${from}\n${links
-            .map((link) => `\tTo: ${link.node} (${link.weight})`)
+            .map((link) => `\tTo: ${link.to} (${link.weight})`)
             .join("\n")}` // each outgoing link should be represented on it's own line
       )
       .join("\n")}`; // Each section will be separated by a newline

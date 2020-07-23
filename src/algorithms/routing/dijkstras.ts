@@ -107,9 +107,9 @@ function dijstraks({
 
     // Get all the links from our current item
     graph
-      .getRelated(currentItem.node)
-      .filter(({ node }) => shortestPathTree[node] === undefined) // only those that aren't in our tree already
-      .forEach(({ node, weight }) => {
+      .getOutgoing(currentItem.node)
+      .filter(({ to }) => shortestPathTree[to] === undefined) // only those that aren't in our tree already
+      .forEach(({ to: node, weight }) => {
         // Remove the matching item from our current known distances
         // It will either be replaced as is, or replaced with updated details
         const otherItem = currentDistances.removeMatch(
