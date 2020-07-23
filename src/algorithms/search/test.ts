@@ -1,25 +1,6 @@
-import { SearchFunction } from "../../types";
-
-import binarySearch from "./binarySearch";
-import linearSearch from "./linearSearch";
+import algorithms from "./index";
 import { NO_MATCH } from "./common";
 import { arithmeticComparator, generateRandomNumbers } from "../common";
-
-interface NamedSearch {
-  name: string;
-  search: SearchFunction;
-}
-
-const algorithms: NamedSearch[] = [
-  {
-    name: "Binary Search",
-    search: binarySearch,
-  },
-  {
-    name: "Linear Search",
-    search: linearSearch,
-  },
-];
 
 algorithms.forEach(({ name, search }) => {
   test(`${name} - Numbers`, () => {

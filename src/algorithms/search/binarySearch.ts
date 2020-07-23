@@ -1,15 +1,22 @@
 import { NO_MATCH } from "./common";
-import { MatchComparator, SearchFunction } from "../../types";
+import {
+  MatchComparator,
+  SearchFunction,
+  SearchObserver,
+  EMPTY_OBSERVER,
+} from "../../types";
 
 // https://www.geeksforgeeks.org/binary-search/
 function binarySearchRecurse<T>(
   data: T[],
   compare: MatchComparator<T>,
+  observe: SearchObserver<T>,
   left: number,
   right: number
 ): number {
   if (right >= left) {
     const mid = Math.floor(left + (right - left) / 2);
+    observe(mid, data[mid], { left, right, mid });
 
     const compareMid = compare(data[mid]);
 
@@ -19,11 +26,11 @@ function binarySearchRecurse<T>(
     } else if (compareMid < 0) {
       // If element is smaller than mid, then
       // it can only be present in left subarray
-      return binarySearchRecurse(data, compare, left, mid - 1);
+      return binarySearchRecurse(data, compare, observe, left, mid - 1);
     } else {
       // Else the element can only be present
       // in right subarray
-      return binarySearchRecurse(data, compare, mid + 1, right);
+      return binarySearchRecurse(data, compare, observe, mid + 1, right);
     }
   }
 
@@ -42,7 +49,8 @@ function binarySearchRecurse<T>(
  */
 const binarySearch: SearchFunction = <T>(
   data: T[],
-  compare: MatchComparator<T>
-) => binarySearchRecurse(data, compare, 0, data.length - 1);
+  compare: MatchComparator<T>,
+  observe: SearchObserver<T> = EMPTY_OBSERVER
+) => binarySearchRecurse(data, compare, observe, 0, data.length - 1);
 
 export default binarySearch;

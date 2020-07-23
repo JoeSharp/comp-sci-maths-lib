@@ -1,5 +1,10 @@
 import { NO_MATCH } from "./common";
-import { MatchComparator, SearchFunction } from "../../types";
+import {
+  MatchComparator,
+  SearchFunction,
+  SearchObserver,
+  EMPTY_OBSERVER,
+} from "../../types";
 
 /**
  * perform a linear search on an array
@@ -13,9 +18,11 @@ import { MatchComparator, SearchFunction } from "../../types";
  */
 const linearSearch: SearchFunction = <T>(
   data: T[],
-  compare: MatchComparator<T>
+  compare: MatchComparator<T>,
+  observe: SearchObserver<T> = EMPTY_OBSERVER
 ): number => {
   for (let i = 0; i < data.length; i++) {
+    observe(i, data[i]);
     if (compare(data[i]) === 0) {
       return i;
     }

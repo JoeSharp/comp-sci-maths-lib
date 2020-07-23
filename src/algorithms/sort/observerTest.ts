@@ -10,9 +10,21 @@ import { SortObserver } from "../../types";
 
 const logger = winston.createLogger({
   level: "info",
-  format: winston.format.json(),
+  format: winston.format.simple(),
   transports: [new winston.transports.Console()],
 });
+
+const observe: SortObserver<number> = (
+  stageName: string,
+  data: number[],
+  positionVars: { [k: string]: number }
+) => {
+  logger.info(
+    `${stageName}: Data: ${JSON.stringify(data)}, Position Vars: ${objToString(
+      positionVars
+    )}`
+  );
+};
 
 // Create a test for each algorithm
 algorithms.forEach(({ name, sort }) => {
@@ -21,18 +33,6 @@ algorithms.forEach(({ name, sort }) => {
   // Generate a list of random numbers
   const inputList: number[] = generateRandomNumbers(0, 100, 10);
 
-  const observer: SortObserver<number> = (
-    stageName: string,
-    data: number[],
-    positionVars: { [k: string]: number }
-  ) => {
-    logger.info(
-      `${stageName}: Data: ${JSON.stringify(
-        data
-      )}, Position Vars: ${objToString(positionVars)}`
-    );
-  };
-
   // Execute the sort
-  sort(inputList, arithmeticComparator, observer);
+  sort(inputList, arithmeticComparator, observe);
 });

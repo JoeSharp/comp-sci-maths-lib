@@ -4,7 +4,7 @@ import { swap } from "../common";
 const insertionSort = <T>(
   inputList: T[],
   comparator: Comparator<T>,
-  observer: SortObserver<T> = EMPTY_OBSERVER
+  observe: SortObserver<T> = EMPTY_OBSERVER
 ): T[] => {
   if (inputList.length < 2) {
     return inputList;
@@ -14,7 +14,7 @@ const insertionSort = <T>(
   const outputList = [...inputList];
 
   for (let index = 1; index < outputList.length; index++) {
-    observer("Placing Item", outputList, { index });
+    observe("Placing Item", outputList, { index });
     const itemToPlace: T = outputList[index];
     let itemPlace = index;
     while (itemPlace > 0) {

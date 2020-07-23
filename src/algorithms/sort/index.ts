@@ -4,7 +4,7 @@ import quickSort from "./quickSort";
 import insertionSort from "./insertionSort";
 import { SortFunction } from "../../types";
 
-export interface NamedSort {
+interface NamedSort {
   name: string;
   sort: SortFunction<any>;
 }

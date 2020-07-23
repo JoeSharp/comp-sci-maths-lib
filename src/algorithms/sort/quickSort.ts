@@ -37,7 +37,7 @@ function partition<T>(
 function quickSortRecurse<T>(
   arr: T[],
   comparator: Comparator<T>,
-  observer: SortObserver<T>,
+  observe: SortObserver<T>,
   low: number,
   high: number
 ) {
@@ -46,15 +46,15 @@ function quickSortRecurse<T>(
            at right place */
     const pi: number = partition(arr, comparator, low, high);
 
-    quickSortRecurse(arr, comparator, observer, low, pi - 1); // Before pi
-    quickSortRecurse(arr, comparator, observer, pi + 1, high); // After pi
+    quickSortRecurse(arr, comparator, observe, low, pi - 1); // Before pi
+    quickSortRecurse(arr, comparator, observe, pi + 1, high); // After pi
   }
 }
 
 const quickSort = <T>(
   inputList: T[],
   comparator: Comparator<T>,
-  observer: SortObserver<T> = EMPTY_OBSERVER
+  observe: SortObserver<T> = EMPTY_OBSERVER
 ): T[] => {
   if (inputList.length < 2) {
     return inputList;
@@ -62,7 +62,7 @@ const quickSort = <T>(
 
   const outputList = [...inputList];
 
-  quickSortRecurse(outputList, comparator, observer, 0, inputList.length - 1);
+  quickSortRecurse(outputList, comparator, observe, 0, inputList.length - 1);
 
   return outputList;
 };

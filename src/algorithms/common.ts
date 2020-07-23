@@ -6,10 +6,12 @@ function swap<T>(arr: T[], from: number, to: number) {
   arr[to] = swapItem;
 }
 
-export function objToString(o: object) {
-  return Object.entries(o)
-    .map((k) => `${k[0]}=${k[1]}`)
-    .join(" ");
+export function objToString(o?: object) {
+  return !!o
+    ? Object.entries(o)
+        .map((k) => `${k[0]}=${k[1]}`)
+        .join(" ")
+    : "none";
 }
 
 /**
