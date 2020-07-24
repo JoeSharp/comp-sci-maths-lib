@@ -1,8 +1,7 @@
-import { HeuristicCostFunction, ShortestPathTree } from "./types";
+import { ShortestPathTree } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
 import { dijstraks, getPath } from "./dijkstras";
-import { stringComparator } from "../common";
 
 // https://youtu.be/ySN5Wnu88nE?t=239
 test("Routing Algorithms - A*", () => {

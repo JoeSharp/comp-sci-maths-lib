@@ -32,8 +32,8 @@ export default class Graph implements GraphData {
    * @param edges Existing edges to populate it with
    */
   constructor(graphData: GraphData = EMPTY_GRAPH_DATA) {
-    this.vertices = graphData.vertices;
-    this.edges = graphData.edges;
+    this.vertices = new Set(graphData.vertices);
+    this.edges = [...graphData.edges];
   }
 
   /**
