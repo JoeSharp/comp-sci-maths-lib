@@ -2,12 +2,7 @@ import bubbleSort from "./bubbleSort";
 import mergeSort from "./mergeSort";
 import quickSort from "./quickSort";
 import insertionSort from "./insertionSort";
-import { SortFunction } from "../../types";
-
-interface NamedSort {
-  name: string;
-  sort: SortFunction<any>;
-}
+import { NamedSort } from "../../types";
 
 const algorithms: NamedSort[] = [
   { name: "Bubble Sort", sort: bubbleSort },

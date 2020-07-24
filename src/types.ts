@@ -19,12 +19,19 @@ export type SortObserver<T> = (
 // tslint:disable-next-line: no-empty
 export const EMPTY_OBSERVER = () => {};
 
+// Sorting
 export type SortFunction<T> = (
   inputList: T[],
   comparator: Comparator<T>,
   observe?: SortObserver<T>
 ) => T[];
 
+export interface NamedSort {
+  name: string;
+  sort: SortFunction<any>;
+}
+
+// Searching
 export type MatchComparator<T> = (a: T) => number;
 
 export type SearchObserver<T> = (
@@ -38,3 +45,8 @@ export type SearchFunction = <T>(
   match: MatchComparator<T>,
   observe?: SearchObserver<T>
 ) => number;
+
+export interface NamedSearch {
+  name: string;
+  search: SearchFunction;
+}

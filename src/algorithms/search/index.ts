@@ -1,12 +1,7 @@
-import { SearchFunction } from "../../types";
+import { NamedSearch } from "../../types";
 
 import binarySearch from "./binarySearch";
 import linearSearch from "./linearSearch";
-
-interface NamedSearch {
-  name: string;
-  search: SearchFunction;
-}
 
 const algorithms: NamedSearch[] = [
   {
