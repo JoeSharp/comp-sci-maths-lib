@@ -4,19 +4,36 @@ import { Optional } from "../../types";
  * This class encapsulates a weighted directional graph.
  * Each Edge is stored as a separate object in an array
  */
-interface Edge {
+export interface Edge {
   from: string;
   to: string;
   weight: number;
 }
 
-export default class Graph {
+export interface GraphData {
+  vertices: Set<string>;
+  edges: Edge[];
+}
+
+export const EMPTY_GRAPH_DATA: GraphData = {
+  vertices: new Set(),
+  edges: [],
+};
+
+export default class Graph implements GraphData {
   vertices: Set<string>;
   edges: Edge[];
 
-  constructor() {
-    this.vertices = new Set();
-    this.edges = [];
+  /**
+   * A constructor that accepts existing graph details.
+   * Allows it to be used as a copy constructor.
+   *
+   * @param vertices Existing vertices to populate it with
+   * @param edges Existing edges to populate it with
+   */
+  constructor(graphData: GraphData = EMPTY_GRAPH_DATA) {
+    this.vertices = graphData.vertices;
+    this.edges = graphData.edges;
   }
 
   /**
@@ -140,17 +157,10 @@ export default class Graph {
   }
 
   /**
-   * Get a list of all the vertices in the graph
-   */
-  getAllVertices(): string[] {
-    return [...this.vertices];
-  }
-
-  /**
    * Represent the graph as a string, it will use tabs and newlines to space things out.
    */
   toString() {
-    return `Graph\n${this.getAllVertices()
+    return `Graph\n${[...this.vertices]
       .map((page) => ({
         from: page,
         edges: this.getOutgoing(page),

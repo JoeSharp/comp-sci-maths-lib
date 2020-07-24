@@ -1,5 +1,5 @@
 import { PageRanks, PageRankState } from "./types";
-import Graph from "../../dataStructures/graph/Graph";
+import { GraphData, EMPTY_GRAPH_DATA } from "../../dataStructures/graph/Graph";
 
 const MAX_ITERATIONS = 20;
 
@@ -13,6 +13,14 @@ const MAX_ITERATIONS = 20;
 export const roundTo2Dp = (x: number): number =>
   x !== undefined ? parseFloat(x.toFixed(2)) : 0;
 
+export const BLANK_PAGE_RANK_STATE: PageRankState = {
+  iterations: 0,
+  graph: EMPTY_GRAPH_DATA,
+  ranks: {},
+  rankHistory: [],
+  dampingFactor: 0.85,
+};
+
 /**
  * Create an initial state for the page rank algorithm.
  * The returned state object can be used in a reducer, it stores everything successive iterations will need.
@@ -21,12 +29,13 @@ export const roundTo2Dp = (x: number): number =>
  * @param dampingFactor The damping factor to apply during the page rank iterations
  */
 export const initialisePageRank = (
-  graph: Graph,
+  graph: GraphData,
   dampingFactor: number = 0.85
 ) => {
-  const firstRanks = graph
-    .getAllVertices()
-    .reduce((acc, curr) => ({ ...acc, [curr]: 1 }), {});
+  const firstRanks = [...graph.vertices].reduce(
+    (acc, curr) => ({ ...acc, [curr]: 1 }),
+    {}
+  );
   return {
     iterations: 0,
     graph,
@@ -74,7 +83,7 @@ export const iteratePageRank = ({
 
   const newRanks: PageRanks = { ...ranks };
 
-  graph.getAllVertices().forEach((page) => {
+  graph.vertices.forEach((page) => {
     const rank: number = graph.edges
       .filter((edge) => edge.to === page)
       .map((edge) => edge.from)

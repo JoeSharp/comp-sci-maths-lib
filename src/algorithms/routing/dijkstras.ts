@@ -80,8 +80,7 @@ function dijstraks({
   });
 
   // Add all the other nodes, with a distance of Infinity
-  graph
-    .getAllVertices()
+  [...graph.vertices]
     .filter((node) => node.localeCompare(sourceNode) !== 0)
     .map((node) => ({ node, viaNode: undefined, cost: Infinity }))
     .forEach((n) => currentDistances.enqueue(n));

@@ -26,9 +26,9 @@ test("Creating a Weighted Graph", () => {
   const ec = graph.getEdgeWeight("E", "C");
   expect(ec).toBe(Infinity);
 
-  const vertices = graph.getAllVertices();
+  const vertices = graph.vertices;
   ["A", "B", "C", "D", "E"].forEach((v) =>
-    expect(vertices.includes(v)).toBeTruthy()
+    expect(vertices.has(v)).toBeTruthy()
   );
 
   // Execute some removals
@@ -37,6 +37,6 @@ test("Creating a Weighted Graph", () => {
 
   const acPostDelete = graph.getEdgeWeight("A", "C");
   expect(acPostDelete).toBe(Infinity);
-  const verticesPostDelete = graph.getAllVertices();
-  expect(verticesPostDelete.includes("B")).toBeFalsy();
+  const verticesPostDelete = graph.vertices;
+  expect(verticesPostDelete.has("B")).toBeFalsy();
 });
