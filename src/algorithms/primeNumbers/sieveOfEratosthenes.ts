@@ -6,7 +6,21 @@ export interface MarkedNumber {
   divisibleBy: number[];
 }
 
-export type PrimeCallback = (markedNumber: MarkedNumber) => void;
+export interface PrimeCallbackArgs {
+  markedNumbers: MarkedNumber[];
+  index: number;
+  p: number;
+}
+export type PrimeCallback = (args: PrimeCallbackArgs) => void;
+
+/**
+ * Given a populated list of marked numbers, extracts the prime numbers.
+ * @param markedNumbers The array of all the numbers, with their marking details.
+ */
+export const getPrimeNumbers = (markedNumbers: MarkedNumber[]): number[] =>
+  markedNumbers
+    .filter(({ divisibleBy }) => divisibleBy.length === 0)
+    .map(({ value }) => value);
 
 /**
  * Runs the sieve of eratosthenes algorithm up to the given limit.
@@ -20,11 +34,11 @@ function sieveOfEratosthenes(
   limit: number,
   callback: PrimeCallback = EMPTY_OBSERVER
 ): number[] {
-  const numbers: MarkedNumber[] = [];
+  const markedNumbers: MarkedNumber[] = [];
 
   // 1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
   for (let value = 2; value <= limit; value++) {
-    numbers.push({ value, divisibleBy: [] });
+    markedNumbers.push({ value, divisibleBy: [] });
   }
 
   // 2. Initially, let p equal 2, the smallest prime number.
@@ -34,16 +48,20 @@ function sieveOfEratosthenes(
   while (true) {
     // 3 . Enumerate the multiples of p by counting in increments of p from 2p to n, and mark them in the list (these will be 2p, 3p, 4p, ...; the p itself should not be marked).
     while (pMultiple <= limit) {
-      const indexOfPMultiple = pMultiple - 2; // adjust to get the array position
-      numbers[indexOfPMultiple].divisibleBy.push(p);
-      callback(numbers[indexOfPMultiple]);
+      const index = pMultiple - 2; // adjust to get the array position
+      markedNumbers[index].divisibleBy.push(p);
+      callback({
+        markedNumbers,
+        index,
+        p,
+      });
 
       pMultiple += p;
     }
 
     // 4. Find the smallest number in the list greater than p that is not marked. If there was no such number, stop.
     // Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
-    const nextP = numbers.find(
+    const nextP = markedNumbers.find(
       ({ value, divisibleBy }) => value > p && divisibleBy.length === 0
     );
 
@@ -59,9 +77,7 @@ function sieveOfEratosthenes(
   }
 
   // 5. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
-  return numbers
-    .filter(({ divisibleBy }) => divisibleBy.length === 0)
-    .map(({ value }) => value);
+  return getPrimeNumbers(markedNumbers);
 }
 
 export default sieveOfEratosthenes;

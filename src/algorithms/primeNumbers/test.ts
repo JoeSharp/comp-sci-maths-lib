@@ -3,12 +3,15 @@ import { cloneDeep } from "lodash";
 import sieveOfEratosthenes, {
   MarkedNumber,
   PrimeCallback,
+  PrimeCallbackArgs,
 } from "./sieveOfEratosthenes";
 
 test("Sieve of Eratosthenes", () => {
   const callbacks: MarkedNumber[] = [];
-  const recordingCallback: PrimeCallback = (markedNumber: MarkedNumber) =>
-    callbacks.push(cloneDeep(markedNumber)); // must take a deep copy
+  const recordingCallback: PrimeCallback = ({
+    markedNumbers,
+    index,
+  }: PrimeCallbackArgs) => callbacks.push(cloneDeep(markedNumbers[index])); // must take a deep copy
 
   const primes = sieveOfEratosthenes(20, recordingCallback);
 
