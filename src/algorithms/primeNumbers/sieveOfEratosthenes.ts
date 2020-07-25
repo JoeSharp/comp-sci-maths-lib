@@ -7,8 +7,7 @@ export interface MarkedNumber {
 }
 
 export interface PrimeCallbackArgs {
-  markedNumbers: MarkedNumber[];
-  index: number;
+  tickedOff: number[];
   p: number;
 }
 export type PrimeCallback = (args: PrimeCallbackArgs) => void;
@@ -50,14 +49,17 @@ function sieveOfEratosthenes(
     while (pMultiple <= limit) {
       const index = pMultiple - 2; // adjust to get the array position
       markedNumbers[index].divisibleBy.push(p);
-      callback({
-        markedNumbers,
-        index,
-        p,
-      });
 
       pMultiple += p;
     }
+
+    // Callback after we have reached the last number
+    callback({
+      tickedOff: markedNumbers
+        .filter(({ divisibleBy }) => divisibleBy.includes(p))
+        .map(({ value }) => value),
+      p,
+    });
 
     // 4. Find the smallest number in the list greater than p that is not marked. If there was no such number, stop.
     // Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.

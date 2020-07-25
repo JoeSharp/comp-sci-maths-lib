@@ -1,34 +1,50 @@
 import { cloneDeep } from "lodash";
 
 import sieveOfEratosthenes, {
-  MarkedNumber,
   PrimeCallback,
   PrimeCallbackArgs,
 } from "./sieveOfEratosthenes";
 
 test("Sieve of Eratosthenes", () => {
-  const callbacks: MarkedNumber[] = [];
-  const recordingCallback: PrimeCallback = ({
-    markedNumbers,
-    index,
-  }: PrimeCallbackArgs) => callbacks.push(cloneDeep(markedNumbers[index])); // must take a deep copy
+  const callbacks: PrimeCallbackArgs[] = [];
+  const recordingCallback: PrimeCallback = (args: PrimeCallbackArgs) =>
+    callbacks.push(cloneDeep(args)); // must take a deep copy
 
   const primes = sieveOfEratosthenes(20, recordingCallback);
 
   expect(callbacks).toStrictEqual([
-    { value: 4, divisibleBy: [2] },
-    { value: 6, divisibleBy: [2] },
-    { value: 8, divisibleBy: [2] },
-    { value: 10, divisibleBy: [2] },
-    { value: 12, divisibleBy: [2] },
-    { value: 14, divisibleBy: [2] },
-    { value: 16, divisibleBy: [2] },
-    { value: 18, divisibleBy: [2] },
-    { value: 20, divisibleBy: [2] },
-    { value: 9, divisibleBy: [3] },
-    { value: 12, divisibleBy: [2, 3] },
-    { value: 15, divisibleBy: [3] },
-    { value: 18, divisibleBy: [2, 3] },
+    {
+      p: 2,
+      tickedOff: [4, 6, 8, 10, 12, 14, 16, 18, 20],
+    },
+    {
+      p: 3,
+      tickedOff: [9, 12, 15, 18],
+    },
+    {
+      p: 5,
+      tickedOff: [],
+    },
+    {
+      p: 7,
+      tickedOff: [],
+    },
+    {
+      p: 11,
+      tickedOff: [],
+    },
+    {
+      p: 13,
+      tickedOff: [],
+    },
+    {
+      p: 17,
+      tickedOff: [],
+    },
+    {
+      p: 19,
+      tickedOff: [],
+    },
   ]);
 
   expect(primes).toStrictEqual([2, 3, 5, 7, 11, 13, 17, 19]);
