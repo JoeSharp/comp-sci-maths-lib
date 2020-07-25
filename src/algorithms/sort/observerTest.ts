@@ -1,4 +1,4 @@
-import * as winston from "winston";
+import { simpleLogger } from "../../common";
 
 import algorithms from "./index";
 import {
@@ -8,18 +8,12 @@ import {
 } from "../common";
 import { SortObserver } from "../../types";
 
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.simple(),
-  transports: [new winston.transports.Console()],
-});
-
 const observe: SortObserver<number> = (
   stageName: string,
   data: number[],
   positionVars: { [k: string]: number }
 ) => {
-  logger.info(
+  simpleLogger.info(
     `${stageName}: Data: ${JSON.stringify(data)}, Position Vars: ${objToString(
       positionVars
     )}`
@@ -28,7 +22,7 @@ const observe: SortObserver<number> = (
 
 // Create a test for each algorithm
 algorithms.forEach(({ name, sort }) => {
-  logger.info(`Running Sort Algorithm ${name}`);
+  simpleLogger.info(`Running Sort Algorithm ${name}`);
 
   // Generate a list of random numbers
   const inputList: number[] = generateRandomNumbers(0, 100, 10);

@@ -16,9 +16,6 @@ export type SortObserver<T> = (
   positionVars: PositionVars
 ) => void;
 
-// tslint:disable-next-line: no-empty
-export const EMPTY_OBSERVER = () => {};
-
 // Sorting
 export type SortFunction<T> = (
   inputList: T[],

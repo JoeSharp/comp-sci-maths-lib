@@ -1,4 +1,4 @@
-import * as winston from "winston";
+import { simpleLogger } from "../../common";
 
 import algorithms from "./index";
 import {
@@ -8,18 +8,12 @@ import {
 } from "../common";
 import { SearchObserver } from "../../types";
 
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.simple(),
-  transports: [new winston.transports.Console()],
-});
-
 const observe: SearchObserver<number> = (
   index: number,
   value: number,
   positionVars: { [k: string]: number }
 ) => {
-  logger.info(
+  simpleLogger.info(
     `Checking data[${index}]=${value}, Position Vars: ${objToString(
       positionVars
     )}`
@@ -27,18 +21,18 @@ const observe: SearchObserver<number> = (
 };
 
 algorithms.forEach(({ name, search }) => {
-  logger.info(`Running Sort Algorithm ${name}`);
+  simpleLogger.info(`Running Sort Algorithm ${name}`);
   // Generate a list of random numbers
   const inputList: number[] = generateRandomNumbers(0, 100, 20);
   inputList.sort(arithmeticComparator);
 
   // Search for some specific indices
   [1, 10, 14, 19].forEach((index) => {
-    logger.info(`Searching for inputList[${index}]=${inputList[index]}`);
+    simpleLogger.info(`Searching for inputList[${index}]=${inputList[index]}`);
 
     // Search for the 15th one
     const found = search(inputList, (d) => inputList[index] - d, observe);
 
-    logger.info(`Found at ${found}`);
+    simpleLogger.info(`Found at ${found}`);
   });
 });

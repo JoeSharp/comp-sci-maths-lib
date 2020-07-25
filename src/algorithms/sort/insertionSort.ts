@@ -1,4 +1,5 @@
-import { Comparator, SortObserver, EMPTY_OBSERVER } from "../../types";
+import { Comparator, SortObserver } from "../../types";
+import { EMPTY_OBSERVER } from "../../common";
 import { swap } from "../common";
 
 const insertionSort = <T>(

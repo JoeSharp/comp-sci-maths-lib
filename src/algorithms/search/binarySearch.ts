@@ -1,10 +1,6 @@
 import { NO_MATCH } from "./common";
-import {
-  MatchComparator,
-  SearchFunction,
-  SearchObserver,
-  EMPTY_OBSERVER,
-} from "../../types";
+import { MatchComparator, SearchFunction, SearchObserver } from "../../types";
+import { EMPTY_OBSERVER } from "../../common";
 
 // https://www.geeksforgeeks.org/binary-search/
 function binarySearchRecurse<T>(

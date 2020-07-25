@@ -24,6 +24,7 @@
     "@types/jest": "^26.0.5",
     "@types/lodash": "^4.14.149",
     "jest": "^26.1.0",
+    "lodash": "^4.17.19",
     "tslint": "^6.1.0",
     "winston": "^3.2.1"
   },
