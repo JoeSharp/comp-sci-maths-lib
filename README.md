@@ -24,6 +24,12 @@ This contains implementations of all the algorithms required by the OCR A Level 
 - Binary Trees: In Order, Pre Order, Post Order
 - Graphs: Depth First, Breadth First
 
+# Maths
+
+It also guest stars some algorithms from Secondary Maths
+
+- Sieve of Eratosthenes (Prime Number generation)
+
 ## Spec Contents for 2.3.1 Algorithms
 
 Algorithms for the main data structures, (stacks,
