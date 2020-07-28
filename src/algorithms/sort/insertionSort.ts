@@ -1,15 +1,14 @@
-import { Comparator, SortObserver } from "../../types";
-import { EMPTY_OBSERVER } from "../../common";
-import { swap } from "../common";
-import { FINISHED, STARTING, MAKING_SWAP } from "./common";
+import { SortUtility } from "../../types";
+import { anyComparator, emptyObserver, simpleSwap } from "../common";
 
-const insertionSort = <T>(
+export default <T>(
   inputList: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T> = EMPTY_OBSERVER
+  {
+    comparator = anyComparator,
+    observe = emptyObserver,
+    swap = simpleSwap,
+  }: SortUtility<T>
 ): T[] => {
-  observe(STARTING, inputList, {}, {});
-
   if (inputList.length < 2) {
     return inputList;
   }
@@ -18,22 +17,17 @@ const insertionSort = <T>(
   const outputList = [...inputList];
 
   for (let index = 1; index < outputList.length; index++) {
-    observe("Placing Item", outputList, { index }, {});
+    observe("Placing Item", outputList, { index });
     let itemPlace = index;
     while (itemPlace > 0) {
       const lower = itemPlace - 1;
       const upper = itemPlace;
 
-      observe(
-        "Seeking Place",
-        outputList,
-        {
-          index,
-          lower,
-          upper,
-        },
-        {}
-      );
+      observe("Seeking Place", outputList, {
+        index,
+        lower,
+        upper,
+      });
 
       const comparison: number = comparator(
         outputList[lower],
@@ -42,19 +36,6 @@ const insertionSort = <T>(
 
       // The comparator returns -ve if the first item is 'greater than' the second one
       if (comparison > 0) {
-        observe(
-          MAKING_SWAP,
-          outputList,
-          {
-            index,
-            lower,
-            upper,
-            a: lower,
-            b: upper,
-          },
-          {}
-        );
-
         // Temporary variable to prevent overwrites
         swap(outputList, lower, upper);
       } else {
@@ -66,9 +47,5 @@ const insertionSort = <T>(
     }
   }
 
-  observe(FINISHED, outputList, {}, {});
-
   return outputList;
 };
-
-export default insertionSort;

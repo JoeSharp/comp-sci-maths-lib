@@ -1,6 +1,6 @@
 import { Comparator } from "../types";
 
-export function swap<T>(arr: T[], from: number, to: number) {
+export function simpleSwap<T>(arr: T[], from: number, to: number) {
   const swapItem: T = arr[from];
   arr[from] = arr[to];
   arr[to] = swapItem;
@@ -13,6 +13,11 @@ export function objToString(o?: object) {
         .join(" ")
     : "none";
 }
+
+// tslint:disable-next-line: no-empty
+export const emptyObserver = () => {};
+
+export const anyComparator: Comparator<any> = (a: any, b: any) => a - b;
 
 /**
  * Comparator function that uses simple arithmetic comparison.
@@ -46,3 +51,14 @@ export function generateRandomNumbers(
     .fill(null)
     .map((i) => from + Math.floor((to - from) * Math.random()));
 }
+
+const LETTERS: string[] = [];
+for (let i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
+  LETTERS.push(String.fromCharCode(i));
+}
+
+export const generateRandomLetter = () =>
+  LETTERS[Math.floor(Math.random() * LETTERS.length)];
+
+export const generateRandomLetters = (length: number) =>
+  Array(length).fill(null).map(generateRandomLetter);

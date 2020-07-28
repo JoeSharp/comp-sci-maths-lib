@@ -1,34 +1,22 @@
-import { Comparator, SortObserver } from "../../types";
-import { EMPTY_OBSERVER } from "../../common";
-import { swap } from "../common";
-import { STARTING, FINISHED, NEXT_ITERATION, MAKING_SWAP } from "./common";
+import { SortUtility } from "../../types";
+import { simpleSwap, emptyObserver, anyComparator } from "../common";
 
-const bubbleSort = <T>(
+export default <T>(
   inputList: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T> = EMPTY_OBSERVER
+  {
+    comparator = anyComparator,
+    observe = emptyObserver,
+    swap = simpleSwap,
+  }: SortUtility<T>
 ): T[] => {
   const outputList: T[] = [...inputList];
 
-  observe(STARTING, outputList, {}, {});
-
   for (let top: number = outputList.length - 1; top > 0; top--) {
-    observe(NEXT_ITERATION, outputList, { top }, {});
+    observe("Iterating Top Value", outputList, { top });
     let anySwapsMade = false;
     for (let current: number = 0; current < top; current++) {
-      observe("Bubbling", outputList, { top, current }, {});
+      observe("Bubbling", outputList, { top, current });
       if (comparator(outputList[current], outputList[current + 1]) > 0) {
-        observe(
-          MAKING_SWAP,
-          outputList,
-          {
-            top,
-            current,
-            a: current,
-            b: current + 1,
-          },
-          {}
-        );
         swap(outputList, current, current + 1);
         anySwapsMade = true;
       }
@@ -37,9 +25,5 @@ const bubbleSort = <T>(
     if (!anySwapsMade) break;
   }
 
-  observe(FINISHED, outputList, {}, {});
-
   return outputList;
 };
-
-export default bubbleSort;

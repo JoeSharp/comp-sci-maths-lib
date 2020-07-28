@@ -1,11 +1,9 @@
-import { Comparator, SortObserver } from "../../types";
-import { EMPTY_OBSERVER } from "../../common";
-import { FINISHED, STARTING, RECURSING } from "./common";
+import { SortUtility } from "../../types";
+import { simpleSwap, emptyObserver, anyComparator } from "../common";
 
-function mergeSortRecurse<T>(
+function mergeSort<T>(
   inputList: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T>,
+  utilities: SortUtility<T>,
   leftPointer: number,
   rightPointer: number
 ): T[] {
@@ -13,32 +11,38 @@ function mergeSortRecurse<T>(
     return [inputList[leftPointer]];
   }
 
+  const {
+    comparator = anyComparator,
+    observe = emptyObserver,
+    swap = simpleSwap,
+  } = utilities;
+
   // Calculate the mid point
   const middle = Math.floor((leftPointer + rightPointer) / 2);
 
   // Recurse sort both halves to yield the two lists to merge
-  const firstHalf = mergeSortRecurse(
-    inputList,
-    comparator,
-    observe,
-    leftPointer,
-    middle
-  );
-  const secondHalf = mergeSortRecurse(
-    inputList,
-    comparator,
-    observe,
+  const firstHalf = mergeSort(inputList, utilities, leftPointer, middle);
+  const secondHalf = mergeSort(
+    [
+      // The observer needs to see how the list is shaping up, so pass in the sorted first half
+      ...inputList.slice(0, leftPointer),
+      ...firstHalf,
+      ...inputList.slice(middle + 1),
+    ],
+    utilities,
     middle + 1,
     rightPointer
   );
   observe(
-    RECURSING,
-    inputList,
-    { leftPointer, rightPointer, middle },
-    {
-      firstHalf,
-      secondHalf,
-    }
+    "Recursing",
+    [
+      // The observer needs to see how the list is shaping up
+      ...inputList.slice(0, leftPointer),
+      ...firstHalf,
+      ...secondHalf,
+      ...inputList.slice(rightPointer + 1),
+    ],
+    { leftPointer, rightPointer, middle }
   );
 
   // Merge the two halves into a single sorted list
@@ -65,28 +69,17 @@ function mergeSortRecurse<T>(
   return outputList;
 }
 
-const mergeSort = <T>(
-  inputList: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T> = EMPTY_OBSERVER
-): T[] => {
-  observe(STARTING, inputList, {}, {});
-
+export default <T>(inputList: T[], utilities: SortUtility<T>): T[] => {
   if (inputList.length < 2) {
     return inputList;
   }
 
-  const outputList: T[] = mergeSortRecurse(
+  const outputList: T[] = mergeSort(
     inputList,
-    comparator,
-    observe,
+    utilities,
     0,
     inputList.length - 1
   );
 
-  observe(FINISHED, outputList, {}, {});
-
   return outputList;
 };
-
-export default mergeSort;

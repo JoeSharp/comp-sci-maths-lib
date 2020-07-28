@@ -4,10 +4,8 @@
 
     And converted from pseudo code to JavaScript.
 */
-import { Comparator, SortObserver } from "../../types";
-import { swap } from "../common";
-import { EMPTY_OBSERVER } from "../../common";
-import { FINISHED, STARTING, RECURSING, MAKING_SWAP } from "./common";
+import { SortUtility } from "../../types";
+import { simpleSwap, emptyObserver, anyComparator } from "../common";
 
 /* This function takes last element as pivot, places
    the pivot element at its correct position in sorted
@@ -16,68 +14,60 @@ import { FINISHED, STARTING, RECURSING, MAKING_SWAP } from "./common";
    of pivot */
 function partition<T>(
   arr: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T>,
+  utilities: SortUtility<T>,
   low: number,
   high: number
 ) {
+  const {
+    comparator = anyComparator,
+    observe = emptyObserver,
+    swap = simpleSwap,
+  } = utilities;
+
   // pivot (Element to be placed at right position)
   const pivot: T = arr[high];
 
   let i = low - 1; // Index of smaller element
 
   for (let j = low; j <= high - 1; j++) {
-    observe("Partioning", arr, { pivot: high, low, high, i, j }, {});
+    observe("Partioning", arr, { pivot: high, low, high, i, j });
 
     // If current element is smaller than the pivot
     if (comparator(arr[j], pivot) < 0) {
       i++; // increment index of smaller element
-      observe(
-        MAKING_SWAP,
-        arr,
-        { pivot: high, low, high, i, j, a: i, b: j },
-        {}
-      );
       swap(arr, i, j);
     }
   }
 
-  observe(
-    MAKING_SWAP,
-    arr,
-    { pivot: high, low, high, i, a: i + 1, b: high },
-    {}
-  );
   swap(arr, i + 1, high);
   return i + 1;
 }
 
-function quickSortRecurse<T>(
+function quickSort<T>(
   arr: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T>,
+  utilities: SortUtility<T>,
   low: number,
   high: number
 ) {
-  observe(RECURSING, arr, { low, high }, {});
+  const {
+    comparator = anyComparator,
+    observe = emptyObserver,
+    swap = simpleSwap,
+  } = utilities;
+
+  observe("Recursing", arr, { low, high });
 
   if (low < high) {
     /* pi is partitioning index, arr[pi] is now
            at right place */
-    const pi: number = partition(arr, comparator, observe, low, high);
+    const pi: number = partition(arr, utilities, low, high);
 
-    quickSortRecurse(arr, comparator, observe, low, pi - 1); // Before pi
-    quickSortRecurse(arr, comparator, observe, pi + 1, high); // After pi
+    quickSort(arr, utilities, low, pi - 1); // Before pi
+    quickSort(arr, utilities, pi + 1, high); // After pi
   }
 }
 
-const quickSort = <T>(
-  inputList: T[],
-  comparator: Comparator<T>,
-  observe: SortObserver<T> = EMPTY_OBSERVER
-): T[] => {
-  observe(STARTING, inputList, {}, {});
-
+export default <T>(inputList: T[], utilities: SortUtility<T>): T[] => {
   if (inputList.length < 2) {
     return inputList;
   }
@@ -86,11 +76,7 @@ const quickSort = <T>(
   const outputList = [...inputList];
 
   // This function recursively operates on the data in place
-  quickSortRecurse(outputList, comparator, observe, 0, inputList.length - 1);
-
-  observe(FINISHED, outputList, {}, {});
+  quickSort(outputList, utilities, 0, inputList.length - 1);
 
   return outputList;
 };
-
-export default quickSort;

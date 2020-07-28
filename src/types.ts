@@ -17,15 +17,21 @@ export interface WorkingLists<T> {
 export type SortObserver<T> = (
   stageName: string,
   data: T[],
-  positionVars: PositionVars,
-  workingLists: WorkingLists<T>
+  positionVars: PositionVars
 ) => void;
+
+export type SwapFunction<T> = (arr: T[], from: number, to: number) => void;
+
+export interface SortUtility<T> {
+  comparator?: Comparator<T>;
+  observe?: SortObserver<T>;
+  swap?: SwapFunction<T>;
+}
 
 // Sorting
 export type SortFunction<T> = (
   inputList: T[],
-  comparator: Comparator<T>,
-  observe?: SortObserver<T>
+  utilities: SortUtility<T>
 ) => T[];
 
 export interface NamedSort {
