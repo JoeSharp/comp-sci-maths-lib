@@ -27,12 +27,12 @@ function partition<T>(
   let i = low - 1; // Index of smaller element
 
   for (let j = low; j <= high - 1; j++) {
-    observe("Partioning", arr, { pivot: high, low, high, i, j });
+    observe("Partioning", arr, { pivot: high, low, high, i, j }, {});
 
     // If current element is smaller than the pivot
     if (comparator(arr[j], pivot) < 0) {
       i++; // increment index of smaller element
-      observe(MAKING_SWAP, arr, { low, high, i, j });
+      observe(MAKING_SWAP, arr, { low, high, i, j }, {});
       swap(arr, i, j);
     }
   }
@@ -47,7 +47,7 @@ function quickSortRecurse<T>(
   low: number,
   high: number
 ) {
-  observe(RECURSING, arr, { low, high });
+  observe(RECURSING, arr, { low, high }, {});
 
   if (low < high) {
     /* pi is partitioning index, arr[pi] is now
@@ -64,7 +64,7 @@ const quickSort = <T>(
   comparator: Comparator<T>,
   observe: SortObserver<T> = EMPTY_OBSERVER
 ): T[] => {
-  observe(STARTING, inputList, {});
+  observe(STARTING, inputList, {}, {});
 
   if (inputList.length < 2) {
     return inputList;
@@ -76,7 +76,7 @@ const quickSort = <T>(
   // This function recursively operates on the data in place
   quickSortRecurse(outputList, comparator, observe, 0, inputList.length - 1);
 
-  observe(FINISHED, outputList, {});
+  observe(FINISHED, outputList, {}, {});
 
   return outputList;
 };

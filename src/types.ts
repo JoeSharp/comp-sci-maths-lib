@@ -10,10 +10,15 @@ export interface PositionVars {
   [k: string]: number;
 }
 
+export interface WorkingLists<T> {
+  [k: string]: T[];
+}
+
 export type SortObserver<T> = (
   stageName: string,
   data: T[],
-  positionVars: PositionVars
+  positionVars: PositionVars,
+  workingLists: WorkingLists<T>
 ) => void;
 
 // Sorting

@@ -8,7 +8,7 @@ const insertionSort = <T>(
   comparator: Comparator<T>,
   observe: SortObserver<T> = EMPTY_OBSERVER
 ): T[] => {
-  observe(STARTING, inputList, {});
+  observe(STARTING, inputList, {}, {});
 
   if (inputList.length < 2) {
     return inputList;
@@ -18,17 +18,22 @@ const insertionSort = <T>(
   const outputList = [...inputList];
 
   for (let index = 1; index < outputList.length; index++) {
-    observe("Placing Item", outputList, { index });
+    observe("Placing Item", outputList, { index }, {});
     let itemPlace = index;
     while (itemPlace > 0) {
       const lower = itemPlace - 1;
       const upper = itemPlace;
 
-      observe("Seeking Place", outputList, {
-        index,
-        lower,
-        upper,
-      });
+      observe(
+        "Seeking Place",
+        outputList,
+        {
+          index,
+          lower,
+          upper,
+        },
+        {}
+      );
 
       const comparison: number = comparator(
         outputList[lower],
@@ -37,11 +42,16 @@ const insertionSort = <T>(
 
       // The comparator returns -ve if the first item is 'greater than' the second one
       if (comparison > 0) {
-        observe(MAKING_SWAP, outputList, {
-          index,
-          lower,
-          upper,
-        });
+        observe(
+          MAKING_SWAP,
+          outputList,
+          {
+            index,
+            lower,
+            upper,
+          },
+          {}
+        );
 
         // Temporary variable to prevent overwrites
         swap(outputList, lower, upper);
@@ -54,7 +64,7 @@ const insertionSort = <T>(
     }
   }
 
-  observe(FINISHED, outputList, {});
+  observe(FINISHED, outputList, {}, {});
 
   return outputList;
 };
