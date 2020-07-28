@@ -6,7 +6,7 @@ export type Comparator<T> = (a: T, b: T) => number;
 
 export type VisitFunction<T> = (n: T) => any;
 
-interface PositionVars {
+export interface PositionVars {
   [k: string]: number;
 }
 
