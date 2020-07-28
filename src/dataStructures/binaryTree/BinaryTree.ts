@@ -3,12 +3,12 @@ import { Optional } from "../../types";
 
 export default class BinaryTree<T> {
   value: Optional<T>;
-  comparator: Comparator<T>;
+  compare: Comparator<T>;
   leftBranch: Optional<BinaryTree<T>>;
   rightBranch: Optional<BinaryTree<T>>;
 
-  constructor(comparator: Comparator<T>, value?: Optional<T>) {
-    this.comparator = comparator;
+  constructor(compare: Comparator<T>, value?: Optional<T>) {
+    this.compare = compare;
     this.value = value;
     this.leftBranch = null;
     this.rightBranch = null;
@@ -35,17 +35,17 @@ export default class BinaryTree<T> {
   add(item: T) {
     if (this.value === undefined) {
       this.value = item;
-    } else if (this.comparator(item, this.value) < 0) {
+    } else if (this.compare(item, this.value) < 0) {
       if (!!this.leftBranch) {
         this.leftBranch.add(item);
       } else {
-        this.leftBranch = new BinaryTree(this.comparator, item);
+        this.leftBranch = new BinaryTree(this.compare, item);
       }
     } else {
       if (!!this.rightBranch) {
         this.rightBranch.add(item);
       } else {
-        this.rightBranch = new BinaryTree(this.comparator, item);
+        this.rightBranch = new BinaryTree(this.compare, item);
       }
     }
   }

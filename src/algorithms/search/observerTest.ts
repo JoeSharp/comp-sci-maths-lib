@@ -24,6 +24,8 @@ algorithms.forEach(({ name, search }) => {
   simpleLogger.info(`Running Sort Algorithm ${name}`);
   // Generate a list of random numbers
   const inputList: number[] = generateRandomNumbers(0, 100, 20);
+
+  // Binary search requires sorted array, so lets just sort it for all tests
   inputList.sort(arithmeticComparator);
 
   // Search for some specific indices
@@ -31,7 +33,10 @@ algorithms.forEach(({ name, search }) => {
     simpleLogger.info(`Searching for inputList[${index}]=${inputList[index]}`);
 
     // Search for the 15th one
-    const found = search(inputList, (d) => inputList[index] - d, observe);
+    const found = search(inputList, {
+      match: (d) => inputList[index] - d,
+      observe,
+    });
 
     simpleLogger.info(`Found at ${found}`);
   });

@@ -12,7 +12,7 @@ function mergeSort<T>(
   }
 
   const {
-    comparator = anyComparator,
+    compare = anyComparator,
     observe = emptyObserver,
     swap = simpleSwap,
   } = utilities;
@@ -51,7 +51,7 @@ function mergeSort<T>(
   let secondPtr = 0;
   while (firstPtr < firstHalf.length && secondPtr < secondHalf.length) {
     // Comparator returns +ve if the second item is larger than first
-    if (comparator(firstHalf[firstPtr], secondHalf[secondPtr]) > 0) {
+    if (compare(firstHalf[firstPtr], secondHalf[secondPtr]) > 0) {
       outputList.push(secondHalf[secondPtr]);
       secondPtr += 1;
     } else {

@@ -4,7 +4,7 @@ import { anyComparator, emptyObserver, simpleSwap } from "../common";
 export default <T>(
   inputList: T[],
   {
-    comparator = anyComparator,
+    compare = anyComparator,
     observe = emptyObserver,
     swap = simpleSwap,
   }: SortUtility<T>
@@ -29,12 +29,9 @@ export default <T>(
         upper,
       });
 
-      const comparison: number = comparator(
-        outputList[lower],
-        outputList[upper]
-      );
+      const comparison: number = compare(outputList[lower], outputList[upper]);
 
-      // The comparator returns -ve if the first item is 'greater than' the second one
+      // The compare returns -ve if the first item is 'greater than' the second one
       if (comparison > 0) {
         // Temporary variable to prevent overwrites
         swap(outputList, lower, upper);

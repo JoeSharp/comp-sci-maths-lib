@@ -19,7 +19,7 @@ function partition<T>(
   high: number
 ) {
   const {
-    comparator = anyComparator,
+    compare = anyComparator,
     observe = emptyObserver,
     swap = simpleSwap,
   } = utilities;
@@ -33,7 +33,7 @@ function partition<T>(
     observe("Partioning", arr, { pivot: high, low, high, i, j });
 
     // If current element is smaller than the pivot
-    if (comparator(arr[j], pivot) < 0) {
+    if (compare(arr[j], pivot) < 0) {
       i++; // increment index of smaller element
       swap(arr, i, j);
     }
@@ -50,7 +50,7 @@ function quickSort<T>(
   high: number
 ) {
   const {
-    comparator = anyComparator,
+    compare = anyComparator,
     observe = emptyObserver,
     swap = simpleSwap,
   } = utilities;

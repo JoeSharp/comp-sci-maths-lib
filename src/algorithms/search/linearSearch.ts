@@ -1,6 +1,6 @@
 import { NO_MATCH } from "./common";
-import { MatchComparator, SearchFunction, SearchObserver } from "../../types";
-import { EMPTY_OBSERVER } from "../../common";
+import { SearchFunction, SearchUtilities } from "../../types";
+import { emptyObserver } from "../common";
 
 /**
  * perform a linear search on an array
@@ -12,19 +12,16 @@ import { EMPTY_OBSERVER } from "../../common";
  * +ve if item is 'greater than'
  * @return {object} The matching item in the array
  */
-const linearSearch: SearchFunction = <T>(
+export default <T>(
   data: T[],
-  compare: MatchComparator<T>,
-  observe: SearchObserver<T> = EMPTY_OBSERVER
+  { match, observe = emptyObserver }: SearchUtilities<T>
 ): number => {
   for (let i = 0; i < data.length; i++) {
     observe(i, data[i]);
-    if (compare(data[i]) === 0) {
+    if (match(data[i]) === 0) {
       return i;
     }
   }
 
   return NO_MATCH;
 };
-
-export default linearSearch;

@@ -28,5 +28,5 @@ algorithms.forEach(({ name, sort }) => {
   const inputList: number[] = generateRandomNumbers(0, 100, 10);
 
   // Execute the sort
-  sort(inputList, arithmeticComparator, observe);
+  sort(inputList, { compare: arithmeticComparator, observe });
 });

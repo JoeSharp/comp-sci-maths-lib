@@ -23,7 +23,7 @@ export type SortObserver<T> = (
 export type SwapFunction<T> = (arr: T[], from: number, to: number) => void;
 
 export interface SortUtility<T> {
-  comparator?: Comparator<T>;
+  compare?: Comparator<T>;
   observe?: SortObserver<T>;
   swap?: SwapFunction<T>;
 }
@@ -48,10 +48,14 @@ export type SearchObserver<T> = (
   positionVars?: PositionVars
 ) => void;
 
+export interface SearchUtilities<T> {
+  match: MatchComparator<T>;
+  observe?: SearchObserver<T>;
+}
+
 export type SearchFunction = <T>(
   inputList: T[],
-  match: MatchComparator<T>,
-  observe?: SearchObserver<T>
+  utilities: SearchUtilities<T>
 ) => number;
 
 export interface NamedSearch {

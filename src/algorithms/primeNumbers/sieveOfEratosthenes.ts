@@ -1,5 +1,4 @@
-import { Optional } from "../../types";
-import { EMPTY_OBSERVER } from "../../common";
+import { emptyObserver } from "../common";
 
 export interface MarkedNumber {
   value: number;
@@ -31,7 +30,7 @@ export const getPrimeNumbers = (markedNumbers: MarkedNumber[]): number[] =>
  */
 function sieveOfEratosthenes(
   limit: number,
-  callback: PrimeCallback = EMPTY_OBSERVER
+  callback: PrimeCallback = emptyObserver
 ): number[] {
   const markedNumbers: MarkedNumber[] = [];
 

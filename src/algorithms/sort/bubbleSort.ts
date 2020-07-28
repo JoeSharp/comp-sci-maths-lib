@@ -4,7 +4,7 @@ import { simpleSwap, emptyObserver, anyComparator } from "../common";
 export default <T>(
   inputList: T[],
   {
-    comparator = anyComparator,
+    compare = anyComparator,
     observe = emptyObserver,
     swap = simpleSwap,
   }: SortUtility<T>
@@ -16,7 +16,7 @@ export default <T>(
     let anySwapsMade = false;
     for (let current: number = 0; current < top; current++) {
       observe("Bubbling", outputList, { top, current });
-      if (comparator(outputList[current], outputList[current + 1]) > 0) {
+      if (compare(outputList[current], outputList[current + 1]) > 0) {
         swap(outputList, current, current + 1);
         anySwapsMade = true;
       }
