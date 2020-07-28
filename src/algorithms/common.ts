@@ -1,6 +1,6 @@
 import { Comparator } from "../types";
 
-function swap<T>(arr: T[], from: number, to: number) {
+export function swap<T>(arr: T[], from: number, to: number) {
   const swapItem: T = arr[from];
   arr[from] = arr[to];
   arr[to] = swapItem;
@@ -24,10 +24,12 @@ export function objToString(o?: object) {
  * @param {number | string} a First item
  * @param {number | string} b Second item
  */
-const arithmeticComparator: Comparator<number> = (a: number, b: number) =>
-  a - b;
+export const arithmeticComparator: Comparator<number> = (
+  a: number,
+  b: number
+) => a - b;
 
-const stringComparator: Comparator<string> = (a: string, b: string) =>
+export const stringComparator: Comparator<string> = (a: string, b: string) =>
   a.localeCompare(b);
 
 /**
@@ -35,7 +37,7 @@ const stringComparator: Comparator<string> = (a: string, b: string) =>
  * @param {number} length
  * @return {array} the list of random numbers
  */
-function generateRandomNumbers(
+export function generateRandomNumbers(
   from: number,
   to: number,
   length: number
@@ -44,5 +46,3 @@ function generateRandomNumbers(
     .fill(null)
     .map((i) => from + Math.floor((to - from) * Math.random()));
 }
-
-export { swap, arithmeticComparator, stringComparator, generateRandomNumbers };

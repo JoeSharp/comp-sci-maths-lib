@@ -49,6 +49,8 @@ const insertionSort = <T>(
             index,
             lower,
             upper,
+            a: lower,
+            b: upper,
           },
           {}
         );
