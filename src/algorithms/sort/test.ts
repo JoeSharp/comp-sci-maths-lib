@@ -1,5 +1,6 @@
 import algorithms from "./index";
 import { generateRandomNumbers, arithmeticComparator } from "../common";
+import { SortObserver, PositionVars } from "../../types";
 
 // Associate each sort algorithm with a name so they can all be tested in same function
 
@@ -9,8 +10,20 @@ algorithms.forEach(({ name, sort }) => {
     // Generate a list of random numbers
     const inputList: number[] = generateRandomNumbers(0, 100, 20);
 
+    const observer: SortObserver<number> = (
+      stageName: string,
+      data: number[],
+      positionVars: PositionVars
+    ) => {
+      expect(data.length).toBe(inputList.length);
+    };
+
     // Execute the sort
-    const outputList: number[] = sort(inputList, arithmeticComparator);
+    const outputList: number[] = sort(
+      inputList,
+      arithmeticComparator,
+      observer
+    );
 
     // Check all the input numbers are in there somewhere
     expect(outputList.length).toBe(inputList.length);

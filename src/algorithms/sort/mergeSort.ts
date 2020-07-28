@@ -9,8 +9,6 @@ function mergeSortRecurse<T>(
   leftPointer: number,
   rightPointer: number
 ): T[] {
-  observe(RECURSING, inputList, { leftPointer, rightPointer });
-
   if (leftPointer === rightPointer) {
     return [inputList[leftPointer]];
   }
@@ -32,6 +30,18 @@ function mergeSortRecurse<T>(
     observe,
     middle + 1,
     rightPointer
+  );
+  observe(
+    RECURSING,
+    [
+      // Build an idea of what the sorted array looks like so far
+      // obviously this would impact performance...
+      ...inputList.slice(0, leftPointer),
+      ...firstHalf,
+      ...secondHalf,
+      ...inputList.slice(rightPointer + 1),
+    ],
+    { leftPointer, rightPointer, middle }
   );
 
   // Merge the two halves into a single sorted list
@@ -69,7 +79,7 @@ const mergeSort = <T>(
     return inputList;
   }
 
-  const sorted: T[] = mergeSortRecurse(
+  const outputList: T[] = mergeSortRecurse(
     inputList,
     comparator,
     observe,
@@ -77,9 +87,9 @@ const mergeSort = <T>(
     inputList.length - 1
   );
 
-  observe(FINISHED, sorted, {});
+  observe(FINISHED, outputList, {});
 
-  return sorted;
+  return outputList;
 };
 
 export default mergeSort;
