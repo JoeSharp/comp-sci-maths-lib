@@ -32,10 +32,22 @@ function partition<T>(
     // If current element is smaller than the pivot
     if (comparator(arr[j], pivot) < 0) {
       i++; // increment index of smaller element
-      observe(MAKING_SWAP, arr, { low, high, i, j, a: i, b: j }, {});
+      observe(
+        MAKING_SWAP,
+        arr,
+        { pivot: high, low, high, i, j, a: i, b: j },
+        {}
+      );
       swap(arr, i, j);
     }
   }
+
+  observe(
+    MAKING_SWAP,
+    arr,
+    { pivot: high, low, high, i, a: i + 1, b: high },
+    {}
+  );
   swap(arr, i + 1, high);
   return i + 1;
 }
