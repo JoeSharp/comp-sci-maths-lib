@@ -2,7 +2,11 @@ export type MatchFunction<T> = (a: T) => boolean;
 
 export type Optional<T> = T | undefined;
 
-export type Comparator<T> = (a: T, b: T) => number;
+export interface CompareMeta {
+  aIndex: number;
+  bIndex: number;
+}
+export type Comparator<T> = (a: T, b: T, meta?: CompareMeta) => number;
 
 export type VisitFunction<T> = (n: T) => any;
 

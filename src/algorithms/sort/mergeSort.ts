@@ -51,7 +51,12 @@ function mergeSort<T>(
   let secondPtr = 0;
   while (firstPtr < firstHalf.length && secondPtr < secondHalf.length) {
     // Comparator returns +ve if the second item is larger than first
-    if (compare(firstHalf[firstPtr], secondHalf[secondPtr]) > 0) {
+    if (
+      compare(firstHalf[firstPtr], secondHalf[secondPtr], {
+        aIndex: firstPtr,
+        bIndex: secondPtr,
+      }) > 0
+    ) {
       outputList.push(secondHalf[secondPtr]);
       secondPtr += 1;
     } else {

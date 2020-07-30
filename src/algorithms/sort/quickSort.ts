@@ -33,7 +33,7 @@ function partition<T>(
     observe("Partioning", arr, { pivot: high, low, high, i, j });
 
     // If current element is smaller than the pivot
-    if (compare(arr[j], pivot) < 0) {
+    if (compare(arr[j], pivot, { aIndex: j, bIndex: high }) < 0) {
       i++; // increment index of smaller element
       swap(arr, i, j);
     }

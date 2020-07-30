@@ -29,7 +29,10 @@ export default <T>(
         upper,
       });
 
-      const comparison: number = compare(outputList[lower], outputList[upper]);
+      const comparison: number = compare(outputList[lower], outputList[upper], {
+        aIndex: lower,
+        bIndex: upper,
+      });
 
       // The compare returns -ve if the first item is 'greater than' the second one
       if (comparison > 0) {
