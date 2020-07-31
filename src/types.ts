@@ -44,11 +44,10 @@ export interface NamedSort {
 }
 
 // Searching
-export type MatchComparator<T> = (a: T) => number;
+export type MatchComparator<T> = (a: T, aIndex: number) => number;
 
 export type SearchObserver<T> = (
-  index: number,
-  value: T,
+  stageName: string,
   positionVars?: PositionVars
 ) => void;
 

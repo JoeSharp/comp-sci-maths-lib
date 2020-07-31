@@ -30,9 +30,9 @@ function binarySearch<T>(
 
   if (right >= left) {
     const mid = Math.floor(left + (right - left) / 2);
-    observe(mid, data[mid], { left, right, mid });
+    observe("Recursing", { left, right, mid });
 
-    const compareMid: number = match(data[mid]);
+    const compareMid: number = match(data[mid], mid);
 
     // If the element is present in the middle itself
     if (compareMid === 0) {

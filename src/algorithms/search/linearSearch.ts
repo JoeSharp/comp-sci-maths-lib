@@ -17,8 +17,8 @@ export default <T>(
   { match, observe = emptyObserver }: SearchUtilities<T>
 ): number => {
   for (let i = 0; i < data.length; i++) {
-    observe(i, data[i]);
-    if (match(data[i]) === 0) {
+    observe("Looking", { i });
+    if (match(data[i], i) === 0) {
       return i;
     }
   }

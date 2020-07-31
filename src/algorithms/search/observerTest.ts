@@ -9,14 +9,11 @@ import {
 import { SearchObserver } from "../../types";
 
 const observe: SearchObserver<number> = (
-  index: number,
-  value: number,
+  stageName: string,
   positionVars: { [k: string]: number }
 ) => {
   simpleLogger.info(
-    `Checking data[${index}]=${value}, Position Vars: ${objToString(
-      positionVars
-    )}`
+    `Observing ${stageName}, Position Vars: ${objToString(positionVars)}`
   );
 };
 

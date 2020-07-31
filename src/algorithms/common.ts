@@ -37,6 +37,16 @@ export const arithmeticComparator: Comparator<number> = (
 export const stringComparator: Comparator<string> = (a: string, b: string) =>
   a.localeCompare(b);
 
+interface GenerationOpts {
+  sorted?: boolean;
+  unique?: boolean;
+}
+
+const defaultGenOpts: GenerationOpts = {
+  sorted: false,
+  unique: false,
+};
+
 /**
  * Generate a list of random numbers in array of given length
  * @param {number} length
@@ -45,11 +55,20 @@ export const stringComparator: Comparator<string> = (a: string, b: string) =>
 export function generateRandomNumbers(
   from: number,
   to: number,
-  length: number
+  length: number,
+  opts?: GenerationOpts
 ): number[] {
-  return Array(length)
+  const { sorted = false, unique = true } = { ...defaultGenOpts, ...opts };
+
+  const data = Array(length)
     .fill(null)
     .map((i) => from + Math.floor((to - from) * Math.random()));
+
+  if (sorted) {
+    data.sort();
+  }
+
+  return data;
 }
 
 const LETTERS: string[] = [];
@@ -60,5 +79,15 @@ for (let i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
 export const generateRandomLetter = () =>
   LETTERS[Math.floor(Math.random() * LETTERS.length)];
 
-export const generateRandomLetters = (length: number) =>
-  Array(length).fill(null).map(generateRandomLetter);
+export const generateRandomLetters = (
+  length: number,
+  opts?: GenerationOpts
+) => {
+  const { sorted = false, unique = true } = { ...defaultGenOpts, ...opts };
+
+  const data = Array(length).fill(null).map(generateRandomLetter);
+  if (sorted) {
+    data.sort();
+  }
+  return data;
+};
