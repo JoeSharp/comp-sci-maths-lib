@@ -1,5 +1,5 @@
 import { SortUtility } from "../../types";
-import { simpleSwap, emptyObserver, anyComparator } from "../common";
+import { emptyObserver, anyComparator } from "../common";
 
 function mergeSort<T>(
   inputList: T[],
@@ -11,11 +11,7 @@ function mergeSort<T>(
     return [inputList[leftPointer]];
   }
 
-  const {
-    compare = anyComparator,
-    observe = emptyObserver,
-    swap = simpleSwap,
-  } = utilities;
+  const { compare = anyComparator, observe = emptyObserver } = utilities;
 
   // Calculate the mid point
   const middle = Math.floor((leftPointer + rightPointer) / 2);
