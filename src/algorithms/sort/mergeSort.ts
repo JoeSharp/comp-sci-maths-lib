@@ -4,9 +4,21 @@ import { emptyObserver, anyComparator } from "../common";
 function mergeSort<T>(
   inputList: T[],
   utilities: SortUtility<T>,
-  leftPointer: number,
-  rightPointer: number
+  leftPointer?: number,
+  rightPointer?: number
 ): T[] {
+  // Is it worth sorting?
+  if (inputList.length < 2) {
+    return inputList;
+  }
+
+  if (leftPointer === undefined) {
+    leftPointer = 0;
+  }
+  if (rightPointer === undefined) {
+    rightPointer = inputList.length - 1;
+  }
+
   if (leftPointer === rightPointer) {
     return [inputList[leftPointer]];
   }
@@ -70,17 +82,4 @@ function mergeSort<T>(
   return outputList;
 }
 
-export default <T>(inputList: T[], utilities: SortUtility<T>): T[] => {
-  if (inputList.length < 2) {
-    return inputList;
-  }
-
-  const outputList: T[] = mergeSort(
-    inputList,
-    utilities,
-    0,
-    inputList.length - 1
-  );
-
-  return outputList;
-};
+export default mergeSort;

@@ -5,11 +5,14 @@
     And converted from pseudo code to JavaScript.
 */
 
-/* This function takes last element as pivot, places
-   the pivot element at its correct position in sorted
-    array, and places all smaller (smaller than pivot)
-   to left of pivot and all greater elements to right
-   of pivot */
+/**
+ * Partitions a list around a pivot.
+ *
+ * @param arr The data to sort
+ * @param low The lower bound of the sorting
+ * @param high The upper bound of the sorting
+ * @return The position that the list ended up pivoted around
+ */
 function partition<T>(arr: T[], low: number, high: number) {
   // pivot (Element to be placed at right position)
   const pivot: T = arr[high];
@@ -46,11 +49,6 @@ function quickSort<T>(arr: T[], low: number, high: number) {
 }
 
 export default <T>(inputList: T[]): T[] => {
-  // Is it worth sorting?
-  if (inputList.length < 2) {
-    return inputList;
-  }
-
   // Make a copy, don't change input list
   const outputList = [...inputList];
 
