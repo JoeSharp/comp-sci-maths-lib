@@ -5,7 +5,29 @@ import { generateRandomNumbers } from "../common";
 
 // Create a test for each algorithm
 algorithms.forEach(({ name, sort }) => {
-  test(`Sort (basic): ${name}`, () => {
+  test(`Sort Strings (basic): ${name}`, () => {
+    const names: string[] = [
+      "Lister",
+      "Cat",
+      "Kryten",
+      "Rimmer",
+      "Holly",
+      "Kochanski",
+    ];
+
+    const sortedNames: string[] = sort(names);
+
+    expect(sortedNames).toStrictEqual([
+      "Cat",
+      "Holly",
+      "Kochanski",
+      "Kryten",
+      "Lister",
+      "Rimmer",
+    ]);
+  });
+
+  test(`Sort Numbers (basic): ${name}`, () => {
     // Generate a list of random numbers
     const inputList: number[] = generateRandomNumbers(0, 100, 20);
 

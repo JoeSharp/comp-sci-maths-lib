@@ -6,7 +6,7 @@ import { SortObserver, PositionVars } from "../../types";
 
 // Create a test for each algorithm
 algorithms.forEach(({ name, sort }) => {
-  test(`Sort (with telemetry): ${name}`, () => {
+  test(`Sort Numbers (with telemetry): ${name}`, () => {
     // Generate a list of random numbers
     const inputList: number[] = generateRandomNumbers(0, 100, 20);
 
