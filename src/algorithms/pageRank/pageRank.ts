@@ -29,7 +29,7 @@ export const BLANK_PAGE_RANK_STATE: PageRankState = {
  * @param dampingFactor The damping factor to apply during the page rank iterations
  */
 export const initialisePageRank = (
-  graph: GraphData,
+  graph: GraphData<string>,
   dampingFactor: number = 0.85
 ) => {
   const firstRanks = [...graph.vertices].reduce(

@@ -5,7 +5,7 @@ export interface PageRanks {
 }
 export interface PageRankState {
   iterations: number;
-  graph: GraphData;
+  graph: GraphData<string>;
   dampingFactor: number;
   ranks: PageRanks;
   rankHistory: PageRanks[];

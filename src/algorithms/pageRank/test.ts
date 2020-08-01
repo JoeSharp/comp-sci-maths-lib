@@ -7,7 +7,7 @@ import Graph from "../../dataStructures/graph/Graph";
 import { PageRankState } from "./types";
 
 test("Page Rank", () => {
-  const graph = new Graph()
+  const graph = new Graph<string>()
     .addUnidirectionalEdge("a", "b")
     .addUnidirectionalEdge("b", "a")
     .addUnidirectionalEdge("b", "c")

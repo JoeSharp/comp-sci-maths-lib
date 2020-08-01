@@ -41,7 +41,7 @@ function* walkPath(
 }
 
 interface Args {
-  graph: Graph;
+  graph: Graph<string>;
   sourceNode: string;
   destinationNode?: string;
   getHeuristicCost?: HeuristicCostFunction;

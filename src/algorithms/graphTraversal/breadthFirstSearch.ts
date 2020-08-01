@@ -1,9 +1,9 @@
 import Queue from "../../dataStructures/queue/Queue";
 import Graph from "../../dataStructures/graph/Graph";
 
-function breadthFirstSearch<T>(graph: Graph, startVertex: string): string[] {
-  const pendingQueue: Queue<string> = new Queue();
-  const items: string[] = [];
+function breadthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
+  const pendingQueue: Queue<T> = new Queue();
+  const items: T[] = [];
 
   // Visit the starting vertex
   pendingQueue.enqueue(startVertex);
@@ -12,7 +12,7 @@ function breadthFirstSearch<T>(graph: Graph, startVertex: string): string[] {
   let vertex = startVertex;
   do {
     // Get the related edges which are also in the invisited set
-    const related: string[] = graph
+    const related: T[] = graph
       .getOutgoing(vertex)
       .map(({ to }) => to)
       .filter((i) => !items.includes(i));

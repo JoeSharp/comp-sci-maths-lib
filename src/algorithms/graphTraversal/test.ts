@@ -3,7 +3,7 @@ import depthFirstSearch from "./depthFirstSearch";
 import Graph from "../../dataStructures/graph/Graph";
 
 function createTestGraph() {
-  return new Graph()
+  return new Graph<string>()
     .addBiDirectionalEdge("S", "A")
     .addBiDirectionalEdge("S", "B")
     .addBiDirectionalEdge("S", "C")

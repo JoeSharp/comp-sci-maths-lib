@@ -1,9 +1,9 @@
 import Stack from "../../dataStructures/stack/Stack";
 import Graph from "../../dataStructures/graph/Graph";
 
-function depthFirstSearch(graph: Graph, startVertex: string): string[] {
-  const pendingStack = new Stack<string>();
-  const items: string[] = [];
+function depthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
+  const pendingStack = new Stack<T>();
+  const items: T[] = [];
 
   let vertex = startVertex;
   while (true) {
@@ -13,7 +13,7 @@ function depthFirstSearch(graph: Graph, startVertex: string): string[] {
     }
 
     // get the relate edges which are also in the unvisited set
-    const related: string[] = graph
+    const related: T[] = graph
       .getOutgoing(vertex)
       .map(({ to }) => to)
       .filter((i) => !items.includes(i));

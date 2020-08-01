@@ -4,25 +4,25 @@ import { Optional } from "../../types";
  * This class encapsulates a weighted directional graph.
  * Each Edge is stored as a separate object in an array
  */
-export interface Edge {
-  from: string;
-  to: string;
+export interface Edge<T> {
+  from: T;
+  to: T;
   weight: number;
 }
 
-export interface GraphData {
-  vertices: Set<string>;
-  edges: Edge[];
+export interface GraphData<T> {
+  vertices: Set<T>;
+  edges: Edge<T>[];
 }
 
-export const EMPTY_GRAPH_DATA: GraphData = {
+export const EMPTY_GRAPH_DATA: GraphData<any> = {
   vertices: new Set(),
   edges: [],
 };
 
-export default class Graph implements GraphData {
-  vertices: Set<string>;
-  edges: Edge[];
+export default class Graph<T> implements GraphData<T> {
+  vertices: Set<T>;
+  edges: Edge<T>[];
 
   /**
    * A constructor that accepts existing graph details.
@@ -31,33 +31,33 @@ export default class Graph implements GraphData {
    * @param vertices Existing vertices to populate it with
    * @param edges Existing edges to populate it with
    */
-  constructor(graphData: GraphData = EMPTY_GRAPH_DATA) {
+  constructor(graphData: GraphData<T> = EMPTY_GRAPH_DATA) {
     this.vertices = new Set(graphData.vertices);
     this.edges = [...graphData.edges];
   }
 
   /**
-   * Register the existence of a page,
+   * Register the existence of a vertex,
    * this might be done to represent disconnected vertexs,
    * or to simply prepare the list of vertexs before edges are known.
    *
-   * @param page The page to add
+   * @param vertex The vertex to add
    * @returns this, to allow method chaining
    */
-  addVertex(page: string): Graph {
-    this.vertices.add(page);
+  addVertex(vertex: T): Graph<T> {
+    this.vertices.add(vertex);
     return this;
   }
 
   /**
-   * Remove the existence of a page,
-   * will also remove any edges from/to the given page.
-   * @param page The page to remove
+   * Remove the existence of a vertex,
+   * will also remove any edges from/to the given vertex.
+   * @param vertex The vertex to remove
    */
-  removeVertex(page: string): Graph {
-    this.vertices.delete(page);
+  removeVertex(vertex: T): Graph<T> {
+    this.vertices.delete(vertex);
     this.edges = this.edges.filter(
-      ({ from, to }) => from === page || to === page
+      ({ from, to }) => from === vertex || to === vertex
     );
 
     return this;
@@ -68,7 +68,7 @@ export default class Graph implements GraphData {
    * @param from The source vertex
    * @param to The destination vertex
    */
-  removeEdge(from: string, to: string): Graph {
+  removeEdge(from: T, to: T): Graph<T> {
     this.edges = this.edges.filter((l) => !(l.from === from && l.to === to));
     return this;
   }
@@ -80,7 +80,7 @@ export default class Graph implements GraphData {
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addUnidirectionalEdge(from: string, to: string, weight: number = 1.0) {
+  addUnidirectionalEdge(from: T, to: T, weight: number = 1.0) {
     this.vertices.add(from);
     this.vertices.add(to);
     this.edges = [
@@ -97,7 +97,7 @@ export default class Graph implements GraphData {
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addBiDirectionalEdge(from: string, to: string, weight: number = 1.0) {
+  addBiDirectionalEdge(from: T, to: T, weight: number = 1.0) {
     this.vertices.add(from);
     this.vertices.add(to);
 
@@ -122,7 +122,7 @@ export default class Graph implements GraphData {
    * @param to The destination vertex
    * @returns The Edge if one exists
    */
-  getEdge(from: string, to: string): Optional<Edge> {
+  getEdge(from: T, to: T): Optional<Edge<T>> {
     return this.edges.find((l) => l.from === from && l.to === to);
   }
 
@@ -130,7 +130,7 @@ export default class Graph implements GraphData {
    * Access edges coming into a specific vertex
    * @param vertex The from vertex
    */
-  getIncoming(vertex: string): Edge[] {
+  getIncoming(vertex: T): Edge<T>[] {
     return this.edges.filter((l) => l.to === vertex);
   }
 
@@ -138,7 +138,7 @@ export default class Graph implements GraphData {
    * Access the edges from a specific vertex
    * @param {string} vertex The from vertex
    */
-  getOutgoing(vertex: string): Edge[] {
+  getOutgoing(vertex: T): Edge<T>[] {
     return this.edges.filter((l) => l.from === vertex);
   }
 
@@ -151,7 +151,7 @@ export default class Graph implements GraphData {
    * @param {string} to The destination vertex
    * @return The weight of the Edge, or Infinity if there is no Edge.
    */
-  getEdgeWeight(from: string, to: string): number {
+  getEdgeWeight(from: T, to: T): number {
     const edge = this.getEdge(from, to);
     return !!edge ? edge.weight : Infinity;
   }
@@ -161,9 +161,9 @@ export default class Graph implements GraphData {
    */
   toString() {
     return `Graph\n${[...this.vertices]
-      .map((page) => ({
-        from: page,
-        edges: this.getOutgoing(page),
+      .map((vertex) => ({
+        from: vertex,
+        edges: this.getOutgoing(vertex),
       })) // make the entries into a nicer looking object
       .map(
         ({ from, edges }) =>

@@ -23,7 +23,7 @@ test("Routing Algorithms - A*", () => {
     L: 6,
   };
 
-  const myGraph = new Graph()
+  const myGraph = new Graph<string>()
     .addBiDirectionalEdge("S", "A", 7)
     .addBiDirectionalEdge("S", "B", 2)
     .addBiDirectionalEdge("S", "C", 3)
@@ -54,7 +54,7 @@ test("Routing Algorithms - A*", () => {
 
 // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
 test("Routing Algorithms - Dijkstra", () => {
-  const myGraph: Graph = new Graph()
+  const myGraph = new Graph<string>()
     .addBiDirectionalEdge("0", "1", 4)
     .addBiDirectionalEdge("0", "7", 8)
     .addBiDirectionalEdge("1", "2", 8)
