@@ -1,12 +1,12 @@
-import { simpleLogger } from "../../common";
+import { simpleLogger } from "../../../common";
 
 import algorithms from "./index";
 import {
   arithmeticComparator,
   generateRandomNumbers,
   objToString,
-} from "../common";
-import { SearchObserver } from "../../types";
+} from "../../common";
+import { SearchObserver } from "../../../types";
 
 const observe: SearchObserver<number> = (
   stageName: string,

@@ -4,6 +4,36 @@ import sieveOfEratosthenes, {
   PrimeCallback,
   PrimeCallbackArgs,
 } from "./sieveOfEratosthenes";
+import { isDivisibleBy, getDigits, dividesBy3 } from "./divisibilityRules";
+import { StringReporter } from "../common";
+import { simpleLogger } from "../../common";
+import { getPrimeFactors } from "./primeFactors";
+
+test("Divisible By (modulo)", () => {
+  expect(isDivisibleBy(9, 3)).toBeTruthy();
+  expect(isDivisibleBy(151, 4)).toBeFalsy();
+  expect(isDivisibleBy(8, 5)).toBeFalsy();
+  expect(isDivisibleBy(982, 9)).toBeFalsy();
+});
+
+test("getDigits", () => {
+  expect(getDigits(5673)).toStrictEqual([5, 6, 7, 3]);
+  expect(getDigits(985)).toStrictEqual([9, 8, 5]);
+  expect(getDigits(1748201)).toStrictEqual([1, 7, 4, 8, 2, 0, 1]);
+});
+
+test("Divides by 3", () => {
+  const reporter: StringReporter = (s) => simpleLogger.info(s);
+
+  dividesBy3(67, reporter);
+  dividesBy3(94033, reporter);
+  dividesBy3(374841, reporter);
+});
+
+test("Get Prime Factors", () => {
+  expect(getPrimeFactors(36)).toStrictEqual([2, 2, 3, 3]);
+  expect(getPrimeFactors(147)).toStrictEqual([3, 7, 7]);
+});
 
 test("Sieve of Eratosthenes", () => {
   const callbacks: PrimeCallbackArgs[] = [];

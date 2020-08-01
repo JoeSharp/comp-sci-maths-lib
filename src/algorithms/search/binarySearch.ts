@@ -1,6 +1,4 @@
 import { NO_MATCH } from "./common";
-import { SearchUtilities } from "../../types";
-import { emptyObserver } from "../common";
 
 /**
  * Executes a binary search
@@ -15,7 +13,7 @@ import { emptyObserver } from "../common";
  */
 function binarySearch<T>(
   data: T[],
-  utilities: SearchUtilities<T>,
+  match: (a: T) => number,
   left?: number,
   right?: number
 ): number {
@@ -26,13 +24,9 @@ function binarySearch<T>(
     right = data.length - 1;
   }
 
-  const { observe = emptyObserver, match } = utilities;
-
   if (right >= left) {
     const mid = Math.floor(left + (right - left) / 2);
-    observe("Recursing", { left, right, mid });
-
-    const compareMid: number = match(data[mid], mid);
+    const compareMid: number = match(data[mid]);
 
     // If the element is present in the middle itself
     if (compareMid === 0) {
@@ -40,11 +34,11 @@ function binarySearch<T>(
     } else if (compareMid < 0) {
       // If element is smaller than mid, then
       // it can only be present in left subarray
-      return binarySearch(data, utilities, left, mid - 1);
+      return binarySearch(data, match, left, mid - 1);
     } else {
       // Else the element can only be present
       // in right subarray
-      return binarySearch(data, utilities, mid + 1, right);
+      return binarySearch(data, match, mid + 1, right);
     }
   }
 

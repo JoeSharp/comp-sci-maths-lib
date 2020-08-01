@@ -1,28 +1,15 @@
-import { SortUtility } from "../../types";
-import { simpleSwap, emptyObserver, anyComparator } from "../common";
-
-export default <T>(
-  inputList: T[],
-  {
-    compare = anyComparator,
-    observe = emptyObserver,
-    swap = simpleSwap,
-  }: SortUtility<T>
-): T[] => {
+export default <T>(inputList: T[]): T[] => {
   const outputList: T[] = [...inputList];
 
   for (let top: number = outputList.length - 1; top > 0; top--) {
-    observe("Iterating Top Value", outputList, { top });
+    // Use this variable to exit early
     let anySwapsMade = false;
     for (let current: number = 0; current < top; current++) {
-      observe("Bubbling", outputList, { top, current });
-      if (
-        compare(outputList[current], outputList[current + 1], {
-          aIndex: current,
-          bIndex: current + 1,
-        }) > 0
-      ) {
-        swap(outputList, current, current + 1);
+      if (outputList[current] > outputList[current + 1]) {
+        // Handle the swap
+        const swap = outputList[current];
+        outputList[current] = outputList[current + 1];
+        outputList[current + 1] = swap;
         anySwapsMade = true;
       }
     }

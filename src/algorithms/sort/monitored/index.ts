@@ -2,9 +2,9 @@ import bubbleSort from "./bubbleSort";
 import mergeSort from "./mergeSort";
 import quickSort from "./quickSort";
 import insertionSort from "./insertionSort";
-import { NamedBasicSort } from "./types";
+import { NamedSort } from "../../../types";
 
-const algorithms: NamedBasicSort[] = [
+const algorithms: NamedSort[] = [
   { name: "Bubble Sort", sort: bubbleSort },
   {
     name: "Merge Sort",

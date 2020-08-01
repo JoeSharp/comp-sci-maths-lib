@@ -1,27 +1,38 @@
 import algorithms from "./index";
 import { generateRandomNumbers } from "../common";
-import { SortObserver, PositionVars } from "../../types";
 
 // Associate each sort algorithm with a name so they can all be tested in same function
 
 // Create a test for each algorithm
 algorithms.forEach(({ name, sort }) => {
-  test(`Sort Numbers (with telemetry): ${name}`, () => {
+  test(`Sort Strings (basic): ${name}`, () => {
+    const names: string[] = [
+      "Lister",
+      "Cat",
+      "Kryten",
+      "Rimmer",
+      "Holly",
+      "Kochanski",
+    ];
+
+    const sortedNames: string[] = sort(names);
+
+    expect(sortedNames).toStrictEqual([
+      "Cat",
+      "Holly",
+      "Kochanski",
+      "Kryten",
+      "Lister",
+      "Rimmer",
+    ]);
+  });
+
+  test(`Sort Numbers (basic): ${name}`, () => {
     // Generate a list of random numbers
     const inputList: number[] = generateRandomNumbers(0, 100, 20);
 
-    const observe: SortObserver<number> = (
-      stageName: string,
-      data: number[],
-      positionVars: PositionVars
-    ) => {
-      expect(data.length).toBe(inputList.length);
-    };
-
     // Execute the sort
-    const outputList: number[] = sort(inputList, {
-      observe,
-    });
+    const outputList: number[] = sort(inputList);
 
     // Check all the input numbers are in there somewhere
     expect(outputList.length).toBe(inputList.length);

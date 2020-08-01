@@ -1,12 +1,12 @@
-import { simpleLogger } from "../../common";
+import { simpleLogger } from "../../../common";
 
 import algorithms from "./index";
 import {
   generateRandomNumbers,
   arithmeticComparator,
   objToString,
-} from "../common";
-import { SortObserver } from "../../types";
+} from "../../common";
+import { SortObserver } from "../../../types";
 
 const observe: SortObserver<number> = (
   stageName: string,

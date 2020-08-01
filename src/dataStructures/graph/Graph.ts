@@ -44,7 +44,7 @@ export default class Graph implements GraphData {
    * @param page The page to add
    * @returns this, to allow method chaining
    */
-  addPage(page: string): Graph {
+  addVertex(page: string): Graph {
     this.vertices.add(page);
     return this;
   }
@@ -54,7 +54,7 @@ export default class Graph implements GraphData {
    * will also remove any edges from/to the given page.
    * @param page The page to remove
    */
-  removePage(page: string): Graph {
+  removeVertex(page: string): Graph {
     this.vertices.delete(page);
     this.edges = this.edges.filter(
       ({ from, to }) => from === page || to === page

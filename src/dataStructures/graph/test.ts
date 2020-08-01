@@ -33,7 +33,7 @@ test("Creating a Weighted Graph", () => {
 
   // Execute some removals
   graph.removeEdge("A", "C");
-  graph.removePage("B");
+  graph.removeVertex("B");
 
   const acPostDelete = graph.getEdgeWeight("A", "C");
   expect(acPostDelete).toBe(Infinity);

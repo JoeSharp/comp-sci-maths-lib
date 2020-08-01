@@ -1,9 +1,9 @@
-import { BasicNamedSearch } from "./types";
+import { NamedSearch } from "../../../types";
 
 import binarySearch from "./binarySearch";
 import linearSearch from "./linearSearch";
 
-const algorithms: BasicNamedSearch[] = [
+const algorithms: NamedSearch[] = [
   {
     name: "Binary Search",
     search: binarySearch,

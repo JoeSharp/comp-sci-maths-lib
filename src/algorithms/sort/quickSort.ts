@@ -4,79 +4,56 @@
 
     And converted from pseudo code to JavaScript.
 */
-import { SortUtility } from "../../types";
-import { simpleSwap, emptyObserver, anyComparator } from "../common";
 
-/* This function takes last element as pivot, places
-   the pivot element at its correct position in sorted
-    array, and places all smaller (smaller than pivot)
-   to left of pivot and all greater elements to right
-   of pivot */
-function partition<T>(
-  arr: T[],
-  utilities: SortUtility<T>,
-  low: number,
-  high: number
-) {
-  const {
-    compare = anyComparator,
-    observe = emptyObserver,
-    swap = simpleSwap,
-  } = utilities;
-
+/**
+ * Partitions a list around a pivot.
+ *
+ * @param arr The data to sort
+ * @param low The lower bound of the sorting
+ * @param high The upper bound of the sorting
+ * @return The position that the list ended up pivoted around
+ */
+function partition<T>(arr: T[], low: number, high: number) {
   // pivot (Element to be placed at right position)
   const pivot: T = arr[high];
 
   let i = low - 1; // Index of smaller element
 
   for (let j = low; j <= high - 1; j++) {
-    observe("Partioning", arr, { pivot: high, low, high, i, j });
-
     // If current element is smaller than the pivot
-    if (compare(arr[j], pivot, { aIndex: j, bIndex: high }) < 0) {
+    if (arr[j] < pivot) {
       i++; // increment index of smaller element
-      swap(arr, i, j);
+      const swap = arr[i];
+      arr[i] = arr[j];
+      arr[j] = swap;
     }
   }
 
-  swap(arr, i + 1, high);
+  // Swap the pivot to get it into the right place
+  const swapPivot = arr[i + 1];
+  arr[i + 1] = arr[high];
+  arr[high] = swapPivot;
+
   return i + 1;
 }
 
-function quickSort<T>(
-  arr: T[],
-  utilities: SortUtility<T>,
-  low: number,
-  high: number
-) {
-  const {
-    compare = anyComparator,
-    observe = emptyObserver,
-    swap = simpleSwap,
-  } = utilities;
-
-  observe("Recursing", arr, { low, high });
-
+function quickSort<T>(arr: T[], low: number, high: number) {
   if (low < high) {
     /* pi is partitioning index, arr[pi] is now
            at right place */
-    const pi: number = partition(arr, utilities, low, high);
+    const pi: number = partition(arr, low, high);
 
-    quickSort(arr, utilities, low, pi - 1); // Before pi
-    quickSort(arr, utilities, pi + 1, high); // After pi
+    quickSort(arr, low, pi - 1); // Before pi
+    quickSort(arr, pi + 1, high); // After pi
   }
 }
 
-export default <T>(inputList: T[], utilities: SortUtility<T>): T[] => {
-  if (inputList.length < 2) {
-    return inputList;
-  }
-
+export default <T>(inputList: T[]): T[] => {
   // Make a copy, don't change input list
   const outputList = [...inputList];
 
   // This function recursively operates on the data in place
-  quickSort(outputList, utilities, 0, inputList.length - 1);
+  quickSort(outputList, 0, inputList.length - 1);
 
   return outputList;
 };

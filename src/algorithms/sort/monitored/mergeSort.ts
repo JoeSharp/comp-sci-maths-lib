@@ -1,5 +1,9 @@
+import { SortUtility } from "../../../types";
+import { emptyObserver, anyComparator } from "../../common";
+
 function mergeSort<T>(
   inputList: T[],
+  utilities: SortUtility<T>,
   leftPointer?: number,
   rightPointer?: number
 ): T[] {
@@ -19,12 +23,35 @@ function mergeSort<T>(
     return [inputList[leftPointer]];
   }
 
+  const { compare = anyComparator, observe = emptyObserver } = utilities;
+
   // Calculate the mid point
   const middle = Math.floor((leftPointer + rightPointer) / 2);
 
   // Recurse sort both halves to yield the two lists to merge
-  const firstHalf = mergeSort(inputList, leftPointer, middle);
-  const secondHalf = mergeSort(inputList, middle + 1, rightPointer);
+  const firstHalf = mergeSort(inputList, utilities, leftPointer, middle);
+  const secondHalf = mergeSort(
+    [
+      // The observer needs to see how the list is shaping up, so pass in the sorted first half
+      ...inputList.slice(0, leftPointer),
+      ...firstHalf,
+      ...inputList.slice(middle + 1),
+    ],
+    utilities,
+    middle + 1,
+    rightPointer
+  );
+  observe(
+    "Recursing",
+    [
+      // The observer needs to see how the list is shaping up
+      ...inputList.slice(0, leftPointer),
+      ...firstHalf,
+      ...secondHalf,
+      ...inputList.slice(rightPointer + 1),
+    ],
+    { leftPointer, rightPointer, middle }
+  );
 
   // Merge the two halves into a single sorted list
   const outputList = [];
@@ -32,7 +59,12 @@ function mergeSort<T>(
   let secondPtr = 0;
   while (firstPtr < firstHalf.length && secondPtr < secondHalf.length) {
     // Comparator returns +ve if the second item is larger than first
-    if (firstHalf[firstPtr] > secondHalf[secondPtr]) {
+    if (
+      compare(firstHalf[firstPtr], secondHalf[secondPtr], {
+        aIndex: firstPtr,
+        bIndex: secondPtr,
+      }) > 0
+    ) {
       outputList.push(secondHalf[secondPtr]);
       secondPtr += 1;
     } else {
