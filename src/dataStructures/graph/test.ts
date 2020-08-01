@@ -1,6 +1,6 @@
 import Graph from "./graph";
 
-test("Creating a Weighted Graph", () => {
+test("Graph - Weighted (strings)", () => {
   const graph = new Graph()
     .addBiDirectionalEdge("A", "B", 1.0)
     .addBiDirectionalEdge("A", "C")
@@ -28,7 +28,7 @@ test("Creating a Weighted Graph", () => {
 
   const vertices = graph.vertices;
   ["A", "B", "C", "D", "E"].forEach((v) =>
-    expect(vertices.has(v)).toBeTruthy()
+    expect(vertices.includes(v)).toBeTruthy()
   );
 
   // Execute some removals
@@ -38,5 +38,5 @@ test("Creating a Weighted Graph", () => {
   const acPostDelete = graph.getEdgeWeight("A", "C");
   expect(acPostDelete).toBe(Infinity);
   const verticesPostDelete = graph.vertices;
-  expect(verticesPostDelete.has("B")).toBeFalsy();
+  expect(verticesPostDelete.includes("B")).toBeFalsy();
 });

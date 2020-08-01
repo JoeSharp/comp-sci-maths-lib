@@ -1,4 +1,5 @@
 import { Optional } from "../../types";
+import { uniqWith } from "lodash";
 
 /**
  * This class encapsulates a weighted directional graph.
@@ -11,17 +12,22 @@ export interface Edge<T> {
 }
 
 export interface GraphData<T> {
-  vertices: Set<T>;
+  vertices: T[];
   edges: Edge<T>[];
 }
 
+export type EqualityCheck<T> = (a: T, b: T) => boolean;
+
+export const defaultEqualityCheck: EqualityCheck<any> = (a, b) => a === b;
+
 export const EMPTY_GRAPH_DATA: GraphData<any> = {
-  vertices: new Set(),
+  vertices: [],
   edges: [],
 };
 
 export default class Graph<T> implements GraphData<T> {
-  vertices: Set<T>;
+  equalityCheck: EqualityCheck<T>;
+  vertices: T[];
   edges: Edge<T>[];
 
   /**
@@ -31,9 +37,13 @@ export default class Graph<T> implements GraphData<T> {
    * @param vertices Existing vertices to populate it with
    * @param edges Existing edges to populate it with
    */
-  constructor(graphData: GraphData<T> = EMPTY_GRAPH_DATA) {
-    this.vertices = new Set(graphData.vertices);
+  constructor(
+    graphData: GraphData<T> = EMPTY_GRAPH_DATA,
+    equalityCheck: EqualityCheck<T> = defaultEqualityCheck
+  ) {
+    this.vertices = uniqWith(graphData.vertices, this.equalityCheck);
     this.edges = [...graphData.edges];
+    this.equalityCheck = equalityCheck;
   }
 
   /**
@@ -45,7 +55,7 @@ export default class Graph<T> implements GraphData<T> {
    * @returns this, to allow method chaining
    */
   addVertex(vertex: T): Graph<T> {
-    this.vertices.add(vertex);
+    this.vertices = uniqWith([...this.vertices, vertex], this.equalityCheck);
     return this;
   }
 
@@ -55,9 +65,10 @@ export default class Graph<T> implements GraphData<T> {
    * @param vertex The vertex to remove
    */
   removeVertex(vertex: T): Graph<T> {
-    this.vertices.delete(vertex);
+    this.vertices = this.vertices.filter((v) => !this.equalityCheck(v, vertex));
     this.edges = this.edges.filter(
-      ({ from, to }) => from === vertex || to === vertex
+      ({ from, to }) =>
+        this.equalityCheck(from, vertex) || this.equalityCheck(to, vertex)
     );
 
     return this;
@@ -81,8 +92,8 @@ export default class Graph<T> implements GraphData<T> {
    * @returns this to allow method chaining
    */
   addUnidirectionalEdge(from: T, to: T, weight: number = 1.0) {
-    this.vertices.add(from);
-    this.vertices.add(to);
+    this.addVertex(from);
+    this.addVertex(to);
     this.edges = [
       ...this.edges.filter((l) => !(l.from === from && l.to === to)), // filter any existing Edge in this direction
       { from, to, weight },
@@ -98,8 +109,8 @@ export default class Graph<T> implements GraphData<T> {
    * @returns this to allow method chaining
    */
   addBiDirectionalEdge(from: T, to: T, weight: number = 1.0) {
-    this.vertices.add(from);
-    this.vertices.add(to);
+    this.addVertex(from);
+    this.addVertex(to);
 
     this.edges = [
       ...this.edges.filter(
