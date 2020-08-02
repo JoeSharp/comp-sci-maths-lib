@@ -14,8 +14,6 @@ export function objToString(o?: object) {
     : "none";
 }
 
-export type StringReporter = (s: string) => void;
-
 // tslint:disable-next-line: no-empty
 export const emptyObserver = () => {};
 

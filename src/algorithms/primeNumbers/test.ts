@@ -9,10 +9,11 @@ import {
   getDigits,
   dividesBy3,
   isPrime,
+  divisibilityReporters,
 } from "./divisibilityRules";
-import { StringReporter } from "../common";
 import { simpleLogger } from "../../common";
 import { getPrimeFactors, getPrimeFactorTree } from "./primeFactors";
+import { StringReporter } from "../../types";
 
 test("Is Prime", () => {
   expect(isPrime(9)).toBeFalsy();
@@ -36,12 +37,23 @@ test("getDigits", () => {
   expect(getDigits(1748201)).toStrictEqual([1, 7, 4, 8, 2, 0, 1]);
 });
 
-test("Divides by 3", () => {
-  const reporter: StringReporter = (s) => simpleLogger.debug(s);
+test("Divides By Reporter Functions", () => {
+  let reportLines: string[] = [];
+  const lineReporter: StringReporter = (s) => reportLines.push(s);
 
-  dividesBy3(67, reporter);
-  dividesBy3(94033, reporter);
-  dividesBy3(374841, reporter);
+  divisibilityReporters.forEach(({ factor, reporter }) => {
+    lineReporter(`Testing Divide By ${factor}`);
+
+    [234, 673937, 10912374].forEach((value) => {
+      const agree = reporter(value * factor, lineReporter);
+      expect(agree).toBeTruthy();
+      expect(reportLines.length).toBeGreaterThan(0);
+      reportLines = [];
+      reporter(value * factor + 1, lineReporter);
+      expect(reportLines.length).toBeGreaterThan(0);
+      reportLines = [];
+    });
+  });
 });
 
 test("Get Prime Factors", () => {
@@ -54,7 +66,7 @@ test("Get Prime Factors", () => {
 test("Get Prime Factor Tree", () => {
   [1067, 3600, 875, 15485873].forEach((value) => {
     const tree = getPrimeFactorTree(value);
-    simpleLogger.info(`Prime Factor Tree for ${value}:\n ${tree.toString()}`);
+    simpleLogger.debug(`Prime Factor Tree for ${value}:\n ${tree.toString()}`);
   });
 });
 

@@ -6,6 +6,18 @@ export type ToString<T> = (a: T) => string;
 
 export type EqualityCheck<T> = (a: T, b: T) => boolean;
 
+export type StringReporter = (s: string) => void;
+
+export type DivisibilityReporter = (
+  value: number,
+  reporter: StringReporter
+) => boolean;
+
+export interface DivisibilityReporters {
+  factor: number;
+  reporter: DivisibilityReporter;
+}
+
 export interface CompareMeta {
   aIndex: number;
   bIndex: number;

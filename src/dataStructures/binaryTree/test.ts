@@ -33,5 +33,5 @@ test("Binary Tree - With Duplicates", () => {
   myTree.add(2);
   myTree.add(7);
 
-  simpleLogger.info(myTree.toString());
+  simpleLogger.debug(myTree.toString());
 });

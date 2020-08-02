@@ -1,4 +1,5 @@
-import { StringReporter } from "../common";
+import { StringReporter, DivisibilityReporters } from "../../types";
+import { assert } from "console";
 
 export function isDivisibleBy(value: number, divisor: number): boolean {
   return value % divisor === 0;
@@ -20,6 +21,10 @@ export function isPrime(value: number) {
 }
 
 export function getDigits(value: number, radix: number = 10): number[] {
+  if (value < 0) {
+    return [];
+  }
+
   const asStr = value.toString();
   const digits: string[] = [];
   for (const c of asStr) {
@@ -28,19 +33,107 @@ export function getDigits(value: number, radix: number = 10): number[] {
   return digits.map((c) => parseInt(c, radix));
 }
 
-export function dividesBy3(value: number, report: StringReporter) {
+export function dividesBy2(value: number, report: StringReporter): boolean {
+  report(`Is ${value} divisible by 2?`);
+
+  const digits = getDigits(value);
+  const leastSignificantDigit = digits[digits.length - 1];
+
+  const isDiv = [8, 6, 4, 2, 0].includes(leastSignificantDigit);
+  const isDivMod = isDivisibleBy(value, 2);
+  report(
+    `Least Significant Digit is ${leastSignificantDigit}, divisible by 2?: ${isDiv}, Agrees with mod? ${
+      isDiv === isDivMod ? "YES" : "NO"
+    }`
+  );
+
+  return isDiv === isDivMod;
+}
+
+export function dividesBy3(value: number, report: StringReporter): boolean {
   report(`Is ${value} divisible by 3?`);
 
   let currentValue = value;
   let digits = getDigits(currentValue);
-  while (digits.length > 1) {
+  while (digits.length > 1 && currentValue > 0) {
     currentValue = digits.reduce((acc, curr) => acc + curr, 0);
 
-    report(`Number Digits ${digits.join(", ")} add up to ${currentValue}`);
+    report(`Digits ${digits.join(", ")} add up to ${currentValue}`);
 
     digits = getDigits(currentValue);
   }
 
-  const by3 = isDivisibleBy(currentValue, 3);
-  report(`Finished on Value ${currentValue}, divisible by 3?: ${by3}`);
+  const isDiv = [9, 6, 3, 0].includes(currentValue);
+  const isDivMod = isDivisibleBy(value, 3);
+  report(
+    `Finished on Value ${currentValue}, divisible by 3?: ${isDiv}, Agrees with mod? ${
+      isDiv === isDivMod ? "YES" : "NO"
+    }`
+  );
+
+  return isDiv === isDivMod;
 }
+
+export function dividesBy5(value: number, report: StringReporter): boolean {
+  report(`Is ${value} divisible by 5?`);
+
+  const digits = getDigits(value);
+  const leastSignificantDigit = digits[digits.length - 1];
+
+  const isDiv = [5, 0].includes(leastSignificantDigit);
+  const isDivMod = isDivisibleBy(value, 5);
+  report(
+    `Least Significant Digit is ${leastSignificantDigit}, divisible by 5?: ${isDiv}, Agrees with mod? ${
+      isDiv === isDivMod ? "YES" : "NO"
+    }`
+  );
+
+  return isDiv === isDivMod;
+}
+
+export function dividesBy7(value: number, report: StringReporter): boolean {
+  report(`Is ${value} divisible by 7?`);
+
+  let currentValue = value;
+  let digits = getDigits(currentValue);
+  while (digits.length > 2 && currentValue > 0) {
+    const leastSignificantDigit = digits[digits.length - 1];
+    const restOfNumber = Math.floor(currentValue / 10); // lops off the last digit
+
+    report(
+      `Current Value: ${currentValue}, Digits: ${digits} Least significant Digit ${leastSignificantDigit} subtract from ${restOfNumber}`
+    );
+    currentValue = restOfNumber - leastSignificantDigit * 2;
+
+    digits = getDigits(currentValue);
+  }
+
+  const isDiv = isDivisibleBy(currentValue, 7);
+  const isDivMod = isDivisibleBy(value, 7);
+  report(
+    `Finished on Value ${currentValue}, divisible by 7?: ${isDiv}, Agrees with mod? ${
+      isDiv === isDivMod ? "YES" : "NO"
+    }`
+  );
+
+  return isDiv === isDivMod;
+}
+
+export const divisibilityReporters: DivisibilityReporters[] = [
+  {
+    factor: 2,
+    reporter: dividesBy2,
+  },
+  {
+    factor: 3,
+    reporter: dividesBy3,
+  },
+  {
+    factor: 5,
+    reporter: dividesBy5,
+  },
+  {
+    factor: 7,
+    reporter: dividesBy7,
+  },
+];
