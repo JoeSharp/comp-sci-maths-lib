@@ -1,4 +1,5 @@
 import { StringReporter, NamedDivisibilityRule } from "../../types";
+import { assert } from "console";
 
 /**
  * This function uses the mod operator to check if a number is divisible.
@@ -75,8 +76,12 @@ export function dividesBy2(value: number, report: StringReporter): boolean {
       isDiv === isDivMod
     }`
   );
+  assert(
+    isDiv === isDivMod,
+    "Our method gave a different answer to the modulo function"
+  );
 
-  return isDiv === isDivMod;
+  return isDiv;
 }
 
 /**
@@ -107,7 +112,12 @@ export function dividesBy3(value: number, report: StringReporter): boolean {
     }`
   );
 
-  return isDiv === isDivMod;
+  assert(
+    isDiv === isDivMod,
+    "Our method gave a different answer to the modulo function"
+  );
+
+  return isDiv;
 }
 
 /**
@@ -131,7 +141,12 @@ export function dividesBy5(value: number, report: StringReporter): boolean {
     }`
   );
 
-  return isDiv === isDivMod;
+  assert(
+    isDiv === isDivMod,
+    "Our method gave a different answer to the modulo function"
+  );
+
+  return isDiv;
 }
 
 export function dividesBy6(value: number, report: StringReporter): boolean {
@@ -143,9 +158,14 @@ export function dividesBy6(value: number, report: StringReporter): boolean {
   const isDivMod = isDivisibleBy(value, 6);
   const isDiv = isDivBy2 && isDivBy3;
   report(
-    `${value} is divisible by 6 if divisible by 2 ${isDivBy2} and 3 ${isDivBy3} = ${isDiv}`
+    `${value} is divisible by 6 ${isDivMod} if divisible by 2 ${isDivBy2} and 3 ${isDivBy3} = ${isDiv}`
   );
-  return isDiv === isDivMod;
+  assert(
+    isDiv === isDivMod,
+    "Our method gave a different answer to the modulo function"
+  );
+
+  return isDiv;
 }
 
 /**
@@ -182,7 +202,12 @@ export function dividesBy7(value: number, report: StringReporter): boolean {
     }`
   );
 
-  return isDiv === isDivMod;
+  assert(
+    isDiv === isDivMod,
+    "Our method gave a different answer to the modulo function"
+  );
+
+  return isDiv;
 }
 
 // Subtract the last digit from the rest. The result must be divisible by 11.
@@ -216,7 +241,12 @@ export function dividesBy11(value: number, report: StringReporter): boolean {
     }`
   );
 
-  return isDiv === isDivMod;
+  assert(
+    isDiv === isDivMod,
+    "Our method gave a different answer to the modulo function"
+  );
+
+  return isDiv;
 }
 
 export const defaultNamedDivisibilityRule: NamedDivisibilityRule = {

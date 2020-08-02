@@ -36,20 +36,18 @@ test("getDigits", () => {
   expect(getDigits(1748201)).toStrictEqual([1, 7, 4, 8, 2, 0, 1]);
 });
 
-test("Divides By Reporter Functions", () => {
-  let reportLines: string[] = [];
-  const lineReporter: StringReporter = (s) => reportLines.push(s);
-
-  divisibilityRules.forEach(({ factor, rule }) => {
-    lineReporter(`Testing Divide By ${factor}`);
-
-    [234, 673937, 10912374].forEach((value) => {
-      const agree1 = rule(value * factor, lineReporter);
-      expect(agree1).toBeTruthy();
+divisibilityRules.forEach(({ factor, rule }) => {
+  [234, 673937, 10912374].forEach((value) => {
+    test(`Divides By Reporter Functions, Factor: ${factor}, Value: ${value}`, () => {
+      let reportLines: string[] = [];
+      const lineReporter: StringReporter = (s) => reportLines.push(s);
+      lineReporter(`Testing Divide By ${factor}`);
+      const divA = rule(value * factor, lineReporter);
+      expect(divA).toBeTruthy();
       expect(reportLines.length).toBeGreaterThan(0);
       reportLines = [];
-      const agree2 = rule(value * factor + 1, lineReporter);
-      expect(agree2).toBeTruthy();
+      const divB = rule(value * factor + 1, lineReporter);
+      expect(divB).toBeFalsy();
       expect(reportLines.length).toBeGreaterThan(0);
       reportLines = [];
     });
