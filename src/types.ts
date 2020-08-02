@@ -8,14 +8,14 @@ export type EqualityCheck<T> = (a: T, b: T) => boolean;
 
 export type StringReporter = (s: string) => void;
 
-export type DivisibilityReporter = (
+export type DivisibilityRule = (
   value: number,
   reporter: StringReporter
 ) => boolean;
 
-export interface DivisibilityReporters {
+export interface DivisibilityRules {
   factor: number;
-  reporter: DivisibilityReporter;
+  reporter: DivisibilityRule;
 }
 
 export interface CompareMeta {

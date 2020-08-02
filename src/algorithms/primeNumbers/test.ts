@@ -7,9 +7,8 @@ import sieveOfEratosthenes, {
 import {
   isDivisibleBy,
   getDigits,
-  dividesBy3,
   isPrime,
-  divisibilityReporters,
+  divisibilityRules,
 } from "./divisibilityRules";
 import { simpleLogger } from "../../common";
 import { getPrimeFactors, getPrimeFactorTree } from "./primeFactors";
@@ -41,7 +40,7 @@ test("Divides By Reporter Functions", () => {
   let reportLines: string[] = [];
   const lineReporter: StringReporter = (s) => reportLines.push(s);
 
-  divisibilityReporters.forEach(({ factor, reporter }) => {
+  divisibilityRules.forEach(({ factor, reporter }) => {
     lineReporter(`Testing Divide By ${factor}`);
 
     [234, 673937, 10912374].forEach((value) => {
