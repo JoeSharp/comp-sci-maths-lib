@@ -1,4 +1,4 @@
-import { StringReporter, DivisibilityRules } from "../../types";
+import { StringReporter, NamedDivisibilityRule } from "../../types";
 
 /**
  * This function uses the mod operator to check if a number is divisible.
@@ -219,29 +219,58 @@ export function dividesBy11(value: number, report: StringReporter): boolean {
   return isDiv === isDivMod;
 }
 
-export const divisibilityRules: DivisibilityRules[] = [
+export const defaultNamedDivisibilityRule: NamedDivisibilityRule = {
+  factor: 1,
+  explanation: ["Default divisibility by 1"],
+  rule: (v, reporter) => {
+    reporter("Everything is divisible by 1");
+    return true;
+  },
+};
+
+export const divisibilityRules: NamedDivisibilityRule[] = [
   {
     factor: 2,
-    reporter: dividesBy2,
+    explanation: ["Last digit is even"],
+    rule: dividesBy2,
   },
   {
     factor: 3,
-    reporter: dividesBy3,
+    explanation: [
+      "Sum all the digits",
+      "is result divisible by 3?",
+      "Repeat until down to a single digit number",
+    ],
+    rule: dividesBy3,
   },
   {
     factor: 6,
-    reporter: dividesBy6,
+    explanation: ["Divisible by 2 and 3"],
+    rule: dividesBy6,
   },
   {
     factor: 5,
-    reporter: dividesBy5,
+    explanation: ["Last digit is 0 or 5"],
+    rule: dividesBy5,
   },
   {
     factor: 7,
-    reporter: dividesBy7,
+    explanation: [
+      "Take off least significant digit (lsd)",
+      "Calculate remaining number - 2 * lsd",
+      "repeat until 2 digit number",
+      "if divisible by 7 then original number is divisible by 7",
+    ],
+    rule: dividesBy7,
   },
   {
     factor: 11,
-    reporter: dividesBy11,
+    explanation: [
+      "Take off least significant digit (lsd)",
+      "Subtract from what remains",
+      "Repeat until 2 digit number",
+      "if divisible by 11 then original number is divisible by 11",
+    ],
+    rule: dividesBy11,
   },
 ];

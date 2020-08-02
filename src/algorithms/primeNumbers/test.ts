@@ -40,15 +40,16 @@ test("Divides By Reporter Functions", () => {
   let reportLines: string[] = [];
   const lineReporter: StringReporter = (s) => reportLines.push(s);
 
-  divisibilityRules.forEach(({ factor, reporter }) => {
+  divisibilityRules.forEach(({ factor, rule }) => {
     lineReporter(`Testing Divide By ${factor}`);
 
     [234, 673937, 10912374].forEach((value) => {
-      const agree = reporter(value * factor, lineReporter);
-      expect(agree).toBeTruthy();
+      const agree1 = rule(value * factor, lineReporter);
+      expect(agree1).toBeTruthy();
       expect(reportLines.length).toBeGreaterThan(0);
       reportLines = [];
-      reporter(value * factor + 1, lineReporter);
+      const agree2 = rule(value * factor + 1, lineReporter);
+      expect(agree2).toBeTruthy();
       expect(reportLines.length).toBeGreaterThan(0);
       reportLines = [];
     });

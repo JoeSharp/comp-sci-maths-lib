@@ -1,9 +1,9 @@
 import BinaryTree from "./BinaryTree";
 import {
+  simpleLogger,
   stringComparator,
   arithmeticComparator,
-} from "../../algorithms/common";
-import { simpleLogger } from "../../common";
+} from "../../common";
 
 test("Binary Tree - Contains", () => {
   const myTree = new BinaryTree<string>(stringComparator);

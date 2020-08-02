@@ -13,9 +13,10 @@ export type DivisibilityRule = (
   reporter: StringReporter
 ) => boolean;
 
-export interface DivisibilityRules {
+export interface NamedDivisibilityRule {
   factor: number;
-  reporter: DivisibilityRule;
+  explanation: string[];
+  rule: DivisibilityRule;
 }
 
 export interface CompareMeta {

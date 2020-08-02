@@ -1,6 +1,6 @@
 import algorithms from "./index";
 import { NO_MATCH } from "./common";
-import { arithmeticComparator, generateRandomNumbers } from "../../common";
+import { arithmeticComparator, generateRandomNumbers } from "../../../common";
 
 algorithms.forEach(({ name, search }) => {
   test(`${name} - Numbers`, () => {

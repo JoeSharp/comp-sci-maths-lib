@@ -1,11 +1,10 @@
-import { simpleLogger } from "../../../common";
-
 import algorithms from "./index";
 import {
+  simpleLogger,
   arithmeticComparator,
   generateRandomNumbers,
   objToString,
-} from "../../common";
+} from "../../../common";
 import { SearchObserver } from "../../../types";
 
 const observe: SearchObserver<number> = (

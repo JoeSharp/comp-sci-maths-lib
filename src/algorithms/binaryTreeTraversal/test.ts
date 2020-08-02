@@ -2,7 +2,7 @@ import BinaryTree from "../../dataStructures/binaryTree/BinaryTree";
 import traverseInOrder from "./traverseInOrder";
 import traversePostOrder from "./traversePostOrder";
 import traversePreOrder from "./traversePreOrder";
-import { stringComparator } from "../common";
+import { stringComparator } from "../../common";
 
 test("Binary Tree - Traversal", () => {
   const myTree: BinaryTree<string> = new BinaryTree<string>(stringComparator);

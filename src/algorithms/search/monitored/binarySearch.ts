@@ -1,6 +1,6 @@
 import { NO_MATCH } from "./common";
 import { SearchUtilities } from "../../../types";
-import { emptyObserver } from "../../common";
+import { emptyObserver } from "../../../common";
 
 /**
  * Executes a binary search

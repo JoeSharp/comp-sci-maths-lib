@@ -1,5 +1,5 @@
 import { SortUtility } from "../../../types";
-import { emptyObserver, anyComparator } from "../../common";
+import { emptyObserver, anyComparator } from "../../../common";
 
 function mergeSort<T>(
   inputList: T[],

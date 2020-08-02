@@ -1,5 +1,5 @@
 import { SortUtility } from "../../../types";
-import { anyComparator, emptyObserver, simpleSwap } from "../../common";
+import { anyComparator, emptyObserver, simpleSwap } from "../../../common";
 
 export default <T>(
   inputList: T[],

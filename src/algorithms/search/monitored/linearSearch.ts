@@ -1,6 +1,6 @@
 import { NO_MATCH } from "./common";
-import { SearchFunction, SearchUtilities } from "../../../types";
-import { emptyObserver } from "../../common";
+import { SearchUtilities } from "../../../types";
+import { emptyObserver } from "../../../common";
 
 /**
  * perform a linear search on an array

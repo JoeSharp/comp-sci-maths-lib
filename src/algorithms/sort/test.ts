@@ -1,5 +1,5 @@
 import algorithms from "./index";
-import { generateRandomNumbers } from "../common";
+import { generateRandomNumbers } from "../../common";
 
 // Associate each sort algorithm with a name so they can all be tested in same function
 
