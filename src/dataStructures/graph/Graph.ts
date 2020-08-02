@@ -1,5 +1,6 @@
-import { Optional } from "../../types";
+import { Optional, ToString, EqualityCheck } from "../../types";
 import { uniqWith } from "lodash";
+import { defaultEqualityCheck, defaultToString } from "../../common";
 
 /**
  * This class encapsulates a weighted directional graph.
@@ -16,16 +17,25 @@ export interface GraphData<T> {
   edges: Edge<T>[];
 }
 
-export type EqualityCheck<T> = (a: T, b: T) => boolean;
-
-export const defaultEqualityCheck: EqualityCheck<any> = (a, b) => a === b;
-
 export const EMPTY_GRAPH_DATA: GraphData<any> = {
   vertices: [],
   edges: [],
 };
 
+interface NewGraph<T> {
+  graphData?: GraphData<T>;
+  equalityCheck?: EqualityCheck<T>;
+  vertexToString: ToString<T>;
+}
+
+const defaultNewGraph: NewGraph<any> = {
+  graphData: EMPTY_GRAPH_DATA,
+  equalityCheck: defaultEqualityCheck,
+  vertexToString: defaultToString,
+};
+
 export default class Graph<T> implements GraphData<T> {
+  vertexToString: ToString<T>;
   equalityCheck: EqualityCheck<T>;
   vertices: T[];
   edges: Edge<T>[];
@@ -34,16 +44,18 @@ export default class Graph<T> implements GraphData<T> {
    * A constructor that accepts existing graph details.
    * Allows it to be used as a copy constructor.
    *
-   * @param vertices Existing vertices to populate it with
-   * @param edges Existing edges to populate it with
+   * @param graphData Existing graph data
+   * @param equalityCheck Function to determine if two vertices are equal
    */
-  constructor(
-    graphData: GraphData<T> = EMPTY_GRAPH_DATA,
-    equalityCheck: EqualityCheck<T> = defaultEqualityCheck
-  ) {
+  constructor(opts: NewGraph<T> = defaultNewGraph) {
+    const { graphData, equalityCheck, vertexToString } = {
+      ...defaultNewGraph,
+      ...opts,
+    };
     this.vertices = uniqWith(graphData.vertices, this.equalityCheck);
     this.edges = [...graphData.edges];
     this.equalityCheck = equalityCheck;
+    this.vertexToString = vertexToString;
   }
 
   /**
@@ -178,8 +190,10 @@ export default class Graph<T> implements GraphData<T> {
       })) // make the entries into a nicer looking object
       .map(
         ({ from, edges }) =>
-          `From: ${from}\n${edges
-            .map(({ to, weight }) => `\tTo: ${to} (${weight})`)
+          `From: ${this.vertexToString(from)}\n${edges
+            .map(
+              ({ to, weight }) => `\tTo: ${this.vertexToString(to)} (${weight})`
+            )
             .join("\n")}` // each outgoing Edge should be represented on it's own line
       )
       .join("\n")}`; // Each section will be separated by a newline

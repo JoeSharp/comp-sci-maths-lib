@@ -7,7 +7,7 @@ import sieveOfEratosthenes, {
 import { isDivisibleBy, getDigits, dividesBy3 } from "./divisibilityRules";
 import { StringReporter } from "../common";
 import { simpleLogger } from "../../common";
-import { getPrimeFactors } from "./primeFactors";
+import { getPrimeFactors, getPrimeFactorTree } from "./primeFactors";
 
 test("Divisible By (modulo)", () => {
   expect(isDivisibleBy(9, 3)).toBeTruthy();
@@ -23,7 +23,7 @@ test("getDigits", () => {
 });
 
 test("Divides by 3", () => {
-  const reporter: StringReporter = (s) => simpleLogger.info(s);
+  const reporter: StringReporter = (s) => simpleLogger.debug(s);
 
   dividesBy3(67, reporter);
   dividesBy3(94033, reporter);
@@ -33,6 +33,15 @@ test("Divides by 3", () => {
 test("Get Prime Factors", () => {
   expect(getPrimeFactors(36)).toStrictEqual([2, 2, 3, 3]);
   expect(getPrimeFactors(147)).toStrictEqual([3, 7, 7]);
+  expect(getPrimeFactors(13)).toStrictEqual([13]);
+  expect(getPrimeFactors(1067)).toStrictEqual([11, 97]);
+});
+
+test("Get Prime Factor Tree", () => {
+  [1067, 3600, 45827].forEach((value) => {
+    const tree = getPrimeFactorTree(value);
+    simpleLogger.info(`Prime Factor Tree for ${value}:\n ${tree.toString()}`);
+  });
 });
 
 test("Sieve of Eratosthenes", () => {
