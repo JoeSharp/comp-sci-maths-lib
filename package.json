@@ -1,6 +1,6 @@
 {
   "name": "ocr-cs-alevel-ts",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Collection of Algorithms and Data Structures Required by OCR A Level Computer Science",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
