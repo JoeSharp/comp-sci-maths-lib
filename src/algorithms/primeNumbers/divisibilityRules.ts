@@ -6,11 +6,11 @@ export function isDivisibleBy(value: number, divisor: number): boolean {
 
 export function isPrime(value: number) {
   // Calculate the square root, any factors will exist below this value
-  // Round down...
-  const sqRoot = Math.floor(Math.sqrt(value));
+  // Round up so we include the square root...
+  const sqRoot = Math.ceil(Math.sqrt(value));
 
   // From 2 up to the square root, check for divisibility
-  for (let i = 2; i < sqRoot; i++) {
+  for (let i = 2; i <= sqRoot; i++) {
     if (isDivisibleBy(value, i)) {
       return false;
     }

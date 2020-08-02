@@ -15,6 +15,7 @@ import { simpleLogger } from "../../common";
 import { getPrimeFactors, getPrimeFactorTree } from "./primeFactors";
 
 test("Is Prime", () => {
+  expect(isPrime(9)).toBeFalsy();
   expect(isPrime(45827)).toBeTruthy();
   expect(isPrime(15485867)).toBeTruthy();
   expect(isPrime(15485873)).toBeFalsy();
@@ -51,7 +52,7 @@ test("Get Prime Factors", () => {
 });
 
 test("Get Prime Factor Tree", () => {
-  [1067, 3600, 45827].forEach((value) => {
+  [1067, 3600, 875, 15485873].forEach((value) => {
     const tree = getPrimeFactorTree(value);
     simpleLogger.info(`Prime Factor Tree for ${value}:\n ${tree.toString()}`);
   });

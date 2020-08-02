@@ -1,16 +1,18 @@
 import sieveOfEratosthenes from "./sieveOfEratosthenes";
-import { isDivisibleBy } from "./divisibilityRules";
+import { isDivisibleBy, isPrime } from "./divisibilityRules";
 import Graph from "../../dataStructures/graph/Graph";
 
 export function getPrimeFactors(value: number): number[] {
   const factors: number[] = [];
 
-  // Get the list of prime numbers up to our value
-  const primes: number[] = sieveOfEratosthenes(value);
+  // Get the list of prime numbers up to the square root of our value
+  const primes: number[] = sieveOfEratosthenes(Math.ceil(Math.sqrt(value)));
 
   let currentValue = value;
-  while (!primes.includes(currentValue)) {
+  while (!isPrime(currentValue)) {
     const prime = primes.find((p) => isDivisibleBy(currentValue, p));
+    if (prime === undefined)
+      throw new Error(`Could not find a divisor for ${currentValue}`);
     factors.push(prime);
     currentValue /= prime;
   }
