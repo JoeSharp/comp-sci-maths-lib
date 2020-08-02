@@ -4,10 +4,23 @@ import sieveOfEratosthenes, {
   PrimeCallback,
   PrimeCallbackArgs,
 } from "./sieveOfEratosthenes";
-import { isDivisibleBy, getDigits, dividesBy3 } from "./divisibilityRules";
+import {
+  isDivisibleBy,
+  getDigits,
+  dividesBy3,
+  isPrime,
+} from "./divisibilityRules";
 import { StringReporter } from "../common";
 import { simpleLogger } from "../../common";
 import { getPrimeFactors, getPrimeFactorTree } from "./primeFactors";
+
+test("Is Prime", () => {
+  expect(isPrime(45827)).toBeTruthy();
+  expect(isPrime(15485867)).toBeTruthy();
+  expect(isPrime(15485873)).toBeFalsy();
+  expect(isPrime(472882049)).toBeTruthy();
+  expect(isPrime(472882047)).toBeFalsy();
+});
 
 test("Divisible By (modulo)", () => {
   expect(isDivisibleBy(9, 3)).toBeTruthy();

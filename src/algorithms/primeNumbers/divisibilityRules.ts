@@ -4,6 +4,21 @@ export function isDivisibleBy(value: number, divisor: number): boolean {
   return value % divisor === 0;
 }
 
+export function isPrime(value: number) {
+  // Calculate the square root, any factors will exist below this value
+  // Round down...
+  const sqRoot = Math.floor(Math.sqrt(value));
+
+  // From 2 up to the square root, check for divisibility
+  for (let i = 2; i < sqRoot; i++) {
+    if (isDivisibleBy(value, i)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function getDigits(value: number, radix: number = 10): number[] {
   const asStr = value.toString();
   const digits: string[] = [];
