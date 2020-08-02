@@ -1,5 +1,4 @@
 import { StringReporter, NamedDivisibilityRule } from "../../types";
-import { assert } from "console";
 
 /**
  * This function uses the mod operator to check if a number is divisible.
@@ -76,10 +75,6 @@ export function dividesBy2(value: number, report: StringReporter): boolean {
       isDiv === isDivMod
     }`
   );
-  assert(
-    isDiv === isDivMod,
-    "Our method gave a different answer to the modulo function"
-  );
 
   return isDiv;
 }
@@ -112,11 +107,6 @@ export function dividesBy3(value: number, report: StringReporter): boolean {
     }`
   );
 
-  assert(
-    isDiv === isDivMod,
-    "Our method gave a different answer to the modulo function"
-  );
-
   return isDiv;
 }
 
@@ -141,11 +131,6 @@ export function dividesBy5(value: number, report: StringReporter): boolean {
     }`
   );
 
-  assert(
-    isDiv === isDivMod,
-    "Our method gave a different answer to the modulo function"
-  );
-
   return isDiv;
 }
 
@@ -159,10 +144,6 @@ export function dividesBy6(value: number, report: StringReporter): boolean {
   const isDiv = isDivBy2 && isDivBy3;
   report(
     `${value} is divisible by 6 ${isDivMod} if divisible by 2 ${isDivBy2} and 3 ${isDivBy3} = ${isDiv}`
-  );
-  assert(
-    isDiv === isDivMod,
-    "Our method gave a different answer to the modulo function"
   );
 
   return isDiv;
@@ -202,11 +183,6 @@ export function dividesBy7(value: number, report: StringReporter): boolean {
     }`
   );
 
-  assert(
-    isDiv === isDivMod,
-    "Our method gave a different answer to the modulo function"
-  );
-
   return isDiv;
 }
 
@@ -239,11 +215,6 @@ export function dividesBy11(value: number, report: StringReporter): boolean {
     `Finished on Value ${currentValue}, divisible by 11?: ${isDiv}, Agrees with mod? ${
       isDiv === isDivMod
     }`
-  );
-
-  assert(
-    isDiv === isDivMod,
-    "Our method gave a different answer to the modulo function"
   );
 
   return isDiv;
