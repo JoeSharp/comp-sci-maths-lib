@@ -11,6 +11,10 @@ export default class Queue<T> {
     return JSON.stringify(this.items);
   }
 
+  getItems() {
+    return this.items;
+  }
+
   isEmpty() {
     return this.items.length === 0;
   }

@@ -12,29 +12,17 @@ export interface Edge<T> {
   weight: number;
 }
 
-export interface GraphData<T> {
-  vertices: T[];
-  edges: Edge<T>[];
-}
-
-export const EMPTY_GRAPH_DATA: GraphData<any> = {
-  vertices: [],
-  edges: [],
-};
-
 interface NewGraph<T> {
-  graphData?: GraphData<T>;
   equalityCheck?: EqualityCheck<T>;
   vertexToString: ToString<T>;
 }
 
 const defaultNewGraph: NewGraph<any> = {
-  graphData: EMPTY_GRAPH_DATA,
   equalityCheck: defaultEqualityCheck,
   vertexToString: defaultToString,
 };
 
-export default class Graph<T> implements GraphData<T> {
+export default class Graph<T> {
   vertexToString: ToString<T>;
   equalityCheck: EqualityCheck<T>;
   vertices: T[];
@@ -48,14 +36,24 @@ export default class Graph<T> implements GraphData<T> {
    * @param equalityCheck Function to determine if two vertices are equal
    */
   constructor(opts: NewGraph<T> = defaultNewGraph) {
-    const { graphData, equalityCheck, vertexToString } = {
+    const { equalityCheck, vertexToString } = {
       ...defaultNewGraph,
       ...opts,
     };
-    this.vertices = uniqWith(graphData.vertices, this.equalityCheck);
-    this.edges = [...graphData.edges];
+    this.vertices = [];
+    this.edges = [];
     this.equalityCheck = equalityCheck;
     this.vertexToString = vertexToString;
+  }
+
+  /**
+   * Clear any vertices and edges
+   * @returns This to allow method chaining
+   */
+  clearAll() {
+    this.vertices = [];
+    this.edges = [];
+    return this;
   }
 
   /**
