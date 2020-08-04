@@ -109,13 +109,20 @@ export const generateRandomLetter = () =>
 
 export class DataStructure implements IDataStructure {
   version: number;
+  tickObserver: () => any;
 
   constructor() {
     this.version = 0;
+    this.tickObserver = emptyObserver;
+  }
+
+  setTickObserver(tickObserver: () => any) {
+    this.tickObserver = tickObserver;
   }
 
   tickVersion() {
     this.version += 1;
+    this.tickObserver();
   }
 }
 
