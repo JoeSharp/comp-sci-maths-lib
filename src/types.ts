@@ -8,6 +8,10 @@ export type EqualityCheck<T> = (a: T, b: T) => boolean;
 
 export type StringReporter = (s: string) => void;
 
+export interface IDataStructure {
+  version: number;
+}
+
 export type DivisibilityRule = (
   value: number,
   reporter: StringReporter

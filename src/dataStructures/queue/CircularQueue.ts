@@ -1,4 +1,6 @@
-export default class CircularQueue<T> {
+import { DataStructure } from "../../common";
+
+export default class CircularQueue<T> extends DataStructure {
   frontPointer: number;
   rearPointer: number;
   items: T[];
@@ -6,6 +8,7 @@ export default class CircularQueue<T> {
   capacity: number;
 
   constructor(capacity = 10) {
+    super();
     this.frontPointer = 0;
     this.rearPointer = 0;
     this.items = new Array(capacity);
@@ -30,6 +33,7 @@ export default class CircularQueue<T> {
     this.rearPointer += 1;
     this.rearPointer %= this.items.length;
     this.size += 1;
+    this.tickVersion();
   }
 
   dequeue(): T {
@@ -41,6 +45,7 @@ export default class CircularQueue<T> {
     this.frontPointer += 1;
     this.frontPointer %= this.items.length;
     this.size -= 1;
+    this.tickVersion();
     return item;
   }
 }

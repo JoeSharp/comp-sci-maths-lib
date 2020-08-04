@@ -1,9 +1,10 @@
 import LinkedList from "../linkedList/LinkedList";
 import { MatchFunction } from "../../types";
+import { DataStructure } from "../../common";
 
 export type PriorityComparator<T> = (a: T, b: T) => number;
 
-export default class PriorityQueue<T> {
+export default class PriorityQueue<T> extends DataStructure {
   priorityComparator: PriorityComparator<T>;
   items: LinkedList<T>;
 
@@ -12,6 +13,7 @@ export default class PriorityQueue<T> {
    * @param {function} getPriority A function that accepts an item and returns a number to represent priority
    */
   constructor(priorityComparator: PriorityComparator<T>) {
+    super();
     this.priorityComparator = priorityComparator;
     this.items = new LinkedList();
   }
@@ -30,6 +32,7 @@ export default class PriorityQueue<T> {
    * @returns The removed item
    */
   removeMatch(matchFunction: MatchFunction<T>) {
+    this.tickVersion();
     return this.items.removeMatch(matchFunction);
   }
 
@@ -47,6 +50,7 @@ export default class PriorityQueue<T> {
 
     // Just push onto the end
     this.items.append(newItem);
+    this.tickVersion();
   }
 
   dequeue() {
@@ -54,6 +58,7 @@ export default class PriorityQueue<T> {
       throw new Error("Queue Empty");
     }
 
+    this.tickVersion();
     return this.items.remove(0);
   }
 }

@@ -1,5 +1,5 @@
 import { PageRanks, PageRankState } from "./types";
-import { GraphData, EMPTY_GRAPH_DATA } from "../../dataStructures/graph/Graph";
+import Graph from "../../dataStructures/graph/Graph";
 
 const MAX_ITERATIONS = 20;
 
@@ -15,7 +15,7 @@ export const roundTo2Dp = (x: number): number =>
 
 export const BLANK_PAGE_RANK_STATE: PageRankState = {
   iterations: 0,
-  graph: EMPTY_GRAPH_DATA,
+  graph: new Graph(),
   ranks: {},
   rankHistory: [],
   dampingFactor: 0.85,
@@ -29,7 +29,7 @@ export const BLANK_PAGE_RANK_STATE: PageRankState = {
  * @param dampingFactor The damping factor to apply during the page rank iterations
  */
 export const initialisePageRank = (
-  graph: GraphData<string>,
+  graph: Graph<string>,
   dampingFactor: number = 0.85
 ) => {
   const firstRanks = [...graph.vertices].reduce(

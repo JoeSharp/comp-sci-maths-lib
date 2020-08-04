@@ -1,11 +1,13 @@
 import LinkedItem from "./LinkedItem";
 import { MatchFunction, Optional } from "../../types";
+import { DataStructure } from "../../common";
 
-export default class LinkedList<T> {
+export default class LinkedList<T> extends DataStructure {
   startItem: Optional<LinkedItem<T>>;
   length: number;
 
   constructor() {
+    super();
     this.startItem = undefined;
     this.length = 0;
   }
@@ -50,7 +52,10 @@ export default class LinkedList<T> {
       }
     }
 
-    if (inserted) this.length += 1;
+    if (inserted) {
+      this.length += 1;
+      this.tickVersion();
+    }
 
     return inserted;
   }
@@ -85,6 +90,7 @@ export default class LinkedList<T> {
     }
 
     this.length += 1;
+    this.tickVersion();
   }
 
   /**
@@ -104,6 +110,7 @@ export default class LinkedList<T> {
       cItem = cItem.getNextItem();
       index += 1;
     }
+    this.tickVersion();
 
     return removed;
   }
@@ -140,6 +147,7 @@ export default class LinkedList<T> {
 
     if (removed) {
       this.length -= 1;
+      this.tickVersion();
     }
 
     return removed;

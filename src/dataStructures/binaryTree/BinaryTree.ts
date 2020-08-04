@@ -1,13 +1,15 @@
 import { Comparator } from "../../types";
 import { Optional } from "../../types";
+import { DataStructure } from "../../common";
 
-export default class BinaryTree<T> {
+export default class BinaryTree<T> extends DataStructure {
   value: Optional<T>;
   compare: Comparator<T>;
   leftBranch: Optional<BinaryTree<T>>;
   rightBranch: Optional<BinaryTree<T>>;
 
   constructor(compare: Comparator<T>, value?: Optional<T>) {
+    super();
     this.compare = compare;
     this.value = value;
     this.leftBranch = null;
@@ -48,5 +50,6 @@ export default class BinaryTree<T> {
         this.rightBranch = new BinaryTree(this.compare, item);
       }
     }
+    this.tickVersion();
   }
 }

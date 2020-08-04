@@ -1,9 +1,11 @@
 import LinkedList from "../linkedList/LinkedList";
+import { DataStructure } from "../../common";
 
-export default class Queue<T> {
+export default class Queue<T> extends DataStructure {
   items: LinkedList<T>;
 
   constructor() {
+    super();
     this.items = new LinkedList();
   }
 
@@ -21,6 +23,7 @@ export default class Queue<T> {
 
   enqueue(item: T) {
     this.items.append(item);
+    this.tickVersion();
   }
 
   dequeue(): T {
@@ -28,6 +31,7 @@ export default class Queue<T> {
       throw new Error("Queue Empty");
     }
 
+    this.tickVersion();
     return this.items.remove(0);
   }
 

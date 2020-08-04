@@ -1,5 +1,6 @@
 import * as winston from "winston";
-import { EqualityCheck, ToString, Comparator } from "./types";
+import { EqualityCheck, ToString, Comparator, IDataStructure } from "./types";
+import { uniq } from "lodash";
 
 export const simpleLogger = winston.createLogger({
   level: "info",
@@ -57,6 +58,15 @@ const defaultGenOpts: GenerationOpts = {
   unique: false,
 };
 
+export function fisherYatesShuffle(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
 /**
  * Generate a list of random numbers in array of given length
  * @param {number} length
@@ -70,9 +80,17 @@ export function generateRandomNumbers(
 ): number[] {
   const { sorted = false, unique = true } = { ...defaultGenOpts, ...opts };
 
-  const data = Array(length)
-    .fill(null)
-    .map((i) => from + Math.floor((to - from) * Math.random()));
+  let data: number[];
+  if (unique) {
+    data = Array(length)
+      .fill(null)
+      .map((i) => from + i);
+    fisherYatesShuffle(data);
+  } else {
+    data = Array(length)
+      .fill(null)
+      .map((i) => from + Math.floor((to - from) * Math.random()));
+  }
 
   if (sorted) {
     data.sort();
@@ -89,13 +107,34 @@ for (let i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
 export const generateRandomLetter = () =>
   LETTERS[Math.floor(Math.random() * LETTERS.length)];
 
+export class DataStructure implements IDataStructure {
+  version: number;
+
+  constructor() {
+    this.version = 0;
+  }
+
+  tickVersion() {
+    this.version += 1;
+  }
+}
+
 export const generateRandomLetters = (
   length: number,
   opts?: GenerationOpts
-) => {
+): string[] => {
   const { sorted = false, unique = true } = { ...defaultGenOpts, ...opts };
 
-  const data = Array(length).fill(null).map(generateRandomLetter);
+  let data: string[] = [];
+
+  if (unique) {
+    data = Array(length)
+      .fill(null)
+      .map((_, i) => LETTERS[i]);
+    fisherYatesShuffle(data);
+  } else {
+    data = Array(length).fill(null).map(generateRandomLetter);
+  }
   if (sorted) {
     data.sort();
   }

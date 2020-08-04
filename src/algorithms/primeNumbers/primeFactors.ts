@@ -23,7 +23,7 @@ export function getPrimeFactors(value: number): number[] {
   return factors;
 }
 
-interface PrimeFactor {
+export interface PrimeFactor {
   key: number;
   value: number;
 }

@@ -1,6 +1,10 @@
 import { Optional, ToString, EqualityCheck } from "../../types";
 import { uniqWith } from "lodash";
-import { defaultEqualityCheck, defaultToString } from "../../common";
+import {
+  defaultEqualityCheck,
+  defaultToString,
+  DataStructure,
+} from "../../common";
 
 /**
  * This class encapsulates a weighted directional graph.
@@ -22,7 +26,7 @@ const defaultNewGraph: NewGraph<any> = {
   vertexToString: defaultToString,
 };
 
-export default class Graph<T> {
+export default class Graph<T> extends DataStructure {
   vertexToString: ToString<T>;
   equalityCheck: EqualityCheck<T>;
   vertices: T[];
@@ -36,6 +40,7 @@ export default class Graph<T> {
    * @param equalityCheck Function to determine if two vertices are equal
    */
   constructor(opts: NewGraph<T> = defaultNewGraph) {
+    super();
     const { equalityCheck, vertexToString } = {
       ...defaultNewGraph,
       ...opts,
@@ -53,6 +58,7 @@ export default class Graph<T> {
   clearAll() {
     this.vertices = [];
     this.edges = [];
+    this.tickVersion();
     return this;
   }
 
@@ -66,6 +72,7 @@ export default class Graph<T> {
    */
   addVertex(vertex: T): Graph<T> {
     this.vertices = uniqWith([...this.vertices, vertex], this.equalityCheck);
+    this.tickVersion();
     return this;
   }
 
@@ -80,6 +87,7 @@ export default class Graph<T> {
       ({ from, to }) =>
         this.equalityCheck(from, vertex) || this.equalityCheck(to, vertex)
     );
+    this.tickVersion();
 
     return this;
   }
@@ -91,6 +99,7 @@ export default class Graph<T> {
    */
   removeEdge(from: T, to: T): Graph<T> {
     this.edges = this.edges.filter((l) => !(l.from === from && l.to === to));
+    this.tickVersion();
     return this;
   }
 
@@ -108,6 +117,7 @@ export default class Graph<T> {
       ...this.edges.filter((l) => !(l.from === from && l.to === to)), // filter any existing Edge in this direction
       { from, to, weight },
     ];
+    this.tickVersion();
     return this;
   }
 
@@ -133,6 +143,7 @@ export default class Graph<T> {
       { from, to, weight },
       { from: to, to: from, weight }, // add the other direction
     ];
+    this.tickVersion();
 
     return this;
   }
