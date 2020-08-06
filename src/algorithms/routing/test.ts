@@ -41,14 +41,14 @@ test("Routing Algorithms - A*", () => {
     .addBiDirectionalEdge("I", "K", 4)
     .addBiDirectionalEdge("J", "L", 4)
     .addBiDirectionalEdge("J", "K", 4);
-  const shortestPathTreeStoE: ShortestPathTree = dijstraks({
+  const shortestPathTreeStoE: ShortestPathTree<string> = dijstraks({
     graph: myGraph,
     sourceNode: "S",
     destinationNode: "E",
     getHeuristicCost: (d) => euclideanDistances[d],
   });
 
-  const pathStoE: string[] = getPath(shortestPathTreeStoE, "E");
+  const pathStoE: string[] = getPath(myGraph, shortestPathTreeStoE, "E");
   expect(pathStoE).toEqual(["E", "G", "H", "B", "S"]);
 });
 
@@ -71,7 +71,7 @@ test("Routing Algorithms - Dijkstra", () => {
     .addBiDirectionalEdge("7", "8", 7);
 
   const viaNode = "0";
-  const shortestPathTreeAll: ShortestPathTree = dijstraks({
+  const shortestPathTreeAll: ShortestPathTree<string> = dijstraks({
     graph: myGraph,
     sourceNode: viaNode,
   });
@@ -87,24 +87,24 @@ test("Routing Algorithms - Dijkstra", () => {
     "8": { cost: 14, viaNode: "2" },
   });
 
-  const pathTo4 = getPath(shortestPathTreeAll, "4");
+  const pathTo4 = getPath(myGraph, shortestPathTreeAll, "4");
   expect(pathTo4).toEqual(["4", "5", "6", "7", "0"]);
 
-  const pathTo3 = getPath(shortestPathTreeAll, "3");
+  const pathTo3 = getPath(myGraph, shortestPathTreeAll, "3");
   expect(pathTo3).toEqual(["3", "2", "1", "0"]);
 
-  const pathTo8 = getPath(shortestPathTreeAll, "8");
+  const pathTo8 = getPath(myGraph, shortestPathTreeAll, "8");
   expect(pathTo8).toEqual(["8", "2", "1", "0"]);
 
   // Do the same thing again, but only find the route to one node
   // It should come up with the same answer, but will make no attempt to route 'every node'
-  const shortestPathTree4only: ShortestPathTree = dijstraks(
+  const shortestPathTree4only: ShortestPathTree<string> = dijstraks(
     {
       graph: myGraph,
       sourceNode: viaNode,
       destinationNode: "4",
     } // this time specifying the toNode
   );
-  const pathTo4only = getPath(shortestPathTree4only, "4");
+  const pathTo4only = getPath(myGraph, shortestPathTree4only, "4");
   expect(pathTo4only).toEqual(["4", "5", "6", "7", "0"]);
 });

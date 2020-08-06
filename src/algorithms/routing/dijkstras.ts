@@ -4,6 +4,7 @@ import {
   ShortestPathTree,
   ShortestPathWithNode,
   HeuristicCostFunction,
+  ShortestPathForNode,
 } from "./types";
 
 /**
@@ -13,9 +14,13 @@ import {
  * @param {string} destinationNode
  * @returns An array containing the path (walking backwards)
  */
-function getPath(shortestPathTree: ShortestPathTree, destinationNode: string) {
-  const path: string[] = [];
-  for (const p of walkPath(shortestPathTree, destinationNode)) {
+function getPath<T>(
+  graph: Graph<T>,
+  shortestPathTree: ShortestPathTree<T>,
+  destinationNode: T
+) {
+  const path: T[] = [];
+  for (const p of walkPath(graph, shortestPathTree, destinationNode)) {
     path.push(p);
   }
   return path;
@@ -29,22 +34,28 @@ function getPath(shortestPathTree: ShortestPathTree, destinationNode: string) {
  * @param {string} viaNode The start point of the journey
  * @param {string} destinationNode The end point of the journey
  */
-function* walkPath(
-  shortestPathTree: ShortestPathTree,
-  destinationNode: string
+function* walkPath<T>(
+  { vertexToString }: Graph<T>,
+  shortestPathTree: ShortestPathTree<T>,
+  destinationNode: T
 ) {
-  let node: string = destinationNode;
+  let node: T = destinationNode;
   while (!!node) {
     yield node;
-    node = shortestPathTree[node].viaNode;
+    const thisShortestPath: ShortestPathForNode<T> =
+      shortestPathTree[vertexToString(node)];
+    if (thisShortestPath === undefined) {
+      break;
+    }
+    node = thisShortestPath.viaNode;
   }
 }
 
-interface Args {
-  graph: Graph<string>;
-  sourceNode: string;
-  destinationNode?: string;
-  getHeuristicCost?: HeuristicCostFunction;
+interface Args<T> {
+  graph: Graph<T>;
+  sourceNode: T;
+  destinationNode?: T;
+  getHeuristicCost?: HeuristicCostFunction<T>;
 }
 
 /**
@@ -58,17 +69,17 @@ interface Args {
  * @param {string | undefined} optionalArguments // Optional arguments, see above for default values
  * @returns Shortest Path Tree { [node] : {cost: number, viaNode: string} }
  */
-function dijstraks({
+function dijstraks<T>({
   graph,
   sourceNode,
   destinationNode,
-  getHeuristicCost = (n) => 0,
-}: Args): ShortestPathTree {
-  const shortestPathTree: ShortestPathTree = {};
+  getHeuristicCost = () => 0,
+}: Args<T>): ShortestPathTree<T> {
+  const shortestPathTree: ShortestPathTree<T> = {};
 
   // Build a priority queue, where the nodes are arranged in order of
   // distance from the source (smallest to largest)
-  const currentDistances = new PriorityQueue<ShortestPathWithNode>(
+  const currentDistances = new PriorityQueue<ShortestPathWithNode<T>>(
     (a, b) => b.cost - a.cost
   );
 
@@ -79,9 +90,11 @@ function dijstraks({
     cost: 0,
   });
 
+  const { vertices, equalityCheck, vertexToString } = graph;
+
   // Add all the other nodes, with a distance of Infinity
-  [...graph.vertices]
-    .filter((node) => node.localeCompare(sourceNode) !== 0)
+  vertices
+    .filter((node) => !equalityCheck(node, sourceNode))
     .map((node) => ({ node, viaNode: undefined, cost: Infinity }))
     .forEach((n) => currentDistances.enqueue(n));
 
@@ -91,27 +104,24 @@ function dijstraks({
     const currentItem = currentDistances.dequeue();
 
     // Put this item into our set (using node as a key)
-    shortestPathTree[currentItem.node] = {
+    shortestPathTree[vertexToString(currentItem.node)] = {
       cost: currentItem.cost,
       viaNode: currentItem.viaNode,
     };
 
-    if (
-      !!destinationNode &&
-      currentItem.node.localeCompare(destinationNode) === 0
-    ) {
+    if (!!destinationNode && equalityCheck(currentItem.node, destinationNode)) {
       break;
     }
 
     // Get all the links from our current item
     graph
       .getOutgoing(currentItem.node)
-      .filter(({ to }) => shortestPathTree[to] === undefined) // only those that aren't in our tree already
+      .filter(({ to }) => shortestPathTree[vertexToString(to)] === undefined) // only those that aren't in our tree already
       .forEach(({ to: node, weight }) => {
         // Remove the matching item from our current known distances
         // It will either be replaced as is, or replaced with updated details
-        const otherItem = currentDistances.removeMatch(
-          (d) => d.node.localeCompare(node) === 0
+        const otherItem = currentDistances.removeMatch((d) =>
+          equalityCheck(d.node, node)
         );
 
         if (weight === Infinity) {

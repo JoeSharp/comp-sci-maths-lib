@@ -1,14 +1,16 @@
-export interface ShortestPathForNode {
+import { Optional } from "../../types";
+
+export interface ShortestPathForNode<T> {
   cost: number;
-  viaNode: string;
+  viaNode: Optional<T>;
 }
 
-export interface ShortestPathWithNode extends ShortestPathForNode {
-  node: string;
+export interface ShortestPathWithNode<T> extends ShortestPathForNode<T> {
+  node: T;
 }
 
-export interface ShortestPathTree {
-  [node: string]: ShortestPathForNode;
+export interface ShortestPathTree<T> {
+  [nodeAsStr: string]: ShortestPathForNode<T>;
 }
 
-export type HeuristicCostFunction = (node: string) => number;
+export type HeuristicCostFunction<T> = (node: T) => number;

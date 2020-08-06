@@ -85,7 +85,7 @@ export default class Graph<T> extends DataStructure {
     this.vertices = this.vertices.filter((v) => !this.equalityCheck(v, vertex));
     this.edges = this.edges.filter(
       ({ from, to }) =>
-        this.equalityCheck(from, vertex) || this.equalityCheck(to, vertex)
+        !(this.equalityCheck(from, vertex) || this.equalityCheck(to, vertex))
     );
     this.tickVersion();
 
@@ -98,7 +98,9 @@ export default class Graph<T> extends DataStructure {
    * @param to The destination vertex
    */
   removeEdge(from: T, to: T): Graph<T> {
-    this.edges = this.edges.filter((l) => !(l.from === from && l.to === to));
+    this.edges = this.edges.filter(
+      (l) => !(this.equalityCheck(l.from, from) && this.equalityCheck(l.to, to))
+    );
     this.tickVersion();
     return this;
   }
@@ -114,7 +116,10 @@ export default class Graph<T> extends DataStructure {
     this.addVertex(from);
     this.addVertex(to);
     this.edges = [
-      ...this.edges.filter((l) => !(l.from === from && l.to === to)), // filter any existing Edge in this direction
+      ...this.edges.filter(
+        (l) =>
+          !(this.equalityCheck(l.from, from) && this.equalityCheck(l.to, to))
+      ), // filter any existing Edge in this direction
       { from, to, weight },
     ];
     this.tickVersion();
@@ -136,8 +141,9 @@ export default class Graph<T> extends DataStructure {
       ...this.edges.filter(
         (l) =>
           !(
-            (l.from === from && l.to === to) ||
-            (l.from === to && l.to === from)
+            (this.equalityCheck(l.from, from) &&
+              this.equalityCheck(l.to, to)) ||
+            (this.equalityCheck(l.from, to) && this.equalityCheck(l.to, from))
           )
       ), // filter any existing Edge in both directions
       { from, to, weight },
@@ -155,7 +161,9 @@ export default class Graph<T> extends DataStructure {
    * @returns The Edge if one exists
    */
   getEdge(from: T, to: T): Optional<Edge<T>> {
-    return this.edges.find((l) => l.from === from && l.to === to);
+    return this.edges.find(
+      (l) => this.equalityCheck(l.from, from) && this.equalityCheck(l.to, to)
+    );
   }
 
   /**
@@ -163,7 +171,7 @@ export default class Graph<T> extends DataStructure {
    * @param vertex The from vertex
    */
   getIncoming(vertex: T): Edge<T>[] {
-    return this.edges.filter((l) => l.to === vertex);
+    return this.edges.filter((l) => this.equalityCheck(l.to, vertex));
   }
 
   /**
@@ -171,7 +179,7 @@ export default class Graph<T> extends DataStructure {
    * @param {string} vertex The from vertex
    */
   getOutgoing(vertex: T): Edge<T>[] {
-    return this.edges.filter((l) => l.from === vertex);
+    return this.edges.filter((l) => this.equalityCheck(l.from, vertex));
   }
 
   /**

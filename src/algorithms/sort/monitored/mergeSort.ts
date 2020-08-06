@@ -61,8 +61,8 @@ function mergeSort<T>(
     // Comparator returns +ve if the second item is larger than first
     if (
       compare(firstHalf[firstPtr], secondHalf[secondPtr], {
-        aIndex: firstPtr,
-        bIndex: secondPtr,
+        aIndex: leftPointer + firstPtr,
+        bIndex: leftPointer + secondPtr,
       }) > 0
     ) {
       outputList.push(secondHalf[secondPtr]);
