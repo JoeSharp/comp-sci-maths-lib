@@ -62,7 +62,7 @@ function mergeSort<T>(
     if (
       compare(firstHalf[firstPtr], secondHalf[secondPtr], {
         aIndex: leftPointer + firstPtr,
-        bIndex: leftPointer + secondPtr,
+        bIndex: middle + secondPtr,
       }) > 0
     ) {
       outputList.push(secondHalf[secondPtr]);
