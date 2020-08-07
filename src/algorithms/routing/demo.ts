@@ -1,4 +1,4 @@
-import { ShortestPathTree } from "./types";
+import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
 import { dijstraks, getPath } from "./dijkstras";
@@ -47,18 +47,27 @@ for (let col = 0; col < columns; col++) {
 
 const sourceNode = { x: 0, y: 0 };
 const destinationNode = { x: columns - 1, y: rows - 1 };
+const observations: ObserverArgs<Point>[] = [];
 
 const shortestPathAcross: ShortestPathTree<Point> = dijstraks({
   graph: myGraph,
   sourceNode,
   destinationNode,
+  observer: (d) => observations.push(d),
 });
 
-const pathAcross: Point[] = getPath(
-  myGraph,
-  shortestPathAcross,
-  destinationNode
-);
+const pathAcross: Point[] = getPath({
+  graph: myGraph,
+  shortestPathTree: shortestPathAcross,
+  destinationNode,
+});
 
 simpleLogger.info("Shortest Path Tree", shortestPathAcross);
-simpleLogger.info("Path Across Grid", pathAcross);
+simpleLogger.info("Path Across Grid", pathAcross.map(pointToStr).join(" -> "));
+
+simpleLogger.info("OBSERVATIONS");
+observations.forEach(({ currentDistances, shortestPathTree, currentItem }) => {
+  simpleLogger.info(`Current Item: ${pointToStr(currentItem.node)}`);
+});
+
+// TODO we need to be able to get the path going forwards...

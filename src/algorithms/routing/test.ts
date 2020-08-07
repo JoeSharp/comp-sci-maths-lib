@@ -1,7 +1,35 @@
-import { ShortestPathTree } from "./types";
+import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
 import { dijstraks, getPath } from "./dijkstras";
+
+test("Routing Algorithms - Dead End", () => {
+  const myGraph = new Graph<string>()
+    .addBiDirectionalEdge("A", "B")
+    .addBiDirectionalEdge("B", "C")
+    .addBiDirectionalEdge("E", "D");
+
+  const shortestPathTree = dijstraks({
+    graph: myGraph,
+    sourceNode: "A",
+    destinationNode: "D",
+  });
+
+  // Check the unreachable nodes
+  ["D", "E"].forEach((u) => {
+    expect(shortestPathTree[u].cost).toBe(Infinity);
+    expect(shortestPathTree[u].viaNode).toBeUndefined();
+  });
+
+  const path = getPath({
+    graph: myGraph,
+    shortestPathTree,
+    destinationNode: "D",
+  });
+
+  // Should be empty with no available path
+  expect(path).toStrictEqual([]);
+});
 
 // https://youtu.be/ySN5Wnu88nE?t=239
 test("Routing Algorithms - A*", () => {
@@ -41,15 +69,24 @@ test("Routing Algorithms - A*", () => {
     .addBiDirectionalEdge("I", "K", 4)
     .addBiDirectionalEdge("J", "L", 4)
     .addBiDirectionalEdge("J", "K", 4);
+
+  const observations: ObserverArgs<string>[] = [];
   const shortestPathTreeStoE: ShortestPathTree<string> = dijstraks({
     graph: myGraph,
     sourceNode: "S",
     destinationNode: "E",
     getHeuristicCost: (d) => euclideanDistances[d],
+    observer: (d) => observations.push(d),
   });
 
-  const pathStoE: string[] = getPath(myGraph, shortestPathTreeStoE, "E");
-  expect(pathStoE).toEqual(["E", "G", "H", "B", "S"]);
+  expect(observations.length).toBeGreaterThan(1);
+
+  const pathStoE: string[] = getPath({
+    graph: myGraph,
+    shortestPathTree: shortestPathTreeStoE,
+    destinationNode: "E",
+  });
+  expect(pathStoE).toEqual(["S", "B", "H", "G", "E"]);
 });
 
 // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
@@ -87,14 +124,26 @@ test("Routing Algorithms - Dijkstra", () => {
     "8": { cost: 14, viaNode: "2" },
   });
 
-  const pathTo4 = getPath(myGraph, shortestPathTreeAll, "4");
-  expect(pathTo4).toEqual(["4", "5", "6", "7", "0"]);
+  const pathTo4 = getPath({
+    graph: myGraph,
+    shortestPathTree: shortestPathTreeAll,
+    destinationNode: "4",
+  });
+  expect(pathTo4).toEqual(["0", "7", "6", "5", "4"]);
 
-  const pathTo3 = getPath(myGraph, shortestPathTreeAll, "3");
-  expect(pathTo3).toEqual(["3", "2", "1", "0"]);
+  const pathTo3 = getPath({
+    graph: myGraph,
+    shortestPathTree: shortestPathTreeAll,
+    destinationNode: "3",
+  });
+  expect(pathTo3).toEqual(["0", "1", "2", "3"]);
 
-  const pathTo8 = getPath(myGraph, shortestPathTreeAll, "8");
-  expect(pathTo8).toEqual(["8", "2", "1", "0"]);
+  const pathTo8 = getPath({
+    graph: myGraph,
+    shortestPathTree: shortestPathTreeAll,
+    destinationNode: "8",
+  });
+  expect(pathTo8).toEqual(["0", "1", "2", "8"]);
 
   // Do the same thing again, but only find the route to one node
   // It should come up with the same answer, but will make no attempt to route 'every node'
@@ -105,6 +154,10 @@ test("Routing Algorithms - Dijkstra", () => {
       destinationNode: "4",
     } // this time specifying the toNode
   );
-  const pathTo4only = getPath(myGraph, shortestPathTree4only, "4");
-  expect(pathTo4only).toEqual(["4", "5", "6", "7", "0"]);
+  const pathTo4only = getPath({
+    graph: myGraph,
+    shortestPathTree: shortestPathTree4only,
+    destinationNode: "4",
+  });
+  expect(pathTo4only).toEqual(["0", "7", "6", "5", "4"]);
 });

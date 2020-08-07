@@ -1,4 +1,5 @@
 import { Optional } from "../../types";
+import PriorityQueue from "../../dataStructures/queue/PriorityQueue";
 
 export interface ShortestPathForNode<T> {
   cost: number;
@@ -14,3 +15,10 @@ export interface ShortestPathTree<T> {
 }
 
 export type HeuristicCostFunction<T> = (node: T) => number;
+
+export interface ObserverArgs<T> {
+  currentItem: ShortestPathWithNode<T>;
+  shortestPathTree: ShortestPathTree<T>;
+  currentDistances: PriorityQueue<ShortestPathWithNode<T>>;
+}
+export type RoutingObserver<T> = (args: ObserverArgs<T>) => void;

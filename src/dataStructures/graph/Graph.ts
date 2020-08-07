@@ -63,6 +63,16 @@ export default class Graph<T> extends DataStructure {
   }
 
   /**
+   * Remove all edges to and from a given vertex, leave the vertex on the graph though
+   * @param vertex The vertex to disconnect
+   */
+  disconnectVertex(vertex: T): Graph<T> {
+    this.removeVertex(vertex);
+    this.addVertex(vertex);
+    return this;
+  }
+
+  /**
    * Register the existence of a vertex,
    * this might be done to represent disconnected vertexs,
    * or to simply prepare the list of vertexs before edges are known.

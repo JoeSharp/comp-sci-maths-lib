@@ -5,25 +5,36 @@ import {
   ShortestPathWithNode,
   HeuristicCostFunction,
   ShortestPathForNode,
+  RoutingObserver,
 } from "./types";
+import { emptyObserver } from "../../common";
 
 /**
  * Calls the walkPath generator function and puts all the nodes into an array, returns the array.
  *
  * @param {object[key=node, value={cost: number, viaNode: string}]} shortestPathTree
  * @param {string} destinationNode
- * @returns An array containing the path (walking backwards)
+ * @returns An array containing the path (walking backwards), it will be empty if no route was found
  */
-function getPath<T>(
-  graph: Graph<T>,
-  shortestPathTree: ShortestPathTree<T>,
-  destinationNode: T
-) {
+function getPath<T>({ graph, shortestPathTree, destinationNode }: WalkPath<T>) {
   const path: T[] = [];
-  for (const p of walkPath(graph, shortestPathTree, destinationNode)) {
+
+  // If there is no available path to the destination, feed back empty list
+  const endpoint = shortestPathTree[graph.vertexToString(destinationNode)];
+  if (!endpoint || endpoint.viaNode === undefined) {
+    return path;
+  }
+
+  for (const p of walkPath({ graph, shortestPathTree, destinationNode })) {
     path.push(p);
   }
-  return path;
+  return path.reverse();
+}
+
+interface WalkPath<T> {
+  graph: Graph<T>;
+  shortestPathTree: ShortestPathTree<T>;
+  destinationNode: T;
 }
 
 /**
@@ -34,11 +45,11 @@ function getPath<T>(
  * @param {string} viaNode The start point of the journey
  * @param {string} destinationNode The end point of the journey
  */
-function* walkPath<T>(
-  { vertexToString }: Graph<T>,
-  shortestPathTree: ShortestPathTree<T>,
-  destinationNode: T
-) {
+function* walkPath<T>({
+  graph: { vertexToString },
+  shortestPathTree,
+  destinationNode,
+}: WalkPath<T>) {
   let node: T = destinationNode;
   while (!!node) {
     yield node;
@@ -56,7 +67,10 @@ interface Args<T> {
   sourceNode: T;
   destinationNode?: T;
   getHeuristicCost?: HeuristicCostFunction<T>;
+  observer?: RoutingObserver<T>;
 }
+
+export const emptyHeuristic: HeuristicCostFunction<any> = () => 0;
 
 /**
  * Executes Dijkstras routing algorithm, returning the shortest path tree for the given source node.
@@ -73,7 +87,8 @@ function dijstraks<T>({
   graph,
   sourceNode,
   destinationNode,
-  getHeuristicCost = () => 0,
+  getHeuristicCost = emptyHeuristic,
+  observer = emptyObserver,
 }: Args<T>): ShortestPathTree<T> {
   const shortestPathTree: ShortestPathTree<T> = {};
 
@@ -103,12 +118,16 @@ function dijstraks<T>({
     // Take the node that is the shortest distance from our source node
     const currentItem = currentDistances.dequeue();
 
+    // Tell any observer the step
+    observer({ currentItem, shortestPathTree, currentDistances });
+
     // Put this item into our set (using node as a key)
     shortestPathTree[vertexToString(currentItem.node)] = {
       cost: currentItem.cost,
       viaNode: currentItem.viaNode,
     };
 
+    // Have we reached the destination? Quit early
     if (!!destinationNode && equalityCheck(currentItem.node, destinationNode)) {
       break;
     }
