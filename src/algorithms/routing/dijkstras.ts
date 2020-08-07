@@ -185,6 +185,9 @@ function dijstraks<T>({
       });
   }
 
+  // Tell any observer the step
+  observer({ shortestPathTree, currentDistances });
+
   return shortestPathTree;
 }
 

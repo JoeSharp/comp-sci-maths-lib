@@ -45,6 +45,29 @@ function testGrid() {
       }
     }
   }
+  myGraph.disconnectVertex({ x: 0, y: 7 });
+  myGraph.disconnectVertex({ x: 1, y: 6 });
+  myGraph.disconnectVertex({ x: 2, y: 5 });
+  myGraph.disconnectVertex({ x: 3, y: 4 });
+  myGraph.disconnectVertex({ x: 4, y: 3 });
+  myGraph.disconnectVertex({ x: 4, y: 4 });
+  myGraph.disconnectVertex({ x: 4, y: 5 });
+
+  myGraph.disconnectVertex({ x: 8, y: 1 });
+  myGraph.disconnectVertex({ x: 8, y: 2 });
+  myGraph.disconnectVertex({ x: 8, y: 3 });
+  myGraph.disconnectVertex({ x: 8, y: 4 });
+
+  myGraph.disconnectVertex({ x: 9, y: 4 });
+  myGraph.disconnectVertex({ x: 9, y: 7 });
+  myGraph.disconnectVertex({ x: 10, y: 3 });
+  myGraph.disconnectVertex({ x: 11, y: 1 });
+  myGraph.disconnectVertex({ x: 11, y: 6 });
+  myGraph.disconnectVertex({ x: 11, y: 7 });
+
+  myGraph.disconnectVertex({ x: 12, y: 1 });
+  myGraph.disconnectVertex({ x: 12, y: 4 });
+  myGraph.disconnectVertex({ x: 12, y: 5 });
 
   const sourceNode = { x: 0, y: 0 };
   const destinationNode = { x: columns - 1, y: rows - 1 };
@@ -71,16 +94,28 @@ function testGrid() {
 
   simpleLogger.info("OBSERVATIONS");
   observations.forEach(({ currentItem }) => {
-    simpleLogger.info(`Current Item: ${pointToStr(currentItem.node)}`);
+    simpleLogger.info(
+      `Current Item: ${!!currentItem ? pointToStr(currentItem.node) : "NONE"}`
+    );
   });
 
-  // TODO we need to be able to get the path going forwards...
   const pathFrom: Point[] = getPathFrom({
     graph: myGraph,
     shortestPathTree,
     node: sourceNode,
   });
   simpleLogger.info("Shortest Path From Source", pathFrom);
+
+  observations.forEach((o) => {
+    const path = getPathTo({
+      graph: myGraph,
+      shortestPathTree: o.shortestPathTree,
+      node: !!o.currentItem ? o.currentItem.node : "A",
+    });
+    simpleLogger.info(
+      `Observation: ${path.map(pointToStr)} - ${JSON.stringify(o.currentItem)}`
+    );
+  });
 }
 
 function testBrokenPath() {
@@ -88,11 +123,13 @@ function testBrokenPath() {
     .addBiDirectionalEdge("A", "B")
     .addBiDirectionalEdge("B", "C")
     .addBiDirectionalEdge("E", "D");
+  const observations: ObserverArgs<string>[] = [];
 
   const shortestPathTree = dijstraks({
     graph: myGraph,
     sourceNode: "A",
     destinationNode: "D",
+    observer: (d) => observations.push(d),
   });
 
   const pathFrom = getPathFrom({
@@ -101,7 +138,18 @@ function testBrokenPath() {
     node: "A",
   });
   simpleLogger.info("Broken Path From ", pathFrom);
+
+  observations.forEach((o) => {
+    const path = getPathTo({
+      graph: myGraph,
+      shortestPathTree: o.shortestPathTree,
+      node: !!o.currentItem ? o.currentItem.node : "A",
+    });
+    simpleLogger.info(
+      `Observation: ${path} - ${JSON.stringify(o.currentItem)}`
+    );
+  });
 }
 
 testGrid();
-testBrokenPath();
+// testBrokenPath();

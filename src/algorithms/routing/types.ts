@@ -17,8 +17,11 @@ export interface ShortestPathTree<T> {
 export type HeuristicCostFunction<T> = (node: T) => number;
 
 export interface ObserverArgs<T> {
-  currentItem: ShortestPathWithNode<T>;
+  currentItem?: ShortestPathWithNode<T>;
   shortestPathTree: ShortestPathTree<T>;
   currentDistances: PriorityQueue<ShortestPathWithNode<T>>;
+}
+export interface ObserverArgsWithPathFrom<T> extends ObserverArgs<T> {
+  pathFrom: T[];
 }
 export type RoutingObserver<T> = (args: ObserverArgs<T>) => void;
