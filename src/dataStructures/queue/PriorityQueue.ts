@@ -26,6 +26,10 @@ export default class PriorityQueue<T> extends DataStructure {
     return this.items.length === 0;
   }
 
+  toArray() {
+    return this.items.toArray();
+  }
+
   /**
    * Removes
    * @param {function} matchFunction Returns true for the object being removed
