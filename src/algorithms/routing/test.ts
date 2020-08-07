@@ -1,7 +1,7 @@
 import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
-import { dijstraks, getPath } from "./dijkstras";
+import { dijstraks, getPathFrom, getPathTo } from "./dijkstras";
 
 test("Routing Algorithms - Dead End", () => {
   const myGraph = new Graph<string>()
@@ -21,14 +21,21 @@ test("Routing Algorithms - Dead End", () => {
     expect(shortestPathTree[u].viaNode).toBeUndefined();
   });
 
-  const path = getPath({
+  const pathTo = getPathTo({
     graph: myGraph,
     shortestPathTree,
-    destinationNode: "D",
+    node: "D",
   });
 
   // Should be empty with no available path
-  expect(path).toStrictEqual([]);
+  expect(pathTo).toStrictEqual([]);
+
+  const pathFrom = getPathFrom({
+    graph: myGraph,
+    shortestPathTree,
+    node: "A",
+  });
+  expect(pathFrom[0]).toBe("A");
 });
 
 // https://youtu.be/ySN5Wnu88nE?t=239
@@ -81,10 +88,10 @@ test("Routing Algorithms - A*", () => {
 
   expect(observations.length).toBeGreaterThan(1);
 
-  const pathStoE: string[] = getPath({
+  const pathStoE: string[] = getPathTo({
     graph: myGraph,
     shortestPathTree: shortestPathTreeStoE,
-    destinationNode: "E",
+    node: "E",
   });
   expect(pathStoE).toEqual(["S", "B", "H", "G", "E"]);
 });
@@ -124,24 +131,24 @@ test("Routing Algorithms - Dijkstra", () => {
     "8": { cost: 14, viaNode: "2" },
   });
 
-  const pathTo4 = getPath({
+  const pathTo4 = getPathTo({
     graph: myGraph,
     shortestPathTree: shortestPathTreeAll,
-    destinationNode: "4",
+    node: "4",
   });
   expect(pathTo4).toEqual(["0", "7", "6", "5", "4"]);
 
-  const pathTo3 = getPath({
+  const pathTo3 = getPathTo({
     graph: myGraph,
     shortestPathTree: shortestPathTreeAll,
-    destinationNode: "3",
+    node: "3",
   });
   expect(pathTo3).toEqual(["0", "1", "2", "3"]);
 
-  const pathTo8 = getPath({
+  const pathTo8 = getPathTo({
     graph: myGraph,
     shortestPathTree: shortestPathTreeAll,
-    destinationNode: "8",
+    node: "8",
   });
   expect(pathTo8).toEqual(["0", "1", "2", "8"]);
 
@@ -154,10 +161,10 @@ test("Routing Algorithms - Dijkstra", () => {
       destinationNode: "4",
     } // this time specifying the toNode
   );
-  const pathTo4only = getPath({
+  const pathTo4only = getPathTo({
     graph: myGraph,
     shortestPathTree: shortestPathTree4only,
-    destinationNode: "4",
+    node: "4",
   });
   expect(pathTo4only).toEqual(["0", "7", "6", "5", "4"]);
 });

@@ -87,6 +87,14 @@ export default class Graph<T> extends DataStructure {
   }
 
   /**
+   *
+   * @param vAsString The string representation of the vertex to search for
+   */
+  getVertex(vAsString: string): Optional<T> {
+    return this.vertices.find((v) => this.vertexToString(v) === vAsString);
+  }
+
+  /**
    * Remove the existence of a vertex,
    * will also remove any edges from/to the given vertex.
    * @param vertex The vertex to remove

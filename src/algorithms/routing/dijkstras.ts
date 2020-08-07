@@ -9,6 +9,21 @@ import {
 } from "./types";
 import { emptyObserver } from "../../common";
 
+function getPathFrom<T>({ graph, shortestPathTree, node }: WalkPath<T>): T[] {
+  const path: T[] = [];
+
+  while (node !== undefined) {
+    path.push(node);
+
+    const match = Object.entries(shortestPathTree).find(
+      ([_, { viaNode }]) => viaNode && graph.equalityCheck(viaNode, node)
+    );
+    node = !!match ? graph.getVertex(match[0]) : undefined;
+  }
+
+  return path;
+}
+
 /**
  * Calls the walkPath generator function and puts all the nodes into an array, returns the array.
  *
@@ -16,16 +31,16 @@ import { emptyObserver } from "../../common";
  * @param {string} destinationNode
  * @returns An array containing the path (walking backwards), it will be empty if no route was found
  */
-function getPath<T>({ graph, shortestPathTree, destinationNode }: WalkPath<T>) {
+function getPathTo<T>({ graph, shortestPathTree, node }: WalkPath<T>) {
   const path: T[] = [];
 
   // If there is no available path to the destination, feed back empty list
-  const endpoint = shortestPathTree[graph.vertexToString(destinationNode)];
+  const endpoint = shortestPathTree[graph.vertexToString(node)];
   if (!endpoint || endpoint.viaNode === undefined) {
     return path;
   }
 
-  for (const p of walkPath({ graph, shortestPathTree, destinationNode })) {
+  for (const p of walkPath({ graph, shortestPathTree, node })) {
     path.push(p);
   }
   return path.reverse();
@@ -34,7 +49,7 @@ function getPath<T>({ graph, shortestPathTree, destinationNode }: WalkPath<T>) {
 interface WalkPath<T> {
   graph: Graph<T>;
   shortestPathTree: ShortestPathTree<T>;
-  destinationNode: T;
+  node: T;
 }
 
 /**
@@ -48,9 +63,8 @@ interface WalkPath<T> {
 function* walkPath<T>({
   graph: { vertexToString },
   shortestPathTree,
-  destinationNode,
+  node,
 }: WalkPath<T>) {
-  let node: T = destinationNode;
   while (!!node) {
     yield node;
     const thisShortestPath: ShortestPathForNode<T> =
@@ -174,4 +188,4 @@ function dijstraks<T>({
   return shortestPathTree;
 }
 
-export { dijstraks, getPath, walkPath };
+export { dijstraks, getPathFrom, getPathTo, walkPath };
