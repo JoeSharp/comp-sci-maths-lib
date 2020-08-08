@@ -1,5 +1,5 @@
 import PriorityQueue from "../../dataStructures/queue/PriorityQueue";
-import Graph from "../../dataStructures/graph/Graph";
+import Graph, { Edge } from "../../dataStructures/graph/Graph";
 import {
   ShortestPathTree,
   ShortestPathWithNode,
@@ -132,8 +132,12 @@ function dijstraks<T>({
     // Take the node that is the shortest distance from our source node
     const currentItem = currentDistances.dequeue();
 
+    const outgoing: Edge<T>[] = graph
+      .getOutgoing(currentItem.node)
+      .filter(({ to }) => shortestPathTree[vertexToString(to)] === undefined); // only those that aren't in our tree already
+
     // Tell any observer the step
-    observer({ currentItem, shortestPathTree, currentDistances });
+    observer({ currentItem, shortestPathTree, currentDistances, outgoing });
 
     // Put this item into our set (using node as a key)
     shortestPathTree[vertexToString(currentItem.node)] = {
@@ -147,46 +151,43 @@ function dijstraks<T>({
     }
 
     // Get all the links from our current item
-    graph
-      .getOutgoing(currentItem.node)
-      .filter(({ to }) => shortestPathTree[vertexToString(to)] === undefined) // only those that aren't in our tree already
-      .forEach(({ to: node, weight }) => {
-        // Remove the matching item from our current known distances
-        // It will either be replaced as is, or replaced with updated details
-        const otherItem = currentDistances.removeMatch((d) =>
-          equalityCheck(d.node, node)
-        );
+    outgoing.forEach(({ to: node, weight }) => {
+      // Remove the matching item from our current known distances
+      // It will either be replaced as is, or replaced with updated details
+      const otherItem = currentDistances.removeMatch((d) =>
+        equalityCheck(d.node, node)
+      );
 
-        if (weight === Infinity) {
-          // This is the first time we have 'found' this node, so this is the best known route
+      if (weight === Infinity) {
+        // This is the first time we have 'found' this node, so this is the best known route
+        currentDistances.enqueue({
+          node,
+          cost: weight,
+          viaNode: currentItem.node,
+        });
+      } else {
+        // What is the distance to this other node, from our current node?
+        const newPotentialDistance =
+          currentItem.cost + weight + getHeuristicCost(currentItem.node);
+
+        // Have we found a shorter route?
+        if (newPotentialDistance < otherItem.cost) {
+          // Replace the node with our new distance and via details
           currentDistances.enqueue({
             node,
-            cost: weight,
+            cost: newPotentialDistance,
             viaNode: currentItem.node,
           });
         } else {
-          // What is the distance to this other node, from our current node?
-          const newPotentialDistance =
-            currentItem.cost + weight + getHeuristicCost(currentItem.node);
-
-          // Have we found a shorter route?
-          if (newPotentialDistance < otherItem.cost) {
-            // Replace the node with our new distance and via details
-            currentDistances.enqueue({
-              node,
-              cost: newPotentialDistance,
-              viaNode: currentItem.node,
-            });
-          } else {
-            // Just put the current one back
-            currentDistances.enqueue(otherItem);
-          }
+          // Just put the current one back
+          currentDistances.enqueue(otherItem);
         }
-      });
+      }
+    });
   }
 
   // Tell any observer the step
-  observer({ shortestPathTree, currentDistances });
+  observer({ shortestPathTree, currentDistances, outgoing: [] });
 
   return shortestPathTree;
 }

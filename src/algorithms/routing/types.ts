@@ -1,5 +1,6 @@
 import { Optional } from "../../types";
 import PriorityQueue from "../../dataStructures/queue/PriorityQueue";
+import { Edge } from "../../dataStructures/graph/Graph";
 
 export interface ShortestPathForNode<T> {
   cost: number;
@@ -20,6 +21,7 @@ export interface ObserverArgs<T> {
   currentItem?: ShortestPathWithNode<T>;
   shortestPathTree: ShortestPathTree<T>;
   currentDistances: PriorityQueue<ShortestPathWithNode<T>>;
+  outgoing: Edge<T>[];
 }
 export interface ObserverArgsWithPathFrom<T> extends ObserverArgs<T> {
   pathFrom: T[];
