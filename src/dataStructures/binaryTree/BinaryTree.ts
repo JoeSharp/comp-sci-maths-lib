@@ -16,6 +16,12 @@ export default class BinaryTree<T> extends DataStructure {
     this.rightBranch = null;
   }
 
+  clear() {
+    this.value = undefined;
+    this.leftBranch = null;
+    this.rightBranch = null;
+  }
+
   toString(): string {
     return `(${this.leftBranch && this.leftBranch.toString()} ${this.value} ${
       this.rightBranch && this.rightBranch.toString()
@@ -34,7 +40,7 @@ export default class BinaryTree<T> extends DataStructure {
     return false;
   }
 
-  add(item: T) {
+  add(item: T): BinaryTree<T> {
     if (this.value === undefined) {
       this.value = item;
     } else if (this.compare(item, this.value) < 0) {
@@ -51,5 +57,6 @@ export default class BinaryTree<T> extends DataStructure {
       }
     }
     this.tickVersion();
+    return this;
   }
 }

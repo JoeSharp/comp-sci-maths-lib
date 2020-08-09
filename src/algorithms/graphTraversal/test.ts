@@ -18,7 +18,8 @@ function createTestGraph() {
 test("Graph - Breadth First Search", () => {
   const myGraph = createTestGraph();
 
-  const items = breadthFirstSearch(myGraph, "S");
+  const items: string[] = [];
+  breadthFirstSearch(myGraph, "S", (d) => items.push(d));
 
   const directlyEdgeed = ["A", "B", "C"];
   const transitivelyEdgeed = ["D", "E", "F", "G"];
@@ -36,7 +37,8 @@ test("Graph - Breadth First Search", () => {
 test("Graph - Depth First Search", () => {
   const myGraph = createTestGraph();
 
-  const items = depthFirstSearch(myGraph, "S");
+  const items: string[] = [];
+  depthFirstSearch(myGraph, "S", (d) => items.push(d));
 
   const directRelatives = [
     { direct: "C", transitive: "F" },

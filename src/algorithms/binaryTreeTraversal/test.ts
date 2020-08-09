@@ -5,14 +5,13 @@ import traversePreOrder from "./traversePreOrder";
 import { stringComparator } from "../../common";
 
 test("Binary Tree - Traversal", () => {
-  const myTree: BinaryTree<string> = new BinaryTree<string>(stringComparator);
-
-  myTree.add("B");
-  myTree.add("A");
-  myTree.add("D");
-  myTree.add("E");
-  myTree.add("C");
-  myTree.add("F");
+  const myTree: BinaryTree<string> = new BinaryTree<string>(stringComparator)
+    .add("B")
+    .add("A")
+    .add("D")
+    .add("E")
+    .add("C")
+    .add("F");
 
   let results: string[] = [];
   traverseInOrder(myTree, (n) => results.push(n));

@@ -1,13 +1,19 @@
 import Queue from "../../dataStructures/queue/Queue";
 import Graph from "../../dataStructures/graph/Graph";
+import { VisitFunction } from "../../types";
 
-function breadthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
+function breadthFirstSearch<T>(
+  graph: Graph<T>,
+  startVertex: T,
+  visit: VisitFunction<T>
+): void {
   const pendingQueue: Queue<T> = new Queue();
-  const items: T[] = [];
+  const visited: Set<T> = new Set();
 
   // Visit the starting vertex
   pendingQueue.enqueue(startVertex);
-  items.push(startVertex);
+  visited.add(startVertex);
+  visit(startVertex);
 
   let vertex = startVertex;
   do {
@@ -15,11 +21,12 @@ function breadthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
     const related: T[] = graph
       .getOutgoing(vertex)
       .map(({ to }) => to)
-      .filter((i) => !items.includes(i));
+      .filter((i) => !visited.has(i));
 
     // If we have related edges, add them all to the items
     related.forEach((r) => {
-      items.push(r);
+      visited.add(r);
+      visit(r);
       pendingQueue.enqueue(r);
     });
 
@@ -27,8 +34,6 @@ function breadthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
       vertex = pendingQueue.dequeue();
     }
   } while (!pendingQueue.isEmpty());
-
-  return items;
 }
 
 export default breadthFirstSearch;

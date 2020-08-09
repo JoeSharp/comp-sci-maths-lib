@@ -1,14 +1,20 @@
 import Stack from "../../dataStructures/stack/Stack";
 import Graph from "../../dataStructures/graph/Graph";
+import { VisitFunction } from "../../types";
 
-function depthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
+function depthFirstSearch<T>(
+  graph: Graph<T>,
+  startVertex: T,
+  visit: VisitFunction<T>
+): void {
   const pendingStack = new Stack<T>();
-  const items: T[] = [];
+  const visited: Set<T> = new Set();
 
   let vertex = startVertex;
   while (true) {
-    if (!items.includes(vertex)) {
-      items.push(vertex);
+    if (!visited.has(vertex)) {
+      visited.add(vertex);
+      visit(vertex);
       pendingStack.push(vertex);
     }
 
@@ -16,7 +22,7 @@ function depthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
     const related: T[] = graph
       .getOutgoing(vertex)
       .map(({ to }) => to)
-      .filter((i) => !items.includes(i));
+      .filter((i) => !visited.has(i));
 
     if (related.length > 0) {
       vertex = related[0];
@@ -28,8 +34,6 @@ function depthFirstSearch<T>(graph: Graph<T>, startVertex: T): T[] {
       break;
     }
   }
-
-  return items;
 }
 
 export default depthFirstSearch;
