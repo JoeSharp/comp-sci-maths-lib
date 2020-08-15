@@ -7,14 +7,17 @@ import Graph from "../../dataStructures/graph/Graph";
 import { PageRankState } from "./types";
 
 test("Page Rank", () => {
-  const graph = new Graph<string>()
+  const graph = new Graph<string>({
+    vertexToString: (d) => d,
+    equalityCheck: (a, b) => a.localeCompare(b) === 0,
+  })
     .addUnidirectionalEdge("a", "b")
     .addUnidirectionalEdge("b", "a")
     .addUnidirectionalEdge("b", "c")
     .addUnidirectionalEdge("b", "d")
     .addUnidirectionalEdge("d", "a");
 
-  let pageRankState: PageRankState = initialisePageRank(graph);
+  let pageRankState: PageRankState<string> = initialisePageRank(graph);
 
   // Iterate the rank 5 times
   for (let i = 0; i < 5; i++) {
