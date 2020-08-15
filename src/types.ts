@@ -4,7 +4,7 @@ export type Optional<T> = T | undefined;
 
 export type ToString<T> = (a: T) => string;
 
-export type EqualityCheck<T> = (a: T, b: T) => boolean;
+export type areVerticesEqual<T> = (a: T, b: T) => boolean;
 
 export type StringReporter = (s: string) => void;
 

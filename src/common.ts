@@ -1,5 +1,10 @@
 import * as winston from "winston";
-import { EqualityCheck, ToString, Comparator, IDataStructure } from "./types";
+import {
+  areVerticesEqual,
+  ToString,
+  Comparator,
+  IDataStructure,
+} from "./types";
 import { uniq } from "lodash";
 
 export const simpleLogger = winston.createLogger({
@@ -8,7 +13,7 @@ export const simpleLogger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-export const defaultEqualityCheck: EqualityCheck<any> = (a, b) => a === b;
+export const defaultareVerticesEqual: areVerticesEqual<any> = (a, b) => a === b;
 export const defaultToString: ToString<any> = (a) => `${a}`;
 
 export function simpleSwap<T>(arr: T[], from: number, to: number) {

@@ -16,7 +16,7 @@ function getPathFrom<T>({ graph, shortestPathTree, node }: WalkPath<T>): T[] {
     path.push(node);
 
     const match = Object.entries(shortestPathTree).find(
-      ([_, { viaNode }]) => viaNode && graph.equalityCheck(viaNode, node)
+      ([_, { viaNode }]) => viaNode && graph.areVerticesEqual(viaNode, node)
     );
     node = !!match ? graph.getVertex(match[0]) : undefined;
   }
@@ -35,7 +35,7 @@ function getPathTo<T>({ graph, shortestPathTree, node }: WalkPath<T>) {
   const path: T[] = [];
 
   // If there is no available path to the destination, feed back empty list
-  const endpoint = shortestPathTree[graph.vertexToString(node)];
+  const endpoint = shortestPathTree[graph.getVertexKey(node)];
   if (!endpoint || endpoint.viaNode === undefined) {
     return path;
   }
@@ -61,14 +61,14 @@ interface WalkPath<T> {
  * @param {string} destinationNode The end point of the journey
  */
 function* walkPath<T>({
-  graph: { vertexToString },
+  graph: { getVertexKey },
   shortestPathTree,
   node,
 }: WalkPath<T>) {
   while (!!node) {
     yield node;
     const thisShortestPath: ShortestPathForNode<T> =
-      shortestPathTree[vertexToString(node)];
+      shortestPathTree[getVertexKey(node)];
     if (thisShortestPath === undefined) {
       break;
     }
@@ -119,11 +119,11 @@ function dijstraks<T>({
     cost: 0,
   });
 
-  const { vertices, equalityCheck, vertexToString } = graph;
+  const { vertices, areVerticesEqual, getVertexKey } = graph;
 
   // Add all the other nodes, with a distance of Infinity
   vertices
-    .filter((node) => !equalityCheck(node, sourceNode))
+    .filter((node) => !areVerticesEqual(node, sourceNode))
     .map((node) => ({ node, viaNode: undefined, cost: Infinity }))
     .forEach((n) => currentDistances.enqueue(n));
 
@@ -134,19 +134,22 @@ function dijstraks<T>({
 
     const outgoing: Edge<T>[] = graph
       .getOutgoing(currentItem.node)
-      .filter(({ to }) => shortestPathTree[vertexToString(to)] === undefined); // only those that aren't in our tree already
+      .filter(({ to }) => shortestPathTree[getVertexKey(to)] === undefined); // only those that aren't in our tree already
 
     // Tell any observer the step
     observer({ currentItem, shortestPathTree, currentDistances, outgoing });
 
     // Put this item into our set (using node as a key)
-    shortestPathTree[vertexToString(currentItem.node)] = {
+    shortestPathTree[getVertexKey(currentItem.node)] = {
       cost: currentItem.cost,
       viaNode: currentItem.viaNode,
     };
 
     // Have we reached the destination? Quit early
-    if (!!destinationNode && equalityCheck(currentItem.node, destinationNode)) {
+    if (
+      !!destinationNode &&
+      areVerticesEqual(currentItem.node, destinationNode)
+    ) {
       break;
     }
 
@@ -155,7 +158,7 @@ function dijstraks<T>({
       // Remove the matching item from our current known distances
       // It will either be replaced as is, or replaced with updated details
       const otherItem = currentDistances.removeMatch((d) =>
-        equalityCheck(d.node, node)
+        areVerticesEqual(d.node, node)
       );
 
       if (weight === Infinity) {

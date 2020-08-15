@@ -33,8 +33,8 @@ const primeFactorEquality = (a: PrimeFactor, b: PrimeFactor) => a.key === b.key;
 export function getPrimeFactorTree(value: number): Graph<PrimeFactor> {
   const primeFactors: number[] = getPrimeFactors(value);
   const graph = new Graph<PrimeFactor>({
-    equalityCheck: primeFactorEquality,
-    vertexToString: (d) => d.value.toString(10),
+    areVerticesEqual: primeFactorEquality,
+    getVertexKey: (d) => d.value.toString(10),
   });
 
   let currentItem: PrimeFactor = {

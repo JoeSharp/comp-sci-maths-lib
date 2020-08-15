@@ -8,8 +8,8 @@ import { PageRankState } from "./types";
 
 test("Page Rank", () => {
   const graph = new Graph<string>({
-    vertexToString: (d) => d,
-    equalityCheck: (a, b) => a.localeCompare(b) === 0,
+    getVertexKey: (d) => d,
+    areVerticesEqual: (a, b) => a.localeCompare(b) === 0,
   })
     .addUnidirectionalEdge("a", "b")
     .addUnidirectionalEdge("b", "a")

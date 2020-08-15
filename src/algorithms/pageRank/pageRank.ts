@@ -33,7 +33,7 @@ export const initialisePageRank = <T>(
   dampingFactor: number = 0.85
 ) => {
   const firstRanks = [...graph.vertices]
-    .map((v) => graph.vertexToString(v))
+    .map((v) => graph.getVertexKey(v))
     .reduce((acc, curr) => ({ ...acc, [curr]: 1 }), {});
   return {
     iterations: 0,
@@ -84,17 +84,17 @@ export const iteratePageRank = <T>({
 
   graph.vertices.forEach((page) => {
     const rank: number = graph.edges
-      .filter((edge) => graph.equalityCheck(edge.to, page))
+      .filter((edge) => graph.areVerticesEqual(edge.to, page))
       .map((edge) => edge.from)
       .map(
         (incoming) =>
-          newRanks[graph.vertexToString(incoming)] /
-          graph.edges.filter((l) => graph.equalityCheck(l.from, incoming))
+          newRanks[graph.getVertexKey(incoming)] /
+          graph.edges.filter((l) => graph.areVerticesEqual(l.from, incoming))
             .length
       )
       .reduce((acc, curr) => acc + curr, 0);
 
-    newRanks[graph.vertexToString(page)] =
+    newRanks[graph.getVertexKey(page)] =
       1 - dampingFactor + dampingFactor * rank;
   });
 
