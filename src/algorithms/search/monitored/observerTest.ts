@@ -7,7 +7,7 @@ import {
 } from "../../../common";
 import { SearchObserver } from "../../../types";
 
-const observe: SearchObserver<number> = (
+const observe: SearchObserver = (
   stageName: string,
   positionVars: { [k: string]: number }
 ) => {

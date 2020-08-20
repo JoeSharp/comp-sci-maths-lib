@@ -2,15 +2,14 @@ import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
 import { dijstraks, getPathTo, getPathFrom } from "./dijkstras";
-import { ToString, areVerticesEqual } from "../../types";
+import { ToString, EqualityCheck } from "../../types";
 import { simpleLogger } from "../../common";
 
 interface Point {
   x: number;
   y: number;
 }
-const pointEqCheck: areVerticesEqual<Point> = (a, b) =>
-  a.x === b.x && a.y === b.y;
+const pointEqCheck: EqualityCheck<Point> = (a, b) => a.x === b.x && a.y === b.y;
 const pointToStr: ToString<Point> = (a) => `${a.x}, ${a.y}`;
 
 function testGrid() {

@@ -4,7 +4,7 @@ export type Optional<T> = T | undefined;
 
 export type ToString<T> = (a: T) => string;
 
-export type areVerticesEqual<T> = (a: T, b: T) => boolean;
+export type EqualityCheck<T> = (a: T, b: T) => boolean;
 
 export type StringReporter = (s: string) => void;
 
@@ -50,6 +50,8 @@ export type SwapFunction<T> = (arr: T[], from: number, to: number) => void;
 export interface SortUtility<T> {
   compare?: Comparator<T>;
   observe?: SortObserver<T>;
+  split?: SplitObserver<T>;
+  join?: JoinObserver<T>;
   swap?: SwapFunction<T>;
 }
 
@@ -67,14 +69,34 @@ export interface NamedSort {
 // Searching
 export type MatchComparator<T> = (a: T, aIndex: number) => number;
 
-export type SearchObserver<T> = (
+export type SearchObserver = (
   stageName: string,
   positionVars?: PositionVars
 ) => void;
 
+export interface SplitList<T> {
+  key: string;
+  data: T[];
+}
+
+export type SplitObserver<T> = (
+  thisKey: string,
+  listA: SplitList<T>,
+  listB: SplitList<T>
+) => void;
+
+export type JoinObserver<T> = (
+  thisKey: string,
+  listAKey: string,
+  listBKey: string,
+  joinedList: T[]
+) => void;
+
 export interface SearchUtilities<T> {
   match: MatchComparator<T>;
-  observe?: SearchObserver<T>;
+  observe?: SearchObserver;
+  split?: SplitObserver<T>;
+  join?: JoinObserver<T>;
 }
 
 export type SearchFunction = <T>(

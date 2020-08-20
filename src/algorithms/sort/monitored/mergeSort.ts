@@ -1,11 +1,12 @@
-import { SortUtility } from "../../../types";
+import { SortUtility, SplitList } from "../../../types";
 import { emptyObserver, anyComparator } from "../../../common";
 
 function mergeSort<T>(
   inputList: T[],
   utilities: SortUtility<T>,
   leftPointer?: number,
-  rightPointer?: number
+  rightPointer?: number,
+  recurseKey: string = "R-T"
 ): T[] {
   // Is it worth sorting?
   if (inputList.length < 2) {
@@ -23,34 +24,41 @@ function mergeSort<T>(
     return [inputList[leftPointer]];
   }
 
-  const { compare = anyComparator, observe = emptyObserver } = utilities;
+  const {
+    compare = anyComparator,
+    observe = emptyObserver,
+    split = emptyObserver,
+    join = emptyObserver,
+  } = utilities;
 
   // Calculate the mid point
   const middle = Math.floor((leftPointer + rightPointer) / 2);
 
+  const listA: SplitList<T> = {
+    key: recurseKey + "-a",
+    data: inputList.slice(leftPointer, middle),
+  };
+  const listB: SplitList<T> = {
+    key: recurseKey + "-b",
+    data: inputList.slice(middle, rightPointer + 1),
+  };
+  observe("Recursing", inputList, { leftPointer, rightPointer, middle });
+  split(recurseKey, listA, listB);
+
   // Recurse sort both halves to yield the two lists to merge
-  const firstHalf = mergeSort(inputList, utilities, leftPointer, middle);
+  const firstHalf = mergeSort(
+    inputList,
+    utilities,
+    leftPointer,
+    middle,
+    listA.key
+  );
   const secondHalf = mergeSort(
-    [
-      // The observer needs to see how the list is shaping up, so pass in the sorted first half
-      ...inputList.slice(0, leftPointer),
-      ...firstHalf,
-      ...inputList.slice(middle + 1),
-    ],
+    inputList,
     utilities,
     middle + 1,
-    rightPointer
-  );
-  observe(
-    "Recursing",
-    [
-      // The observer needs to see how the list is shaping up
-      ...inputList.slice(0, leftPointer),
-      ...firstHalf,
-      ...secondHalf,
-      ...inputList.slice(rightPointer + 1),
-    ],
-    { leftPointer, rightPointer, middle }
+    rightPointer,
+    listB.key
   );
 
   // Merge the two halves into a single sorted list
@@ -78,6 +86,7 @@ function mergeSort<T>(
   secondHalf
     .filter((_, i) => i >= secondPtr)
     .forEach((i) => outputList.push(i));
+  join(recurseKey, listA.key, listB.key, outputList);
 
   return outputList;
 }

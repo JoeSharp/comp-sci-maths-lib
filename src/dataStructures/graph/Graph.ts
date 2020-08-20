@@ -1,7 +1,7 @@
-import { Optional, ToString, areVerticesEqual } from "../../types";
+import { Optional, ToString, EqualityCheck } from "../../types";
 import { uniqWith } from "lodash";
 import {
-  defaultareVerticesEqual,
+  defaultEqualityCheck,
   defaultToString,
   DataStructure,
 } from "../../common";
@@ -17,18 +17,18 @@ export interface Edge<T> {
 }
 
 interface NewGraph<T> {
-  areVerticesEqual?: areVerticesEqual<T>;
+  areVerticesEqual?: EqualityCheck<T>;
   getVertexKey: ToString<T>;
 }
 
 const defaultNewGraph: NewGraph<any> = {
-  areVerticesEqual: defaultareVerticesEqual,
+  areVerticesEqual: defaultEqualityCheck,
   getVertexKey: defaultToString,
 };
 
 export default class Graph<T> extends DataStructure {
   getVertexKey: ToString<T>;
-  areVerticesEqual: areVerticesEqual<T>;
+  areVerticesEqual: EqualityCheck<T>;
   vertices: T[];
   edges: Edge<T>[];
 
@@ -41,14 +41,17 @@ export default class Graph<T> extends DataStructure {
    */
   constructor(opts: NewGraph<T> = defaultNewGraph) {
     super();
-    const { areVerticesEqual, getVertexKey } = {
+    const {
+      areVerticesEqual: _areVerticesEqual,
+      getVertexKey: _getVertexKey,
+    } = {
       ...defaultNewGraph,
       ...opts,
     };
     this.vertices = [];
     this.edges = [];
-    this.areVerticesEqual = areVerticesEqual;
-    this.getVertexKey = getVertexKey;
+    this.areVerticesEqual = _areVerticesEqual;
+    this.getVertexKey = _getVertexKey;
   }
 
   /**
@@ -100,10 +103,15 @@ export default class Graph<T> extends DataStructure {
    * @param vertex The vertex to remove
    */
   removeVertex(vertex: T): Graph<T> {
-    this.vertices = this.vertices.filter((v) => !this.areVerticesEqual(v, vertex));
+    this.vertices = this.vertices.filter(
+      (v) => !this.areVerticesEqual(v, vertex)
+    );
     this.edges = this.edges.filter(
       ({ from, to }) =>
-        !(this.areVerticesEqual(from, vertex) || this.areVerticesEqual(to, vertex))
+        !(
+          this.areVerticesEqual(from, vertex) ||
+          this.areVerticesEqual(to, vertex)
+        )
     );
     this.tickVersion();
 
@@ -117,7 +125,10 @@ export default class Graph<T> extends DataStructure {
    */
   removeEdge(from: T, to: T): Graph<T> {
     this.edges = this.edges.filter(
-      (l) => !(this.areVerticesEqual(l.from, from) && this.areVerticesEqual(l.to, to))
+      (l) =>
+        !(
+          this.areVerticesEqual(l.from, from) && this.areVerticesEqual(l.to, to)
+        )
     );
     this.tickVersion();
     return this;
@@ -136,7 +147,10 @@ export default class Graph<T> extends DataStructure {
     this.edges = [
       ...this.edges.filter(
         (l) =>
-          !(this.areVerticesEqual(l.from, from) && this.areVerticesEqual(l.to, to))
+          !(
+            this.areVerticesEqual(l.from, from) &&
+            this.areVerticesEqual(l.to, to)
+          )
       ), // filter any existing Edge in this direction
       { from, to, weight },
     ];
@@ -161,7 +175,8 @@ export default class Graph<T> extends DataStructure {
           !(
             (this.areVerticesEqual(l.from, from) &&
               this.areVerticesEqual(l.to, to)) ||
-            (this.areVerticesEqual(l.from, to) && this.areVerticesEqual(l.to, from))
+            (this.areVerticesEqual(l.from, to) &&
+              this.areVerticesEqual(l.to, from))
           )
       ), // filter any existing Edge in both directions
       { from, to, weight },
@@ -180,7 +195,8 @@ export default class Graph<T> extends DataStructure {
    */
   getEdge(from: T, to: T): Optional<Edge<T>> {
     return this.edges.find(
-      (l) => this.areVerticesEqual(l.from, from) && this.areVerticesEqual(l.to, to)
+      (l) =>
+        this.areVerticesEqual(l.from, from) && this.areVerticesEqual(l.to, to)
     );
   }
 

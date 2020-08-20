@@ -49,11 +49,7 @@ function quickSort<T>(
   low: number,
   high: number
 ) {
-  const {
-    compare = anyComparator,
-    observe = emptyObserver,
-    swap = simpleSwap,
-  } = utilities;
+  const { observe = emptyObserver } = utilities;
 
   observe("Recursing", arr, { low, high });
 
