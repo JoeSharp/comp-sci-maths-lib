@@ -8,6 +8,14 @@ export type EqualityCheck<T> = (a: T, b: T) => boolean;
 
 export type StringReporter = (s: string) => void;
 
+export interface BaseGraphVertex<T> {
+  key: string;
+  value: T;
+}
+export type AnyGraphVertex = BaseGraphVertex<any>;
+export type StringGraphVertex = BaseGraphVertex<string>;
+export type NumberGraphVertex = BaseGraphVertex<number>;
+
 export interface IDataStructure {
   version: number;
 }

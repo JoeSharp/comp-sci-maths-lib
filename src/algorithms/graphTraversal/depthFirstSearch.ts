@@ -1,8 +1,8 @@
 import Stack from "../../dataStructures/stack/Stack";
 import Graph from "../../dataStructures/graph/Graph";
-import { VisitFunction } from "../../types";
+import { VisitFunction, AnyGraphVertex } from "../../types";
 
-function depthFirstSearch<T>(
+function depthFirstSearch<T extends AnyGraphVertex>(
   graph: Graph<T>,
   startVertex: T,
   visit: VisitFunction<T>

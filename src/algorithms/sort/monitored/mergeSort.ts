@@ -1,12 +1,16 @@
 import { SortUtility, SplitList } from "../../../types";
-import { emptyObserver, anyComparator } from "../../../common";
+import {
+  emptyObserver,
+  anyComparator,
+  ROOT_RECURSION_KEY,
+} from "../../../common";
 
 function mergeSort<T>(
   inputList: T[],
   utilities: SortUtility<T>,
   leftPointer?: number,
   rightPointer?: number,
-  recurseKey: string = "R-T"
+  recurseKey: string = ROOT_RECURSION_KEY
 ): T[] {
   // Is it worth sorting?
   if (inputList.length < 2) {

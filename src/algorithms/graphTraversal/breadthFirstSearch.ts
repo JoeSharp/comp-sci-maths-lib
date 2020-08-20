@@ -1,8 +1,8 @@
 import Queue from "../../dataStructures/queue/Queue";
 import Graph from "../../dataStructures/graph/Graph";
-import { VisitFunction } from "../../types";
+import { VisitFunction, AnyGraphVertex } from "../../types";
 
-function breadthFirstSearch<T>(
+function breadthFirstSearch<T extends AnyGraphVertex>(
   graph: Graph<T>,
   startVertex: T,
   visit: VisitFunction<T>

@@ -1,28 +1,44 @@
 import breadthFirstSearch from "./breadthFirstSearch";
 import depthFirstSearch from "./depthFirstSearch";
 import Graph from "../../dataStructures/graph/Graph";
+import { StringGraphVertex } from "../../types";
+import { getStringVertex } from "../../common";
+
+const vertexA = getStringVertex("A");
+const vertexB = getStringVertex("B");
+const vertexC = getStringVertex("C");
+const vertexD = getStringVertex("D");
+const vertexE = getStringVertex("E");
+const vertexF = getStringVertex("F");
+const vertexG = getStringVertex("G");
+const vertexH = getStringVertex("H");
+const vertexI = getStringVertex("I");
+const vertexJ = getStringVertex("J");
+const vertexK = getStringVertex("K");
+const vertexL = getStringVertex("L");
+const vertexS = getStringVertex("S");
 
 function createTestGraph() {
-  return new Graph<string>()
-    .addBiDirectionalEdge("S", "A")
-    .addBiDirectionalEdge("S", "B")
-    .addBiDirectionalEdge("S", "C")
-    .addBiDirectionalEdge("A", "D")
-    .addBiDirectionalEdge("D", "G")
-    .addBiDirectionalEdge("B", "E")
-    .addBiDirectionalEdge("E", "G")
-    .addBiDirectionalEdge("C", "F")
-    .addBiDirectionalEdge("F", "G");
+  return new Graph<StringGraphVertex>()
+    .addBiDirectionalEdge(vertexS, vertexA)
+    .addBiDirectionalEdge(vertexS, vertexB)
+    .addBiDirectionalEdge(vertexS, vertexC)
+    .addBiDirectionalEdge(vertexA, vertexD)
+    .addBiDirectionalEdge(vertexD, vertexG)
+    .addBiDirectionalEdge(vertexB, vertexE)
+    .addBiDirectionalEdge(vertexE, vertexG)
+    .addBiDirectionalEdge(vertexC, vertexF)
+    .addBiDirectionalEdge(vertexF, vertexG);
 }
 
 test("Graph - Breadth First Search", () => {
   const myGraph = createTestGraph();
 
-  const items: string[] = [];
-  breadthFirstSearch(myGraph, "S", (d) => items.push(d));
+  const items: StringGraphVertex[] = [];
+  breadthFirstSearch(myGraph, vertexS, (d) => items.push(d));
 
-  const directlyEdgeed = ["A", "B", "C"];
-  const transitivelyEdgeed = ["D", "E", "F", "G"];
+  const directlyEdgeed = [vertexA, vertexB, vertexC];
+  const transitivelyEdgeed = [vertexD, vertexE, vertexF, vertexG];
   directlyEdgeed.forEach((i) =>
     transitivelyEdgeed.forEach((t) => {
       const indexOfI = items.indexOf(i);
@@ -37,13 +53,13 @@ test("Graph - Breadth First Search", () => {
 test("Graph - Depth First Search", () => {
   const myGraph = createTestGraph();
 
-  const items: string[] = [];
-  depthFirstSearch(myGraph, "S", (d) => items.push(d));
+  const items: StringGraphVertex[] = [];
+  depthFirstSearch(myGraph, vertexS, (d) => items.push(d));
 
   const directRelatives = [
-    { direct: "C", transitive: "F" },
-    { direct: "A", transitive: "D" },
-    { direct: "B", transitive: "E" },
+    { direct: vertexC, transitive: vertexF },
+    { direct: vertexA, transitive: vertexD },
+    { direct: vertexB, transitive: vertexE },
   ].map(({ direct, transitive }) => ({
     direct,
     transitive,
@@ -56,7 +72,7 @@ test("Graph - Depth First Search", () => {
   expect(directRelatives.length).toBe(3);
 
   // This is the common transitive link from all 3 start points
-  const indexOfG = items.indexOf("G");
+  const indexOfG = items.indexOf(vertexG);
 
   // For all but the first one
   directRelatives

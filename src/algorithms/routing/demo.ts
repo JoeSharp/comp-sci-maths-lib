@@ -2,85 +2,87 @@ import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
 import { dijstraks, getPathTo, getPathFrom } from "./dijkstras";
-import { ToString, EqualityCheck } from "../../types";
-import { simpleLogger } from "../../common";
+import { BaseGraphVertex, StringGraphVertex } from "../../types";
+import { simpleLogger, getStringVertex } from "../../common";
 
 interface Point {
   x: number;
   y: number;
 }
-const pointEqCheck: EqualityCheck<Point> = (a, b) => a.x === b.x && a.y === b.y;
-const pointToStr: ToString<Point> = (a) => `${a.x}, ${a.y}`;
+
+type PointGraphVertex = BaseGraphVertex<Point>;
+
+const getPointGraphVertex = (x: number, y: number): PointGraphVertex => ({
+  key: `${x},${y}`,
+  value: { x, y },
+});
 
 function testGrid() {
   const columns = 10;
   const rows = 10;
 
-  const myGraph = new Graph<Point>({
-    areVerticesEqual: pointEqCheck,
-    getVertexKey: pointToStr,
-  });
+  const myGraph = new Graph<PointGraphVertex>();
 
   for (let col = 0; col < columns; col++) {
     for (let row = 0; row < rows; row++) {
       if (row > 1) {
-        const from = { x: col, y: row };
-        const to = { x: col, y: row - 1 };
+        const from = getPointGraphVertex(col, row);
+        const to = getPointGraphVertex(col, row - 1);
         myGraph.addBiDirectionalEdge(from, to);
       }
       if (row < rows - 1) {
-        const from = { x: col, y: row };
-        const to = { x: col, y: row + 1 };
+        const from = getPointGraphVertex(col, row);
+        const to = getPointGraphVertex(col, row + 1);
         myGraph.addBiDirectionalEdge(from, to);
       }
       if (col > 1) {
-        const from = { x: col, y: row };
-        const to = { x: col - 1, y: row };
+        const from = getPointGraphVertex(col, row);
+        const to = getPointGraphVertex(col - 1, row);
         myGraph.addBiDirectionalEdge(from, to);
       }
       if (col < columns - 1) {
-        const from = { x: col, y: row };
-        const to = { x: col + 1, y: row };
+        const from = getPointGraphVertex(col, row);
+        const to = getPointGraphVertex(col + 1, row);
         myGraph.addBiDirectionalEdge(from, to);
       }
     }
   }
-  myGraph.disconnectVertex({ x: 0, y: 7 });
-  myGraph.disconnectVertex({ x: 1, y: 6 });
-  myGraph.disconnectVertex({ x: 2, y: 5 });
-  myGraph.disconnectVertex({ x: 3, y: 4 });
-  myGraph.disconnectVertex({ x: 4, y: 3 });
-  myGraph.disconnectVertex({ x: 4, y: 4 });
-  myGraph.disconnectVertex({ x: 4, y: 5 });
+  myGraph.disconnectVertex(getPointGraphVertex(0, 7));
+  myGraph.disconnectVertex(getPointGraphVertex(1, 6));
+  myGraph.disconnectVertex(getPointGraphVertex(2, 5));
+  myGraph.disconnectVertex(getPointGraphVertex(3, 4));
+  myGraph.disconnectVertex(getPointGraphVertex(4, 3));
+  myGraph.disconnectVertex(getPointGraphVertex(4, 4));
+  myGraph.disconnectVertex(getPointGraphVertex(4, 5));
 
-  myGraph.disconnectVertex({ x: 8, y: 1 });
-  myGraph.disconnectVertex({ x: 8, y: 2 });
-  myGraph.disconnectVertex({ x: 8, y: 3 });
-  myGraph.disconnectVertex({ x: 8, y: 4 });
+  myGraph.disconnectVertex(getPointGraphVertex(8, 1));
+  myGraph.disconnectVertex(getPointGraphVertex(8, 2));
+  myGraph.disconnectVertex(getPointGraphVertex(8, 3));
+  myGraph.disconnectVertex(getPointGraphVertex(8, 4));
 
-  myGraph.disconnectVertex({ x: 9, y: 4 });
-  myGraph.disconnectVertex({ x: 9, y: 7 });
-  myGraph.disconnectVertex({ x: 10, y: 3 });
-  myGraph.disconnectVertex({ x: 11, y: 1 });
-  myGraph.disconnectVertex({ x: 11, y: 6 });
-  myGraph.disconnectVertex({ x: 11, y: 7 });
+  myGraph.disconnectVertex(getPointGraphVertex(9, 4));
+  myGraph.disconnectVertex(getPointGraphVertex(9, 7));
+  myGraph.disconnectVertex(getPointGraphVertex(10, 3));
+  myGraph.disconnectVertex(getPointGraphVertex(11, 1));
+  myGraph.disconnectVertex(getPointGraphVertex(11, 6));
+  myGraph.disconnectVertex(getPointGraphVertex(11, 7));
 
-  myGraph.disconnectVertex({ x: 12, y: 1 });
-  myGraph.disconnectVertex({ x: 12, y: 4 });
-  myGraph.disconnectVertex({ x: 12, y: 5 });
+  myGraph.disconnectVertex(getPointGraphVertex(12, 1));
+  myGraph.disconnectVertex(getPointGraphVertex(12, 4));
+  myGraph.disconnectVertex(getPointGraphVertex(12, 5));
 
-  const sourceNode = { x: 0, y: 0 };
-  const destinationNode = { x: columns - 1, y: rows - 1 };
-  const observations: ObserverArgs<Point>[] = [];
+  const sourceNode = getPointGraphVertex(0, 0);
+  const destinationNode = getPointGraphVertex(columns - 1, rows - 1);
+  const observations: ObserverArgs<PointGraphVertex>[] = [];
 
-  const shortestPathTree: ShortestPathTree<Point> = dijstraks({
+  const shortestPathTree: ShortestPathTree<PointGraphVertex> = dijstraks({
     graph: myGraph,
     sourceNode,
     destinationNode,
     observer: (d) => observations.push(d),
   });
 
-  const pathToDestination: Point[] = getPathTo({
+  const pathToDestination: PointGraphVertex[] = getPathTo({
     graph: myGraph,
     shortestPathTree,
     node: destinationNode,
@@ -89,17 +91,17 @@ function testGrid() {
   simpleLogger.info("Shortest Path Tree", shortestPathTree);
   simpleLogger.info(
     "Path Across Grid",
-    pathToDestination.map(pointToStr).join(" -> ")
+    pathToDestination.map((v) => v.key).join(" -> ")
   );
 
   simpleLogger.info("OBSERVATIONS");
   observations.forEach(({ currentItem }) => {
     simpleLogger.info(
-      `Current Item: ${!!currentItem ? pointToStr(currentItem.node) : "NONE"}`
+      `Current Item: ${!!currentItem ? currentItem.node.key : "NONE"}`
     );
   });
 
-  const pathFrom: Point[] = getPathFrom({
+  const pathFrom: PointGraphVertex[] = getPathFrom({
     graph: myGraph,
     shortestPathTree,
     node: sourceNode,
@@ -110,32 +112,40 @@ function testGrid() {
     const path = getPathTo({
       graph: myGraph,
       shortestPathTree: o.shortestPathTree,
-      node: !!o.currentItem ? o.currentItem.node : "A",
+      node: !!o.currentItem ? o.currentItem.node : sourceNode,
     });
     simpleLogger.info(
-      `Observation: ${path.map(pointToStr)} - ${JSON.stringify(o.currentItem)}`
+      `Observation: ${path.map((v) => v.key)} - ${JSON.stringify(
+        o.currentItem
+      )}`
     );
   });
 }
 
 function testBrokenPath() {
-  const myGraph = new Graph<string>()
-    .addBiDirectionalEdge("A", "B")
-    .addBiDirectionalEdge("B", "C")
-    .addBiDirectionalEdge("E", "D");
-  const observations: ObserverArgs<string>[] = [];
+  const vertexA = getStringVertex("A");
+  const vertexB = getStringVertex("B");
+  const vertexC = getStringVertex("C");
+  const vertexD = getStringVertex("E");
+  const vertexE = getStringVertex("D");
+
+  const myGraph = new Graph<StringGraphVertex>()
+    .addBiDirectionalEdge(vertexA, vertexB)
+    .addBiDirectionalEdge(vertexB, vertexC)
+    .addBiDirectionalEdge(vertexE, vertexD);
+  const observations: ObserverArgs<StringGraphVertex>[] = [];
 
   const shortestPathTree = dijstraks({
     graph: myGraph,
-    sourceNode: "A",
-    destinationNode: "D",
+    sourceNode: vertexA,
+    destinationNode: vertexD,
     observer: (d) => observations.push(d),
   });
 
   const pathFrom = getPathFrom({
     graph: myGraph,
     shortestPathTree,
-    node: "A",
+    node: vertexA,
   });
   simpleLogger.info("Broken Path From ", pathFrom);
 
@@ -143,7 +153,7 @@ function testBrokenPath() {
     const path = getPathTo({
       graph: myGraph,
       shortestPathTree: o.shortestPathTree,
-      node: !!o.currentItem ? o.currentItem.node : "A",
+      node: !!o.currentItem ? o.currentItem.node : vertexA,
     });
     simpleLogger.info(
       `Observation: ${path} - ${JSON.stringify(o.currentItem)}`

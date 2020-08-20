@@ -1,11 +1,29 @@
 import * as winston from "winston";
-import { EqualityCheck, ToString, Comparator, IDataStructure } from "./types";
-import { uniq } from "lodash";
+import {
+  EqualityCheck,
+  ToString,
+  Comparator,
+  IDataStructure,
+  StringGraphVertex,
+  NumberGraphVertex,
+} from "./types";
 
 export const simpleLogger = winston.createLogger({
   level: "info",
   format: winston.format.simple(),
   transports: [new winston.transports.Console()],
+});
+
+export const ROOT_RECURSION_KEY = "ROOT";
+
+export const getStringVertex = (value: string): StringGraphVertex => ({
+  key: value,
+  value,
+});
+
+export const getNumberVertex = (value: number): NumberGraphVertex => ({
+  key: value.toString(10),
+  value,
 });
 
 export const defaultEqualityCheck: EqualityCheck<any> = (a: any, b: any) =>

@@ -8,8 +8,13 @@ import {
   RoutingObserver,
 } from "./types";
 import { emptyObserver } from "../../common";
+import { AnyGraphVertex } from "../../types";
 
-function getPathFrom<T>({ graph, shortestPathTree, node }: WalkPath<T>): T[] {
+function getPathFrom<T extends AnyGraphVertex>({
+  graph,
+  shortestPathTree,
+  node,
+}: WalkPath<T>): T[] {
   const path: T[] = [];
 
   while (node !== undefined) {
@@ -31,11 +36,15 @@ function getPathFrom<T>({ graph, shortestPathTree, node }: WalkPath<T>): T[] {
  * @param {string} destinationNode
  * @returns An array containing the path (walking backwards), it will be empty if no route was found
  */
-function getPathTo<T>({ graph, shortestPathTree, node }: WalkPath<T>) {
+function getPathTo<T extends AnyGraphVertex>({
+  graph,
+  shortestPathTree,
+  node,
+}: WalkPath<T>) {
   const path: T[] = [];
 
   // If there is no available path to the destination, feed back empty list
-  const endpoint = shortestPathTree[graph.getVertexKey(node)];
+  const endpoint = shortestPathTree[node.key];
   if (!endpoint || endpoint.viaNode === undefined) {
     return path;
   }
@@ -46,7 +55,7 @@ function getPathTo<T>({ graph, shortestPathTree, node }: WalkPath<T>) {
   return path.reverse();
 }
 
-interface WalkPath<T> {
+interface WalkPath<T extends AnyGraphVertex> {
   graph: Graph<T>;
   shortestPathTree: ShortestPathTree<T>;
   node: T;
@@ -60,15 +69,13 @@ interface WalkPath<T> {
  * @param {string} viaNode The start point of the journey
  * @param {string} destinationNode The end point of the journey
  */
-function* walkPath<T>({
-  graph: { getVertexKey },
+function* walkPath<T extends AnyGraphVertex>({
   shortestPathTree,
   node,
 }: WalkPath<T>) {
   while (!!node) {
     yield node;
-    const thisShortestPath: ShortestPathForNode<T> =
-      shortestPathTree[getVertexKey(node)];
+    const thisShortestPath: ShortestPathForNode<T> = shortestPathTree[node.key];
     if (thisShortestPath === undefined) {
       break;
     }
@@ -76,7 +83,7 @@ function* walkPath<T>({
   }
 }
 
-interface Args<T> {
+interface Args<T extends AnyGraphVertex> {
   graph: Graph<T>;
   sourceNode: T;
   destinationNode?: T;
@@ -97,7 +104,7 @@ export const emptyHeuristic: HeuristicCostFunction<any> = () => 0;
  * @param {string | undefined} optionalArguments // Optional arguments, see above for default values
  * @returns Shortest Path Tree { [node] : {cost: number, viaNode: string} }
  */
-function dijstraks<T>({
+function dijstraks<T extends AnyGraphVertex>({
   graph,
   sourceNode,
   destinationNode,
@@ -119,11 +126,9 @@ function dijstraks<T>({
     cost: 0,
   });
 
-  const { vertices, areVerticesEqual, getVertexKey } = graph;
-
   // Add all the other nodes, with a distance of Infinity
-  vertices
-    .filter((node) => !areVerticesEqual(node, sourceNode))
+  graph.vertices
+    .filter((node) => !graph.areVerticesEqual(node, sourceNode))
     .map((node) => ({ node, viaNode: undefined, cost: Infinity }))
     .forEach((n) => currentDistances.enqueue(n));
 
@@ -134,13 +139,13 @@ function dijstraks<T>({
 
     const outgoing: Edge<T>[] = graph
       .getOutgoing(currentItem.node)
-      .filter(({ to }) => shortestPathTree[getVertexKey(to)] === undefined); // only those that aren't in our tree already
+      .filter(({ to }) => shortestPathTree[to.key] === undefined); // only those that aren't in our tree already
 
     // Tell any observer the step
     observer({ currentItem, shortestPathTree, currentDistances, outgoing });
 
     // Put this item into our set (using node as a key)
-    shortestPathTree[getVertexKey(currentItem.node)] = {
+    shortestPathTree[currentItem.node.key] = {
       cost: currentItem.cost,
       viaNode: currentItem.viaNode,
     };
@@ -148,7 +153,7 @@ function dijstraks<T>({
     // Have we reached the destination? Quit early
     if (
       !!destinationNode &&
-      areVerticesEqual(currentItem.node, destinationNode)
+      graph.areVerticesEqual(currentItem.node, destinationNode)
     ) {
       break;
     }
@@ -158,7 +163,7 @@ function dijstraks<T>({
       // Remove the matching item from our current known distances
       // It will either be replaced as is, or replaced with updated details
       const otherItem = currentDistances.removeMatch((d) =>
-        areVerticesEqual(d.node, node)
+        graph.areVerticesEqual(d.node, node)
       );
 
       if (weight === Infinity) {

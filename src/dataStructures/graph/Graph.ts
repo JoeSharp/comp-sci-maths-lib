@@ -1,36 +1,22 @@
-import { Optional, ToString, EqualityCheck } from "../../types";
+import { Optional, AnyGraphVertex } from "../../types";
 import { uniqWith } from "lodash";
-import {
-  defaultEqualityCheck,
-  defaultToString,
-  DataStructure,
-} from "../../common";
+import { DataStructure } from "../../common";
 
 /**
  * This class encapsulates a weighted directional graph.
  * Each Edge is stored as a separate object in an array
  */
-export interface Edge<T> {
-  from: T;
-  to: T;
+export interface Edge<VERTEX extends AnyGraphVertex> {
+  from: VERTEX;
+  to: VERTEX;
   weight: number;
 }
 
-interface NewGraph<T> {
-  areVerticesEqual?: EqualityCheck<T>;
-  getVertexKey: ToString<T>;
-}
-
-const defaultNewGraph: NewGraph<any> = {
-  areVerticesEqual: defaultEqualityCheck,
-  getVertexKey: defaultToString,
-};
-
-export default class Graph<T> extends DataStructure {
-  getVertexKey: ToString<T>;
-  areVerticesEqual: EqualityCheck<T>;
-  vertices: T[];
-  edges: Edge<T>[];
+export default class Graph<
+  VERTEX extends AnyGraphVertex
+> extends DataStructure {
+  vertices: VERTEX[];
+  edges: Edge<VERTEX>[];
 
   /**
    * A constructor that accepts existing graph details.
@@ -39,19 +25,14 @@ export default class Graph<T> extends DataStructure {
    * @param graphData Existing graph data
    * @param areVerticesEqual Function to determine if two vertices are equal
    */
-  constructor(opts: NewGraph<T> = defaultNewGraph) {
+  constructor() {
     super();
-    const {
-      areVerticesEqual: _areVerticesEqual,
-      getVertexKey: _getVertexKey,
-    } = {
-      ...defaultNewGraph,
-      ...opts,
-    };
     this.vertices = [];
     this.edges = [];
-    this.areVerticesEqual = _areVerticesEqual;
-    this.getVertexKey = _getVertexKey;
+  }
+
+  areVerticesEqual(a: VERTEX, b: VERTEX): boolean {
+    return a.key === b.key;
   }
 
   /**
@@ -69,7 +50,7 @@ export default class Graph<T> extends DataStructure {
    * Remove all edges to and from a given vertex, leave the vertex on the graph though
    * @param vertex The vertex to disconnect
    */
-  disconnectVertex(vertex: T): Graph<T> {
+  disconnectVertex(vertex: VERTEX): Graph<VERTEX> {
     this.removeVertex(vertex);
     this.addVertex(vertex);
     return this;
@@ -83,18 +64,21 @@ export default class Graph<T> extends DataStructure {
    * @param vertex The vertex to add
    * @returns this, to allow method chaining
    */
-  addVertex(vertex: T): Graph<T> {
-    this.vertices = uniqWith([...this.vertices, vertex], this.areVerticesEqual);
+  addVertex(vertex: VERTEX): Graph<VERTEX> {
+    this.vertices = uniqWith(
+      [...this.vertices, vertex],
+      this.areVerticesEqual.bind(this)
+    );
     this.tickVersion();
     return this;
   }
 
   /**
    *
-   * @param vAsString The string representation of the vertex to search for
+   * @param key The string representation of the vertex to search for
    */
-  getVertex(vAsString: string): Optional<T> {
-    return this.vertices.find((v) => this.getVertexKey(v) === vAsString);
+  getVertex(key: string): Optional<VERTEX> {
+    return this.vertices.find((v) => v.key === key);
   }
 
   /**
@@ -102,7 +86,7 @@ export default class Graph<T> extends DataStructure {
    * will also remove any edges from/to the given vertex.
    * @param vertex The vertex to remove
    */
-  removeVertex(vertex: T): Graph<T> {
+  removeVertex(vertex: VERTEX): Graph<VERTEX> {
     this.vertices = this.vertices.filter(
       (v) => !this.areVerticesEqual(v, vertex)
     );
@@ -123,7 +107,7 @@ export default class Graph<T> extends DataStructure {
    * @param from The source vertex
    * @param to The destination vertex
    */
-  removeEdge(from: T, to: T): Graph<T> {
+  removeEdge(from: VERTEX, to: VERTEX): Graph<VERTEX> {
     this.edges = this.edges.filter(
       (l) =>
         !(
@@ -141,7 +125,7 @@ export default class Graph<T> extends DataStructure {
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addUnidirectionalEdge(from: T, to: T, weight: number = 1.0) {
+  addUnidirectionalEdge(from: VERTEX, to: VERTEX, weight: number = 1.0) {
     this.addVertex(from);
     this.addVertex(to);
     this.edges = [
@@ -165,7 +149,7 @@ export default class Graph<T> extends DataStructure {
    * @param {number} weight The weighting to attach
    * @returns this to allow method chaining
    */
-  addBiDirectionalEdge(from: T, to: T, weight: number = 1.0) {
+  addBiDirectionalEdge(from: VERTEX, to: VERTEX, weight: number = 1.0) {
     this.addVertex(from);
     this.addVertex(to);
 
@@ -193,7 +177,7 @@ export default class Graph<T> extends DataStructure {
    * @param to The destination vertex
    * @returns The Edge if one exists
    */
-  getEdge(from: T, to: T): Optional<Edge<T>> {
+  getEdge(from: VERTEX, to: VERTEX): Optional<Edge<VERTEX>> {
     return this.edges.find(
       (l) =>
         this.areVerticesEqual(l.from, from) && this.areVerticesEqual(l.to, to)
@@ -204,7 +188,7 @@ export default class Graph<T> extends DataStructure {
    * Access edges coming into a specific vertex
    * @param vertex The from vertex
    */
-  getIncoming(vertex: T): Edge<T>[] {
+  getIncoming(vertex: VERTEX): Edge<VERTEX>[] {
     return this.edges.filter((l) => this.areVerticesEqual(l.to, vertex));
   }
 
@@ -212,7 +196,7 @@ export default class Graph<T> extends DataStructure {
    * Access the edges from a specific vertex
    * @param {string} vertex The from vertex
    */
-  getOutgoing(vertex: T): Edge<T>[] {
+  getOutgoing(vertex: VERTEX): Edge<VERTEX>[] {
     return this.edges.filter((l) => this.areVerticesEqual(l.from, vertex));
   }
 
@@ -225,7 +209,7 @@ export default class Graph<T> extends DataStructure {
    * @param {string} to The destination vertex
    * @return The weight of the Edge, or Infinity if there is no Edge.
    */
-  getEdgeWeight(from: T, to: T): number {
+  getEdgeWeight(from: VERTEX, to: VERTEX): number {
     const edge = this.getEdge(from, to);
     return !!edge ? edge.weight : Infinity;
   }
@@ -241,10 +225,8 @@ export default class Graph<T> extends DataStructure {
       })) // make the entries into a nicer looking object
       .map(
         ({ from, edges }) =>
-          `From: ${this.getVertexKey(from)}\n${edges
-            .map(
-              ({ to, weight }) => `\tTo: ${this.getVertexKey(to)} (${weight})`
-            )
+          `From: ${from.key}\n${edges
+            .map(({ to, weight }) => `\tTo: ${to.key} (${weight})`)
             .join("\n")}` // each outgoing Edge should be represented on it's own line
       )
       .join("\n")}`; // Each section will be separated by a newline

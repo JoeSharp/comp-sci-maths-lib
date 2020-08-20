@@ -1,6 +1,7 @@
 import sieveOfEratosthenes from "./sieveOfEratosthenes";
 import { isDivisibleBy, isPrime } from "./divisibilityRules";
 import Graph from "../../dataStructures/graph/Graph";
+import { NumberGraphVertex } from "../../types";
 
 export function getPrimeFactors(value: number): number[] {
   const factors: number[] = [];
@@ -23,28 +24,18 @@ export function getPrimeFactors(value: number): number[] {
   return factors;
 }
 
-export interface PrimeFactor {
-  key: number;
-  value: number;
-}
-
-const primeFactorEquality = (a: PrimeFactor, b: PrimeFactor) => a.key === b.key;
-
-export function getPrimeFactorTree(value: number): Graph<PrimeFactor> {
+export function getPrimeFactorTree(value: number): Graph<NumberGraphVertex> {
   const primeFactors: number[] = getPrimeFactors(value);
-  const graph = new Graph<PrimeFactor>({
-    areVerticesEqual: primeFactorEquality,
-    getVertexKey: (d) => d.value.toString(10),
-  });
+  const graph = new Graph<NumberGraphVertex>();
 
-  let currentItem: PrimeFactor = {
-    key: 0,
-    value,
-  };
   let k = 0;
-  const nextKey = () => {
+  const nextKey = (): string => {
     k += 1;
-    return k;
+    return k.toString(10);
+  };
+  let currentItem: NumberGraphVertex = {
+    key: nextKey(),
+    value,
   };
   graph.addVertex(currentItem);
   primeFactors
