@@ -115,21 +115,20 @@ function dijstraks<T extends AnyGraphVertex>({
 
   // Build a priority queue, where the nodes are arranged in order of
   // distance from the source (smallest to largest)
-  const currentDistances = new PriorityQueue<ShortestPathWithNode<T>>(
-    (a, b) => b.cost - a.cost
-  );
+  const currentDistances = new PriorityQueue<ShortestPathWithNode<T>>();
 
   // Add the from node, it doesn't go via anything, and it's distance is zero
   currentDistances.enqueue({
     node: sourceNode,
     viaNode: undefined,
     cost: 0,
+    priority: Infinity,
   });
 
   // Add all the other nodes, with a distance of Infinity
   graph.vertices
     .filter((node) => !graph.areVerticesEqual(node, sourceNode))
-    .map((node) => ({ node, viaNode: undefined, cost: Infinity }))
+    .map((node) => ({ node, viaNode: undefined, cost: Infinity, priority: 0 }))
     .forEach((n) => currentDistances.enqueue(n));
 
   // While there are items in the queue to check...
@@ -148,6 +147,7 @@ function dijstraks<T extends AnyGraphVertex>({
     shortestPathTree[currentItem.node.key] = {
       cost: currentItem.cost,
       viaNode: currentItem.viaNode,
+      priority: 1 / currentItem.cost,
     };
 
     // Have we reached the destination? Quit early
@@ -172,6 +172,7 @@ function dijstraks<T extends AnyGraphVertex>({
           node,
           cost: weight,
           viaNode: currentItem.node,
+          priority: 1 / weight,
         });
       } else {
         // What is the distance to this other node, from our current node?
@@ -185,6 +186,7 @@ function dijstraks<T extends AnyGraphVertex>({
             node,
             cost: newPotentialDistance,
             viaNode: currentItem.node,
+            priority: 1 / newPotentialDistance,
           });
         } else {
           // Just put the current one back

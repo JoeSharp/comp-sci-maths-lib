@@ -136,15 +136,15 @@ test("Routing Algorithms - Dijkstra", () => {
     sourceNode: viaNode,
   });
   expect(shortestPathTreeAll).toEqual({
-    [vertexA.key]: { cost: 0, viaNode: undefined },
-    [vertexB.key]: { cost: 4, viaNode: vertexA },
-    [vertexC.key]: { cost: 12, viaNode: vertexB },
-    [vertexD.key]: { cost: 19, viaNode: vertexC },
-    [vertexE.key]: { cost: 21, viaNode: vertexF },
-    [vertexF.key]: { cost: 11, viaNode: vertexG },
-    [vertexG.key]: { cost: 9, viaNode: vertexH },
-    [vertexH.key]: { cost: 8, viaNode: vertexA },
-    [vertexI.key]: { cost: 14, viaNode: vertexC },
+    [vertexA.key]: { cost: 0, viaNode: undefined, priority: Infinity },
+    [vertexB.key]: { cost: 4, viaNode: vertexA, priority: 1 / 4 },
+    [vertexC.key]: { cost: 12, viaNode: vertexB, priority: 1 / 12 },
+    [vertexD.key]: { cost: 19, viaNode: vertexC, priority: 1 / 19 },
+    [vertexE.key]: { cost: 21, viaNode: vertexF, priority: 1 / 21 },
+    [vertexF.key]: { cost: 11, viaNode: vertexG, priority: 1 / 11 },
+    [vertexG.key]: { cost: 9, viaNode: vertexH, priority: 1 / 9 },
+    [vertexH.key]: { cost: 8, viaNode: vertexA, priority: 1 / 8 },
+    [vertexI.key]: { cost: 14, viaNode: vertexC, priority: 1 / 14 },
   });
 
   const pathTo4 = getPathTo({

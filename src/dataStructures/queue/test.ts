@@ -1,5 +1,5 @@
 import CircularQueue from "./CircularQueue";
-import PriorityQueue from "./PriorityQueue";
+import PriorityQueue, { PrioritisedItem } from "./PriorityQueue";
 import Queue from "./Queue";
 
 test("Queue", () => {
@@ -33,15 +33,12 @@ test("Queue", () => {
   expect(h).toBe(19);
 });
 
-interface PrioritisedName {
+interface PrioritisedName extends PrioritisedItem {
   name: string;
-  priority: number;
 }
 
 test("Priority Queue", () => {
-  const myQueue = new PriorityQueue<PrioritisedName>(
-    (o1, o2) => o1.priority - o2.priority
-  );
+  const myQueue = new PriorityQueue<PrioritisedName>();
 
   myQueue.enqueue({ name: "Indigo", priority: 10 });
   myQueue.enqueue({ name: "Joe", priority: 4 });

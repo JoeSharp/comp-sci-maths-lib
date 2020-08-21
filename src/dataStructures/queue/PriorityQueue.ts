@@ -2,21 +2,14 @@ import LinkedList from "../linkedList/LinkedList";
 import { MatchFunction } from "../../types";
 import { DataStructure } from "../../common";
 
-export type PriorityComparator<T> = (a: T, b: T) => number;
+export interface PrioritisedItem {
+  priority: number;
+}
 
-export default class PriorityQueue<T> extends DataStructure {
-  priorityComparator: PriorityComparator<T>;
-  items: LinkedList<T>;
-
-  /**
-   * Constructor for Priority Queue.
-   * @param {function} getPriority A function that accepts an item and returns a number to represent priority
-   */
-  constructor(priorityComparator: PriorityComparator<T>) {
-    super();
-    this.priorityComparator = priorityComparator;
-    this.items = new LinkedList();
-  }
+export default class PriorityQueue<
+  T extends PrioritisedItem
+> extends DataStructure {
+  items: LinkedList<T> = new LinkedList();
 
   toString() {
     return this.items.toString();
@@ -43,7 +36,7 @@ export default class PriorityQueue<T> extends DataStructure {
   enqueue(newItem: T) {
     let index: number = 0;
     for (const item of this.items) {
-      if (this.priorityComparator(newItem, item) > 0) {
+      if (newItem.priority > item.priority) {
         // Insert item at this point and return
         this.items.insert(index, newItem);
         return;
