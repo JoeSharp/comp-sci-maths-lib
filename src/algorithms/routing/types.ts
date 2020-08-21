@@ -22,11 +22,35 @@ export type HeuristicCostFunction<T extends AnyGraphVertex> = (
   node: T
 ) => number;
 
+export enum EdgeCurrentWeightCalcType {
+  unknown,
+  shorterRouteFound,
+  existingRouteStillQuickest,
+}
+
+export const getCurrentWeightCalcTypeStr = (
+  value: EdgeCurrentWeightCalcType
+): string => {
+  switch (value) {
+    case EdgeCurrentWeightCalcType.existingRouteStillQuickest:
+      return "Existing Route";
+    case EdgeCurrentWeightCalcType.shorterRouteFound:
+      return "Shorter Route";
+    case EdgeCurrentWeightCalcType.unknown:
+      return "ERROR";
+  }
+};
+
+export interface EdgeWithCost<T extends AnyGraphVertex> {
+  edge: Edge<T>;
+  totalCost: number;
+  calcResult: EdgeCurrentWeightCalcType;
+}
 export interface ObserverArgs<T extends AnyGraphVertex> {
   currentItem?: ShortestPathWithNode<T>;
   shortestPathTree: ShortestPathTree<T>;
   currentDistances: PriorityQueue<ShortestPathWithNode<T>>;
-  outgoing: Edge<T>[];
+  outgoing: EdgeWithCost<T>[];
 }
 export interface ObserverArgsWithPathFrom<T extends AnyGraphVertex>
   extends ObserverArgs<T> {

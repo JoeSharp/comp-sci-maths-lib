@@ -6,6 +6,8 @@ import {
   HeuristicCostFunction,
   ShortestPathForNode,
   RoutingObserver,
+  EdgeWithCost,
+  EdgeCurrentWeightCalcType,
 } from "./types";
 import { emptyObserver } from "../../common";
 import { AnyGraphVertex } from "../../types";
@@ -131,15 +133,57 @@ function dijstraks<T extends AnyGraphVertex>({
     .map((node) => ({ node, viaNode: undefined, cost: Infinity, priority: 0 }))
     .forEach((n) => currentDistances.enqueue(n));
 
+  // Give the observer the START
+  observer({ shortestPathTree, currentDistances, outgoing: [] });
+
   // While there are items in the queue to check...
   while (!currentDistances.isEmpty()) {
     // Take the node that is the shortest distance from our source node
     const currentItem = currentDistances.dequeue();
 
-    const outgoing: Edge<T>[] = graph
+    // Work out what amendments to make to the priority queue
+    const outgoing: EdgeWithCost<T>[] = graph
       .getOutgoing(currentItem.node)
-      .filter(({ to }) => shortestPathTree[to.key] === undefined); // only those that aren't in our tree already
+      .filter(({ to }) => shortestPathTree[to.key] === undefined) // only those that aren't in our tree already
+      .map((edge) => {
+        const { to: node, weight } = edge;
+        let totalCost = weight;
+        let calcResult = EdgeCurrentWeightCalcType.unknown;
 
+        // Remove the matching item from our current known distances
+        // It will either be replaced as is, or replaced with updated details
+        const otherItem = currentDistances.removeMatch((d) =>
+          graph.areVerticesEqual(d.node, node)
+        );
+
+        // What is the distance to this other node, from our current node?
+        const newPotentialDistance =
+          currentItem.cost + weight + getHeuristicCost(currentItem.node);
+
+        // Have we found a shorter route?
+        if (newPotentialDistance < otherItem.cost) {
+          totalCost = newPotentialDistance;
+          // Replace the node with our new distance and via details
+          currentDistances.enqueue({
+            node,
+            cost: newPotentialDistance,
+            viaNode: currentItem.node,
+            priority: 1 / newPotentialDistance,
+          });
+          calcResult = EdgeCurrentWeightCalcType.shorterRouteFound;
+        } else {
+          totalCost = otherItem.cost;
+          // Just put the current one back
+          currentDistances.enqueue(otherItem);
+          calcResult = EdgeCurrentWeightCalcType.existingRouteStillQuickest;
+        }
+
+        return {
+          edge,
+          totalCost,
+          calcResult,
+        };
+      });
     // Tell any observer the step
     observer({ currentItem, shortestPathTree, currentDistances, outgoing });
 
@@ -157,46 +201,9 @@ function dijstraks<T extends AnyGraphVertex>({
     ) {
       break;
     }
-
-    // Get all the links from our current item
-    outgoing.forEach(({ to: node, weight }) => {
-      // Remove the matching item from our current known distances
-      // It will either be replaced as is, or replaced with updated details
-      const otherItem = currentDistances.removeMatch((d) =>
-        graph.areVerticesEqual(d.node, node)
-      );
-
-      if (weight === Infinity) {
-        // This is the first time we have 'found' this node, so this is the best known route
-        currentDistances.enqueue({
-          node,
-          cost: weight,
-          viaNode: currentItem.node,
-          priority: 1 / weight,
-        });
-      } else {
-        // What is the distance to this other node, from our current node?
-        const newPotentialDistance =
-          currentItem.cost + weight + getHeuristicCost(currentItem.node);
-
-        // Have we found a shorter route?
-        if (newPotentialDistance < otherItem.cost) {
-          // Replace the node with our new distance and via details
-          currentDistances.enqueue({
-            node,
-            cost: newPotentialDistance,
-            viaNode: currentItem.node,
-            priority: 1 / newPotentialDistance,
-          });
-        } else {
-          // Just put the current one back
-          currentDistances.enqueue(otherItem);
-        }
-      }
-    });
   }
 
-  // Tell any observer the step
+  // Give the Observer the END
   observer({ shortestPathTree, currentDistances, outgoing: [] });
 
   return shortestPathTree;
