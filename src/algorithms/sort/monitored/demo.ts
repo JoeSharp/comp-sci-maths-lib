@@ -36,13 +36,12 @@ algorithms
       );
     };
     const join: JoinObserver<number> = (
-      parentKey: string,
-      listAKey: string,
-      listBKey: string,
+      listA: SplitList<number>,
+      listB: SplitList<number>,
       joinedList: number[]
     ) => {
       simpleLogger.info(
-        `Joining ${parentKey}, ${listAKey} + ${listBKey} -> ${joinedList}`
+        `Joining ${listA.data} + ${listB.data} -> ${joinedList}`
       );
     };
 

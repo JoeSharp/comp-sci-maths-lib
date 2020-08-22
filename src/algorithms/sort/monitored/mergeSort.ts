@@ -10,7 +10,8 @@ function mergeSort<T>(
   utilities: SortUtility<T>,
   leftPointer?: number,
   rightPointer?: number,
-  recurseKey: string = ROOT_RECURSION_KEY
+  parentKey: number = ROOT_RECURSION_KEY,
+  levelAdjust: number = ROOT_RECURSION_KEY / 2
 ): T[] {
   // Is it worth sorting?
   if (inputList.length < 2) {
@@ -39,15 +40,15 @@ function mergeSort<T>(
   const middle = Math.floor((leftPointer + rightPointer) / 2);
 
   const listA: SplitList<T> = {
-    key: recurseKey + "-a",
+    key: (parentKey - levelAdjust).toString(10),
     data: inputList.slice(leftPointer, middle + 1),
   };
   const listB: SplitList<T> = {
-    key: recurseKey + "-b",
+    key: (parentKey + levelAdjust).toString(10),
     data: inputList.slice(middle + 1, rightPointer + 1),
   };
   observe("Recursing", inputList, { leftPointer, rightPointer, middle });
-  split(recurseKey, listA, listB);
+  split(parentKey.toString(10), listA, listB);
 
   // Recurse sort both halves to yield the two lists to merge
   const firstHalf = mergeSort(
@@ -55,14 +56,16 @@ function mergeSort<T>(
     utilities,
     leftPointer,
     middle,
-    listA.key
+    parentKey - levelAdjust,
+    levelAdjust / 2
   );
   const secondHalf = mergeSort(
     inputList,
     utilities,
     middle + 1,
     rightPointer,
-    listB.key
+    parentKey + levelAdjust,
+    levelAdjust / 2
   );
 
   // Merge the two halves into a single sorted list
@@ -90,7 +93,7 @@ function mergeSort<T>(
   secondHalf
     .filter((_, i) => i >= secondPtr)
     .forEach((i) => outputList.push(i));
-  join(recurseKey, listA.key, listB.key, outputList);
+  join(listA, listB, outputList);
 
   return outputList;
 }

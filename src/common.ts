@@ -14,7 +14,7 @@ export const simpleLogger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-export const ROOT_RECURSION_KEY = "ROOT";
+export const ROOT_RECURSION_KEY = 50;
 
 export const getStringVertex = (value: string): StringGraphVertex => ({
   key: value,

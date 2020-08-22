@@ -94,9 +94,8 @@ export type SplitObserver<T> = (
 ) => void;
 
 export type JoinObserver<T> = (
-  thisKey: string,
-  listAKey: string,
-  listBKey: string,
+  listA: SplitList<T>,
+  listB: SplitList<T>,
   joinedList: T[]
 ) => void;
 
