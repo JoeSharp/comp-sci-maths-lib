@@ -1,4 +1,4 @@
-import Graph from "./graph";
+import Graph from "./Graph";
 import { getStringVertex } from "../../common";
 
 test("Graph - Weighted (strings)", () => {
