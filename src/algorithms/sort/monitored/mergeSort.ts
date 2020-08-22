@@ -40,11 +40,11 @@ function mergeSort<T>(
 
   const listA: SplitList<T> = {
     key: recurseKey + "-a",
-    data: inputList.slice(leftPointer, middle),
+    data: inputList.slice(leftPointer, middle + 1),
   };
   const listB: SplitList<T> = {
     key: recurseKey + "-b",
-    data: inputList.slice(middle, rightPointer + 1),
+    data: inputList.slice(middle + 1, rightPointer + 1),
   };
   observe("Recursing", inputList, { leftPointer, rightPointer, middle });
   split(recurseKey, listA, listB);
