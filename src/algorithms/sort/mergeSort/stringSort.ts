@@ -1,13 +1,14 @@
-function mergeSort<T>(
-  inputList: T[],
+function mergeSortR(
+  inputList: string[],
   leftPointer?: number,
   rightPointer?: number
-): T[] {
+): string[] {
   // Is it worth sorting?
   if (inputList.length < 2) {
     return inputList;
   }
 
+  // Is this the first run into the function?
   if (leftPointer === undefined) {
     leftPointer = 0;
   }
@@ -15,21 +16,22 @@ function mergeSort<T>(
     rightPointer = inputList.length - 1;
   }
 
+  // Have we reached the bottom of our recursion? This is the exit condition!
   if (leftPointer === rightPointer) {
     return [inputList[leftPointer]];
   }
 
   // Calculate the mid point
-  const middle = Math.floor((leftPointer + rightPointer) / 2);
+  const middle: number = Math.floor((leftPointer + rightPointer) / 2);
 
   // Recurse sort both halves to yield the two lists to merge
-  const firstHalf = mergeSort(inputList, leftPointer, middle);
-  const secondHalf = mergeSort(inputList, middle + 1, rightPointer);
+  const firstHalf: string[] = mergeSortR(inputList, leftPointer, middle);
+  const secondHalf: string[] = mergeSortR(inputList, middle + 1, rightPointer);
 
   // Merge the two halves into a single sorted list
-  const outputList = [];
-  let firstPtr = 0;
-  let secondPtr = 0;
+  const outputList: string[] = [];
+  let firstPtr: number = 0;
+  let secondPtr: number = 0;
   while (firstPtr < firstHalf.length && secondPtr < secondHalf.length) {
     // Comparator returns +ve if the second item is larger than first
     if (firstHalf[firstPtr] > secondHalf[secondPtr]) {
@@ -49,5 +51,16 @@ function mergeSort<T>(
 
   return outputList;
 }
+
+function mergeSort(inputList: string[]): string[] {
+
+  // Is it worth sorting?
+  if (inputList.length < 2) {
+    return inputList;
+  }
+
+  return mergeSortR(inputList, 0, inputList.length - 1)
+}
+
 
 export default mergeSort;

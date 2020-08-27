@@ -43,7 +43,16 @@ function partition<T>(
   return i + 1;
 }
 
-function quickSort<T>(
+/**
+ * Recursive form of the quick sort, this expects the various quick sort parameters to be setup.
+ * It then calls itself until it is dealing with a one item list.
+ * 
+ * @param arr The input array to sort, this function DOES modify the array
+ * @param utilities The various comparison/swapping utilities
+ * @param low Pointer to low point of this division of the list
+ * @param high Pointer to high point of this division of the list
+ */
+function quickSortR<T>(
   arr: T[],
   utilities: SortUtility<T>,
   low: number,
@@ -58,12 +67,18 @@ function quickSort<T>(
            at right place */
     const pi: number = partition(arr, utilities, low, high);
 
-    quickSort(arr, utilities, low, pi - 1); // Before pi
-    quickSort(arr, utilities, pi + 1, high); // After pi
+    quickSortR(arr, utilities, low, pi - 1); // Before pi
+    quickSortR(arr, utilities, pi + 1, high); // After pi
   }
 }
 
-export default <T>(inputList: T[], utilities: SortUtility<T>): T[] => {
+/**
+ * The entry point for the quick sort algorithm.
+ * 
+ * @param inputList The list to sort, this function does not modify this list
+ * @param utilities The various comparison/swapping uility functions required by observers.
+ */
+function quickSort<T>(inputList: T[], utilities: SortUtility<T>): T[] {
   if (inputList.length < 2) {
     return inputList;
   }
@@ -72,7 +87,9 @@ export default <T>(inputList: T[], utilities: SortUtility<T>): T[] => {
   const outputList = [...inputList];
 
   // This function recursively operates on the data in place
-  quickSort(outputList, utilities, 0, inputList.length - 1);
+  quickSortR(outputList, utilities, 0, inputList.length - 1);
 
   return outputList;
 };
+
+export default quickSort;

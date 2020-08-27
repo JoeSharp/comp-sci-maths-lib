@@ -47,32 +47,7 @@ export interface WorkingLists<T> {
   [k: string]: T[];
 }
 
-export type SortObserver<T> = (
-  stageName: string,
-  data: T[],
-  positionVars: PositionVars
-) => void;
 
-export type SwapFunction<T> = (arr: T[], from: number, to: number) => void;
-
-export interface SortUtility<T> {
-  compare?: Comparator<T>;
-  observe?: SortObserver<T>;
-  split?: SplitObserver<T>;
-  join?: JoinObserver<T>;
-  swap?: SwapFunction<T>;
-}
-
-// Sorting
-export type SortFunction<T> = (
-  inputList: T[],
-  utilities: SortUtility<T>
-) => T[];
-
-export interface NamedSort {
-  name: string;
-  sort: SortFunction<any>;
-}
 
 // Searching
 export type MatchComparator<T> = (a: T, aIndex: number) => number;

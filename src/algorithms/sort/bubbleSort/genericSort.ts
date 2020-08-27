@@ -1,10 +1,9 @@
 import { anyComparator } from "../../../common";
-
-export type CompareFunction<T> = (a: T, b: T) => number;
+import { Comparator } from "../../../types";
 
 function bubbleSort<T>(
   inputList: T[],
-  compare: CompareFunction<T> = anyComparator // fall back to the default if no comparison specified
+  compare: Comparator<T> = anyComparator // fall back to the default if no comparison specified
 ): T[] {
   const outputList: T[] = [...inputList];
   for (let top: number = outputList.length - 1; top > 0; top--) {

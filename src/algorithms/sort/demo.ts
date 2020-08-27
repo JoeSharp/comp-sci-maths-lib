@@ -1,12 +1,12 @@
-import algorithms from "./index";
-import { generateRandomNumbers, simpleLogger } from "../../../common";
+import algorithms from "./monitoredSortAlgorithms";
+import { generateRandomNumbers, simpleLogger } from "../../common";
 import {
-  SortObserver,
   SplitObserver,
   JoinObserver,
   SplitList,
   PositionVars,
-} from "../../../types";
+} from "../../types";
+import { SortObserver } from "./types";
 
 algorithms
   .filter(({ name }) => name === "Merge Sort")

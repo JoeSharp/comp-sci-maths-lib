@@ -1,8 +1,8 @@
 // @ts-ignore
 import basicJs from "./basic";
-import basicTs from "./basicStrings";
-import templated from "./templated";
-import monitored from "./monitored";
+import basicTs from "./stringSort";
+import templated from "./genericSort";
+import monitored from "./monitoredSort";
 
 [
   { name: "Basic JavaScript", sort: basicJs },

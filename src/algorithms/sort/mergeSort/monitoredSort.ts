@@ -1,11 +1,12 @@
-import { SortUtility, SplitList } from "../../../types";
+import { SplitList } from "../../../types";
 import {
   emptyObserver,
   anyComparator,
   ROOT_RECURSION_KEY,
 } from "../../../common";
+import { SortUtility } from "../types";
 
-function mergeSort<T>(
+function mergeSortR<T>(
   inputList: T[],
   utilities: SortUtility<T>,
   leftPointer?: number,
@@ -13,18 +14,8 @@ function mergeSort<T>(
   parentKey: number = ROOT_RECURSION_KEY,
   levelAdjust: number = ROOT_RECURSION_KEY / 2
 ): T[] {
-  // Is it worth sorting?
-  if (inputList.length < 2) {
-    return inputList;
-  }
 
-  if (leftPointer === undefined) {
-    leftPointer = 0;
-  }
-  if (rightPointer === undefined) {
-    rightPointer = inputList.length - 1;
-  }
-
+  // Have we reached the bottom of our recursion? This is the exit condition!
   if (leftPointer === rightPointer) {
     return [inputList[leftPointer]];
   }
@@ -51,7 +42,7 @@ function mergeSort<T>(
   split(parentKey.toString(10), listA, listB);
 
   // Recurse sort both halves to yield the two lists to merge
-  const firstHalf = mergeSort(
+  const firstHalf = mergeSortR(
     inputList,
     utilities,
     leftPointer,
@@ -59,7 +50,7 @@ function mergeSort<T>(
     parentKey - levelAdjust,
     levelAdjust / 2
   );
-  const secondHalf = mergeSort(
+  const secondHalf = mergeSortR(
     inputList,
     utilities,
     middle + 1,
@@ -96,6 +87,17 @@ function mergeSort<T>(
   join(listA, listB, outputList);
 
   return outputList;
+}
+
+function mergeSort<T>(inputList: T[],
+  utilities: SortUtility<T>): T[] {
+
+  // Is it worth sorting?
+  if (inputList.length < 2) {
+    return inputList;
+  }
+
+  return mergeSortR(inputList, utilities, 0, inputList.length - 1)
 }
 
 export default mergeSort;

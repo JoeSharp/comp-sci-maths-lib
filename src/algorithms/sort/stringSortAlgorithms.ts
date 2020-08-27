@@ -1,7 +1,7 @@
-import bubbleSort from "./bubbleSort/templated";
-import mergeSort from "./mergeSort";
-import quickSort from "./quickSort";
-import insertionSort from "./insertionSort";
+import bubbleSort from "./bubbleSort/stringSort";
+import mergeSort from "./mergeSort/stringSort";
+import quickSort from "./quickSort/stringSort";
+import insertionSort from "./insertionSort/stringSort";
 import { NamedBasicSort } from "./types";
 
 const algorithms: NamedBasicSort[] = [
