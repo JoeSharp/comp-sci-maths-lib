@@ -47,7 +47,16 @@ export function objToString(o?: object) {
 // tslint:disable-next-line: no-empty
 export const emptyObserver = () => {};
 
-export const anyComparator: Comparator<any> = (a: any, b: any) => a - b;
+// This needs to work for strings and numbers, which is why I cannot use b-a
+export const anyComparator: Comparator<any> = (a: any, b: any) => {
+  if (a > b) {
+    return +1;
+  } else if (b > a) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
 
 /**
  * Comparator function that uses simple arithmetic comparison.

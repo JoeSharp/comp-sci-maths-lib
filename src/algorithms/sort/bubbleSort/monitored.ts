@@ -1,14 +1,20 @@
 import { SortUtility } from "../../../types";
 import { simpleSwap, emptyObserver, anyComparator } from "../../../common";
 
-export default <T>(
+const defaultUtility: SortUtility<any> = {
+  compare: anyComparator,
+  observe: emptyObserver,
+  swap: simpleSwap,
+};
+
+function bubbleSort<T>(
   inputList: T[],
   {
     compare = anyComparator,
     observe = emptyObserver,
     swap = simpleSwap,
-  }: SortUtility<T>
-): T[] => {
+  }: SortUtility<T> = defaultUtility
+): T[] {
   const outputList: T[] = [...inputList];
 
   for (let top: number = outputList.length - 1; top > 0; top--) {
@@ -31,4 +37,6 @@ export default <T>(
   }
 
   return outputList;
-};
+}
+
+export default bubbleSort;

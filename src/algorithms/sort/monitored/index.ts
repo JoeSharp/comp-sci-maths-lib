@@ -1,4 +1,4 @@
-import bubbleSort from "./bubbleSort";
+import bubbleSort from "../bubbleSort/monitored";
 import mergeSort from "./mergeSort";
 import quickSort from "./quickSort";
 import insertionSort from "./insertionSort";
