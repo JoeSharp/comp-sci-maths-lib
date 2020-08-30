@@ -4,8 +4,8 @@
 
     And converted from pseudo code to JavaScript.
 */
-import { SortUtility } from "../../../types";
 import { simpleSwap, emptyObserver, anyComparator } from "../../../common";
+import { SortUtility } from "../types";
 
 /* This function takes last element as pivot, places
    the pivot element at its correct position in sorted
@@ -46,7 +46,7 @@ function partition<T>(
 /**
  * Recursive form of the quick sort, this expects the various quick sort parameters to be setup.
  * It then calls itself until it is dealing with a one item list.
- * 
+ *
  * @param arr The input array to sort, this function DOES modify the array
  * @param utilities The various comparison/swapping utilities
  * @param low Pointer to low point of this division of the list
@@ -74,7 +74,7 @@ function quickSortR<T>(
 
 /**
  * The entry point for the quick sort algorithm.
- * 
+ *
  * @param inputList The list to sort, this function does not modify this list
  * @param utilities The various comparison/swapping uility functions required by observers.
  */
@@ -90,6 +90,6 @@ function quickSort<T>(inputList: T[], utilities: SortUtility<T>): T[] {
   quickSortR(outputList, utilities, 0, inputList.length - 1);
 
   return outputList;
-};
+}
 
 export default quickSort;

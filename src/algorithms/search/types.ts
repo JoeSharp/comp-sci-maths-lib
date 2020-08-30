@@ -1,9 +1,9 @@
-export type BasicSearchFunction = <T>(
+export type GenericSearchFunction = <T>(
   inputList: T[],
   match: (a: T) => number
 ) => number;
 
-export interface BasicNamedSearch {
+export interface NamedGenericSearchFunction {
   name: string;
-  search: BasicSearchFunction;
+  search: GenericSearchFunction;
 }

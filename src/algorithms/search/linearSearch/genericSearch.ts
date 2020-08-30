@@ -1,4 +1,4 @@
-import { NO_MATCH } from "./common";
+import { NO_MATCH } from "../common";
 
 /**
  * perform a linear search on an array
@@ -10,7 +10,7 @@ import { NO_MATCH } from "./common";
  * +ve if item is 'greater than'
  * @return {object} The matching item in the array
  */
-export default <T>(data: T[], match: (a: T) => number): number => {
+function linearSearch<T>(data: T[], match: (a: T) => number): number {
   for (let i = 0; i < data.length; i++) {
     if (match(data[i]) === 0) {
       return i;
@@ -18,4 +18,6 @@ export default <T>(data: T[], match: (a: T) => number): number => {
   }
 
   return NO_MATCH;
-};
+}
+
+export default linearSearch;

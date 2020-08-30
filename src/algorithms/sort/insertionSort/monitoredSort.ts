@@ -1,4 +1,4 @@
-import { SortUtility } from "../../../types";
+import { SortUtility } from "../types";
 import { anyComparator, emptyObserver, simpleSwap } from "../../../common";
 
 function insertionSort<T>(
@@ -48,6 +48,6 @@ function insertionSort<T>(
   }
 
   return outputList;
-};
+}
 
 export default insertionSort;

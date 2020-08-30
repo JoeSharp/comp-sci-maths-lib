@@ -43,7 +43,7 @@ function partition<T>(arr: T[], comparator: Comparator<T>, low: number, high: nu
 /**
  * Recursive form of the quick sort, this expects the various quick sort parameters to be setup.
  * It then calls itself until it is dealing with a one item list.
- * 
+ *
  * @param arr The input array to sort, this function DOES modify the array
  * @param comparator THe function that can compare the items in this list
  * @param low Pointer to low point of this division of the list
@@ -62,7 +62,7 @@ function quickSortR<T>(arr: T[], comparator: Comparator<T>, low: number, high: n
 
 /**
  * The entry point for the quick sort algorithm.
- * 
+ *
  * @param inputList The list to sort, this function does not modify this list
  * @param utilities The various comparison/swapping uility functions required by observers.
  */

@@ -1,4 +1,4 @@
-import { SortUtility } from "../../../types";
+import { SortUtility } from "../types";
 import { simpleSwap, emptyObserver, anyComparator } from "../../../common";
 
 const defaultUtility: SortUtility<any> = {
