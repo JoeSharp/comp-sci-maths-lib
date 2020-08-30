@@ -1,7 +1,7 @@
 import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
-import { dijstraks, getPathFrom, getPathTo } from "./dijkstras";
+import { dijstraks, getPathTo } from "./dijkstras";
 import { getStringVertex } from "../../common";
 import { StringGraphVertex } from "../../types";
 
@@ -45,13 +45,6 @@ test("Routing Algorithms - Dead End", () => {
 
   // Should be empty with no available path
   expect(pathTo).toStrictEqual([]);
-
-  const pathFrom = getPathFrom({
-    graph: myGraph,
-    shortestPathTree,
-    node: vertexA,
-  });
-  expect(pathFrom[0]).toBe(vertexA);
 });
 
 // https://youtu.be/ySN5Wnu88nE?t=239

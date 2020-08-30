@@ -12,25 +12,6 @@ import {
 import { emptyObserver } from "../../common";
 import { AnyGraphVertex } from "../../types";
 
-function getPathFrom<T extends AnyGraphVertex>({
-  graph,
-  shortestPathTree,
-  node,
-}: WalkPath<T>): T[] {
-  const path: T[] = [];
-
-  while (node !== undefined) {
-    path.push(node);
-
-    const match = Object.entries(shortestPathTree).find(
-      ([_, { viaNode }]) => viaNode && graph.areVerticesEqual(viaNode, node)
-    );
-    node = !!match ? graph.getVertex(match[0]) : undefined;
-  }
-
-  return path;
-}
-
 /**
  * Calls the walkPath generator function and puts all the nodes into an array, returns the array.
  *
@@ -93,6 +74,7 @@ interface Args<T extends AnyGraphVertex> {
   observer?: RoutingObserver<T>;
 }
 
+// A hueristic that always returns a constant value will have no effect.
 export const emptyHeuristic: HeuristicCostFunction<any> = () => 0;
 
 /**
@@ -119,7 +101,7 @@ function dijstraks<T extends AnyGraphVertex>({
   // distance from the source (smallest to largest)
   const currentDistances = new PriorityQueue<ShortestPathWithNode<T>>();
 
-  // Add the from node, it doesn't go via anything, and it's distance is zero
+  // Add the 'from' node, it doesn't go via anything, and it's distance is zero
   currentDistances.enqueue({
     node: sourceNode,
     viaNode: undefined,
@@ -209,4 +191,4 @@ function dijstraks<T extends AnyGraphVertex>({
   return shortestPathTree;
 }
 
-export { dijstraks, getPathFrom, getPathTo, walkPath };
+export { dijstraks, getPathTo, walkPath };
