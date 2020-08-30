@@ -66,6 +66,9 @@ function* walkPath<T extends AnyGraphVertex>({
   }
 }
 
+// These are the arguments that the routing algorithm requires
+// Some of them are optional, so it is easier to use an object of named args
+// that can be given default values in the routing function.
 interface Args<T extends AnyGraphVertex> {
   graph: Graph<T>;
   sourceNode: T;
@@ -83,9 +86,14 @@ export const emptyHeuristic: HeuristicCostFunction<any> = () => 0;
  * This algorithm can end early if the toNode is specified, here is a discussion of the validity of this...
  * https://stackoverflow.com/questions/23906530/dijkstras-end-condition
  *
+ * This algorithm accepts a heuristic cost function, which allows it to be used
+ * to execute the A* algorithm.
+ *
  * @param {Graph} graph The graph that contains all the nodes and links
  * @param {string} sourceNode The node we are travelling from
- * @param {string | undefined} optionalArguments // Optional arguments, see above for default values
+ * @param {string | undefined} destinationNode // The node we are aiming for, can be omitted
+ * @param {function} getHeuristicCost // Given a node, returns an estimated remaining cost to the destination.
+ * @param {function} observer // Allows the caller to monitor the steps of the algorithm.
  * @returns Shortest Path Tree { [node] : {cost: number, viaNode: string} }
  */
 function dijstraks<T extends AnyGraphVertex>({
@@ -95,6 +103,8 @@ function dijstraks<T extends AnyGraphVertex>({
   getHeuristicCost = emptyHeuristic,
   observer = emptyObserver,
 }: Args<T>): ShortestPathTree<T> {
+  // The output of this function is the shortest path tree, derived by the algorithm.
+  // The caller can then use this tree to derive a path using the getPathTo function above.
   const shortestPathTree: ShortestPathTree<T> = {};
 
   // Build a priority queue, where the nodes are arranged in order of
