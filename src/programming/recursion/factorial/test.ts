@@ -24,7 +24,7 @@ FACTORIAL_FUNCTIONS.forEach(({ name, factorial }) => {
     TEST_CASES.forEach(({ input, expectedOutput }) => {
         test(`Factorial - ${name} of ${input}`, () => {
 
-            let output = factorial(input);
+            const output = factorial(input);
             expect(output).toBe(expectedOutput);
         });
     });
@@ -34,17 +34,17 @@ FACTORIAL_FUNCTIONS.forEach(({ name, factorial }) => {
 // Note that this test code is perhaps clearer, but more repetitive
 test("Factorial - Recursive vs Loop", () => {
     // try a couple of cases with the recursive function
-    let factorial5_recurse = factorialRecursive(5);
-    expect(factorial5_recurse).toBe(120);
+    const factorial5Recurse = factorialRecursive(5);
+    expect(factorial5Recurse).toBe(120);
 
     // Note that I am having to repeat the structure here...
-    let factorial8_recurse = factorialRecursive(8);
-    expect(factorial8_recurse).toBe(40320);
+    const factorial8Recurse = factorialRecursive(8);
+    expect(factorial8Recurse).toBe(40320);
 
     // Then same again with loop based
-    let factorial5_loop = factorialLoop(5);
-    expect(factorial5_loop).toBe(120);
+    const factorial5Loop = factorialLoop(5);
+    expect(factorial5Loop).toBe(120);
 
-    let factorial8_loop = factorialLoop(8);
-    expect(factorial8_loop).toBe(40320)
+    const factorial8Loop = factorialLoop(8);
+    expect(factorial8Loop).toBe(40320)
 });
