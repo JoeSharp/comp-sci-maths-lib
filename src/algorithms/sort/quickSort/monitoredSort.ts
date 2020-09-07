@@ -4,8 +4,8 @@
 
     And converted from pseudo code to JavaScript.
 */
-import { simpleSwap, emptyObserver, anyComparator } from "../../../common";
 import { SortUtility } from "../types";
+import { simpleSwap, emptyObserver, anyComparator } from "../../../common";
 
 /* This function takes last element as pivot, places
    the pivot element at its correct position in sorted

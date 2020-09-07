@@ -1,5 +1,5 @@
-import { SortUtility } from "../types";
 import { anyComparator, emptyObserver, simpleSwap } from "../../../common";
+import { SortUtility } from "../types";
 
 function insertionSort<T>(
   inputList: T[],
