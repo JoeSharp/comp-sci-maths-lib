@@ -1,4 +1,4 @@
-import { NO_MATCH } from "./common";
+import { NO_MATCH } from "../common";
 import { SearchUtilities } from "../../../types";
 import { emptyObserver } from "../../../common";
 
@@ -12,10 +12,10 @@ import { emptyObserver } from "../../../common";
  * +ve if item is 'greater than'
  * @return {object} The matching item in the array
  */
-export default <T>(
+function linearSearch<T>(
   data: T[],
   { match, observe = emptyObserver }: SearchUtilities<T>
-): number => {
+): number {
   for (let i = 0; i < data.length; i++) {
     observe("Looking", { i });
     if (match(data[i], i) === 0) {
@@ -24,4 +24,6 @@ export default <T>(
   }
 
   return NO_MATCH;
-};
+}
+
+export default linearSearch;

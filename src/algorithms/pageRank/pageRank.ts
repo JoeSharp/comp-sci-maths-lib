@@ -54,7 +54,7 @@ export const extractPageRank = <T extends AnyGraphVertex>(
   { ranks }: PageRankState<T>,
   page: string
 ): number => {
-  return roundTo2Dp(ranks[page] || 0);
+  return ranks[page];
 };
 
 /**

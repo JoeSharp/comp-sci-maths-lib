@@ -90,6 +90,6 @@ function quickSort<T>(inputList: T[], utilities: SortUtility<T>): T[] {
   quickSortR(outputList, utilities, 0, inputList.length - 1);
 
   return outputList;
-};
+}
 
 export default quickSort;

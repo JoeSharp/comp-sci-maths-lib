@@ -1,4 +1,3 @@
-
 import { anyComparator, emptyObserver, simpleSwap } from "../../../common";
 import { SortUtility } from "../types";
 
@@ -49,6 +48,6 @@ function insertionSort<T>(
   }
 
   return outputList;
-};
+}
 
 export default insertionSort;

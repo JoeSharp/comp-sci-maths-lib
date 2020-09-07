@@ -1,11 +1,11 @@
-import algorithms from "./index";
+import algorithms from "./monitoredSearch";
 import {
   simpleLogger,
   arithmeticComparator,
   generateRandomNumbers,
   objToString,
-} from "../../../common";
-import { SearchObserver } from "../../../types";
+} from "../../common";
+import { SearchObserver } from "../../types";
 
 const observe: SearchObserver = (
   stageName: string,

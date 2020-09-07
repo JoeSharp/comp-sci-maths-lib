@@ -1,7 +1,7 @@
-import { NamedSearch } from "../../../types";
+import { NamedSearch } from "../../types";
 
-import binarySearch from "./binarySearch";
-import linearSearch from "./linearSearch";
+import binarySearch from "./binarySearch/monitoredSearch";
+import linearSearch from "./linearSearch/monitoredSearch";
 
 const algorithms: NamedSearch[] = [
   {

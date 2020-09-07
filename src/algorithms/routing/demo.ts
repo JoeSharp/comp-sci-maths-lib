@@ -1,7 +1,7 @@
 import { ShortestPathTree, ObserverArgs } from "./types";
 import Graph from "../../dataStructures/graph/Graph";
 
-import { dijstraks, getPathTo, getPathFrom } from "./dijkstras";
+import { dijstraks, getPathTo } from "./dijkstras";
 import { BaseGraphVertex, StringGraphVertex } from "../../types";
 import { simpleLogger, getStringVertex } from "../../common";
 
@@ -101,13 +101,6 @@ function testGrid() {
     );
   });
 
-  const pathFrom: PointGraphVertex[] = getPathFrom({
-    graph: myGraph,
-    shortestPathTree,
-    node: sourceNode,
-  });
-  simpleLogger.info("Shortest Path From Source", pathFrom);
-
   observations.forEach((o) => {
     const path = getPathTo({
       graph: myGraph,
@@ -141,13 +134,6 @@ function testBrokenPath() {
     destinationNode: vertexD,
     observer: (d) => observations.push(d),
   });
-
-  const pathFrom = getPathFrom({
-    graph: myGraph,
-    shortestPathTree,
-    node: vertexA,
-  });
-  simpleLogger.info("Broken Path From ", pathFrom);
 
   observations.forEach((o) => {
     const path = getPathTo({

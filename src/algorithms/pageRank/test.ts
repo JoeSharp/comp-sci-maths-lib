@@ -2,6 +2,7 @@ import {
   initialisePageRank,
   iteratePageRank,
   extractPageRank,
+  roundTo2Dp,
 } from "./pageRank";
 import Graph from "../../dataStructures/graph/Graph";
 import { PageRankState } from "./types";
@@ -35,8 +36,8 @@ test("Page Rank", () => {
   const pageRankC = extractPageRank(pageRankState, vertexC.key);
   const pageRankD = extractPageRank(pageRankState, vertexD.key);
 
-  expect(pageRankA).toBe(0.67);
-  expect(pageRankB).toBe(0.72);
-  expect(pageRankC).toBe(0.35);
-  expect(pageRankD).toBe(0.35);
+  expect(roundTo2Dp(pageRankA)).toBe(0.67);
+  expect(roundTo2Dp(pageRankB)).toBe(0.72);
+  expect(roundTo2Dp(pageRankC)).toBe(0.35);
+  expect(roundTo2Dp(pageRankD)).toBe(0.35);
 });
