@@ -8,7 +8,7 @@
     "dist/"
   ],
   "engines": {
-    "node": ">=12.16.x"
+    "node": ">=10.21.0"
   },
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
