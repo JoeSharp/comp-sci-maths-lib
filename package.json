@@ -8,7 +8,7 @@
     "dist/"
   ],
   "engines": {
-    "node": ">=12.16.x"
+    "node": ">=10.21.0"
   },
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
@@ -33,7 +33,6 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@types/node": "^13.9.2",
-    "babel-jest": "^26.1.0",
     "typescript": "^3.8.3"
   }
 }

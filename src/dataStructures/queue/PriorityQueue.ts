@@ -9,7 +9,12 @@ export interface PrioritisedItem {
 export default class PriorityQueue<
   T extends PrioritisedItem
 > extends DataStructure {
-  items: LinkedList<T> = new LinkedList();
+  items: LinkedList<T>;
+
+  constructor() {
+    super();
+    this.items = new LinkedList();
+  }
 
   toString() {
     return this.items.toString();
