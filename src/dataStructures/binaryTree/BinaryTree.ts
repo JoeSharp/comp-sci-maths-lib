@@ -23,9 +23,17 @@ export default class BinaryTree<T> extends DataStructure {
   }
 
   toString(): string {
-    return `(${this.leftBranch && this.leftBranch.toString()} ${this.value} ${
-      this.rightBranch && this.rightBranch.toString()
-    })`;
+    if (this.leftBranch !== null && this.rightBranch !== null) {
+      return `(${this.leftBranch.toString()} ${this.value} ${
+        this.rightBranch.toString()
+        })`;
+    } else if (this.leftBranch !== null) {
+      return `(${this.leftBranch.toString()} ${this.value} null)`;
+    } else if (this.rightBranch !== null) {
+      return `(null ${this.value} ${this.rightBranch.toString()})`;
+    } else {
+      return `${this.value}`;
+    }
   }
 
   contains(item: T) {
