@@ -1,12 +1,10 @@
 import BinaryTree from "./BinaryTree";
-import {
-  simpleLogger,
-  stringComparator,
-  arithmeticComparator,
-} from "../../common";
+import { simpleLogger } from "../../common";
+import BinaryTreeString from "./BinaryTreeString";
+import BinaryTreeNumber from "./BinaryTreeNumber";
 
 test("Binary Tree - Contains", () => {
-  const myTree = new BinaryTree<string>(stringComparator);
+  const myTree = new BinaryTreeString();
 
   myTree.add("B");
   myTree.add("A");
@@ -23,7 +21,7 @@ test("Binary Tree - Contains", () => {
 });
 
 test("Binary Tree - With Duplicates", () => {
-  const myTree = new BinaryTree<number>(arithmeticComparator);
+  const myTree = new BinaryTreeNumber();
 
   myTree.add(56);
   myTree.add(2);

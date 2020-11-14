@@ -1,5 +1,19 @@
 import Graph from "./Graph";
+import SimpleStringGraph from "./SimpleStringGraph";
 import { getStringVertex } from "../../common";
+
+test("Graph - Simple String", () => {
+  const graph = new SimpleStringGraph()
+    .addLink("A", "B")
+    .addLink("A", "C")
+    .addLink("B", "D")
+    .addLink("B", "E")
+    .addLink("C", "D");
+
+  const fromA = graph.getConnectedVertices("A");
+  ["B", "C"].forEach((x) => expect(fromA.includes(x)).toBeTruthy());
+  ["D", "E", "F"].forEach((x) => expect(fromA.includes(x)).toBeFalsy());
+});
 
 test("Graph - Weighted (strings)", () => {
   const vertexA = getStringVertex("A");
