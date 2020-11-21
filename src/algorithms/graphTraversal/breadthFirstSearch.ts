@@ -4,9 +4,10 @@ import { VisitFunction, AnyGraphVertex } from "../../types";
 
 function breadthFirstSearch<T extends AnyGraphVertex>(
   graph: Graph<T>,
-  startVertex: T,
+  startVertexKey: string,
   visit: VisitFunction<T>
 ): void {
+  const startVertex: T = graph.getVertex(startVertexKey);
   const pendingQueue: Queue<T> = new Queue();
   const visited: Set<T> = new Set();
 

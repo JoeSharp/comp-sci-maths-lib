@@ -71,8 +71,8 @@ function* walkPath<T extends AnyGraphVertex>({
 // that can be given default values in the routing function.
 interface Args<T extends AnyGraphVertex> {
   graph: Graph<T>;
-  sourceNode: T;
-  destinationNode?: T;
+  sourceNodeKey: string;
+  destinationNodeKey?: string;
   getHeuristicCost?: HeuristicCostFunction<T>;
   observer?: RoutingObserver<T>;
 }
@@ -98,11 +98,15 @@ export const emptyHeuristic: HeuristicCostFunction<any> = () => 0;
  */
 function dijstraks<T extends AnyGraphVertex>({
   graph,
-  sourceNode,
-  destinationNode,
+  sourceNodeKey,
+  destinationNodeKey,
   getHeuristicCost = emptyHeuristic,
   observer = emptyObserver,
 }: Args<T>): ShortestPathTree<T> {
+  const sourceNode: T = graph.getVertex(sourceNodeKey);
+  const destinationNode =
+    destinationNodeKey && graph.getVertex(destinationNodeKey);
+
   // The output of this function is the shortest path tree, derived by the algorithm.
   // The caller can then use this tree to derive a path using the getPathTo function above.
   const shortestPathTree: ShortestPathTree<T> = {};

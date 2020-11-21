@@ -1,8 +1,9 @@
 import breadthFirstSearch from "./breadthFirstSearch";
 import depthFirstSearch from "./depthFirstSearch";
 import Graph from "../../dataStructures/graph/Graph";
-import { StringGraphVertex } from "../../types";
-import { getStringVertex } from "../../common";
+import SimpleStringGraph from "../../dataStructures/graph/SimpleStringGraph";
+import { AnyGraphVertex, StringGraphVertex } from "../../types";
+import { getStringVertex, simpleLogger } from "../../common";
 
 const vertexA = getStringVertex("A");
 const vertexB = getStringVertex("B");
@@ -11,11 +12,6 @@ const vertexD = getStringVertex("D");
 const vertexE = getStringVertex("E");
 const vertexF = getStringVertex("F");
 const vertexG = getStringVertex("G");
-const vertexH = getStringVertex("H");
-const vertexI = getStringVertex("I");
-const vertexJ = getStringVertex("J");
-const vertexK = getStringVertex("K");
-const vertexL = getStringVertex("L");
 const vertexS = getStringVertex("S");
 
 function createTestGraph() {
@@ -31,11 +27,23 @@ function createTestGraph() {
     .addBiDirectionalEdge(vertexF, vertexG);
 }
 
+function checkTraversalContainsEverythingOnce<T extends AnyGraphVertex>(
+  graph: Graph<T>,
+  items: T[]
+) {
+  // Should visit all nodes exactly once
+  const itemsInSet = new Set(items.map((x) => x.value));
+  const verticesInSet = new Set(graph.vertices.map((x) => x.value));
+  expect(itemsInSet.size).toEqual(items.length);
+  expect(itemsInSet).toEqual(verticesInSet);
+}
+
 test("Graph - Breadth First Search", () => {
   const myGraph = createTestGraph();
 
   const items: StringGraphVertex[] = [];
-  breadthFirstSearch(myGraph, vertexS, (d) => items.push(d));
+  breadthFirstSearch(myGraph, "S", (d) => items.push(d));
+  checkTraversalContainsEverythingOnce(myGraph, items);
 
   const directlyEdgeed = [vertexA, vertexB, vertexC];
   const transitivelyEdgeed = [vertexD, vertexE, vertexF, vertexG];
@@ -50,11 +58,28 @@ test("Graph - Breadth First Search", () => {
   );
 });
 
+test("Graph - DFS Very Simple", () => {
+  const myGraph: SimpleStringGraph = new SimpleStringGraph();
+  myGraph.addBiDirectionalEdge(vertexA, vertexB);
+
+  const items: StringGraphVertex[] = [];
+  depthFirstSearch(myGraph, "A", (x) => items.push(x));
+
+  checkTraversalContainsEverythingOnce(myGraph, items);
+});
+
 test("Graph - Depth First Search", () => {
   const myGraph = createTestGraph();
 
   const items: StringGraphVertex[] = [];
-  depthFirstSearch(myGraph, vertexS, (d) => items.push(d));
+  depthFirstSearch(myGraph, "S", (d) => items.push(d));
+  checkTraversalContainsEverythingOnce(myGraph, items);
+
+  // Should visit all nodes exactly once
+  const itemsInSet = new Set(items);
+  const verticesInSet = new Set(myGraph.vertices);
+  expect(itemsInSet.size).toEqual(items.length);
+  expect(itemsInSet).toEqual(verticesInSet);
 
   const directRelatives = [
     { direct: vertexC, transitive: vertexF },

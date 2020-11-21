@@ -1,19 +1,21 @@
 import Stack from "../../dataStructures/stack/Stack";
 import Graph from "../../dataStructures/graph/Graph";
 import { VisitFunction, AnyGraphVertex } from "../../types";
+import { simpleLogger } from "../../common";
 
 function depthFirstSearch<T extends AnyGraphVertex>(
   graph: Graph<T>,
-  startVertex: T,
+  startVertexKey: string,
   visit: VisitFunction<T>
 ): void {
+  const startVertex: T = graph.getVertex(startVertexKey);
   const pendingStack = new Stack<T>();
-  const visited: Set<T> = new Set();
+  const visited: Set<string> = new Set();
 
   let vertex = startVertex;
   while (true) {
-    if (!visited.has(vertex)) {
-      visited.add(vertex);
+    if (!visited.has(vertex.key)) {
+      visited.add(vertex.key);
       visit(vertex);
       pendingStack.push(vertex);
     }
@@ -22,7 +24,7 @@ function depthFirstSearch<T extends AnyGraphVertex>(
     const related: T[] = graph
       .getOutgoing(vertex)
       .map(({ to }) => to)
-      .filter((i) => !visited.has(i));
+      .filter((i) => !visited.has(i.key));
 
     if (related.length > 0) {
       vertex = related[0];
