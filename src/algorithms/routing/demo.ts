@@ -77,8 +77,8 @@ function testGrid() {
 
   const shortestPathTree: ShortestPathTree<PointGraphVertex> = dijstraks({
     graph: myGraph,
-    sourceNode,
-    destinationNode,
+    sourceNodeKey: sourceNode.key,
+    destinationNodeKey: destinationNode.key,
     observer: (d) => observations.push(d),
   });
 
@@ -130,8 +130,8 @@ function testBrokenPath() {
 
   const shortestPathTree = dijstraks({
     graph: myGraph,
-    sourceNode: vertexA,
-    destinationNode: vertexD,
+    sourceNodeKey: vertexA.key,
+    destinationNodeKey: vertexD.key,
     observer: (d) => observations.push(d),
   });
 

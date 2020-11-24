@@ -27,8 +27,8 @@ test("Routing Algorithms - Dead End", () => {
 
   const shortestPathTree = dijstraks({
     graph: myGraph,
-    sourceNode: vertexA,
-    destinationNode: vertexD,
+    sourceNodeKey: vertexA.key,
+    destinationNodeKey: vertexD.key,
   });
 
   // Check the unreachable nodes
@@ -89,8 +89,8 @@ test("Routing Algorithms - A*", () => {
   const observations: ObserverArgs<StringGraphVertex>[] = [];
   const shortestPathTreeStoE: ShortestPathTree<StringGraphVertex> = dijstraks({
     graph: myGraph,
-    sourceNode: vertexS,
-    destinationNode: vertexE,
+    sourceNodeKey: vertexS.key,
+    destinationNodeKey: vertexE.key,
     getHeuristicCost: (d) => euclideanDistances[d.key],
     observer: (d) => observations.push(d),
   });
@@ -126,7 +126,7 @@ test("Routing Algorithms - Dijkstra", () => {
   const viaNode = vertexA;
   const shortestPathTreeAll: ShortestPathTree<StringGraphVertex> = dijstraks({
     graph: myGraph,
-    sourceNode: viaNode,
+    sourceNodeKey: viaNode.key,
   });
   expect(shortestPathTreeAll).toEqual({
     [vertexA.key]: { cost: 0, viaNode: undefined, priority: Infinity },
@@ -166,8 +166,8 @@ test("Routing Algorithms - Dijkstra", () => {
   const shortestPathTree4only: ShortestPathTree<StringGraphVertex> = dijstraks(
     {
       graph: myGraph,
-      sourceNode: viaNode,
-      destinationNode: vertexE,
+      sourceNodeKey: viaNode.key,
+      destinationNodeKey: vertexE.key,
     } // this time specifying the toNode
   );
   const pathTo4only = getPathTo({
