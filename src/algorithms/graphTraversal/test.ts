@@ -2,7 +2,7 @@ import breadthFirstSearch from "./breadthFirstSearch";
 import depthFirstSearch from "./depthFirstSearch";
 import Graph from "../../dataStructures/graph/Graph";
 import { StringGraphVertex } from "../../types";
-import { getStringVertex } from "../../common";
+import { getStringVertex, simpleLogger } from "../../common";
 
 const vertexA = getStringVertex("A");
 const vertexB = getStringVertex("B");
@@ -11,11 +11,6 @@ const vertexD = getStringVertex("D");
 const vertexE = getStringVertex("E");
 const vertexF = getStringVertex("F");
 const vertexG = getStringVertex("G");
-const vertexH = getStringVertex("H");
-const vertexI = getStringVertex("I");
-const vertexJ = getStringVertex("J");
-const vertexK = getStringVertex("K");
-const vertexL = getStringVertex("L");
 const vertexS = getStringVertex("S");
 
 function createTestGraph() {
@@ -36,6 +31,9 @@ test("Graph - Breadth First Search", () => {
 
   const items: StringGraphVertex[] = [];
   breadthFirstSearch(myGraph, vertexS, (d) => items.push(d));
+
+  expect(items.length).toBe(myGraph.vertices.length)
+  simpleLogger.info(items.map(x => x.value).join(', '));
 
   const directlyEdgeed = [vertexA, vertexB, vertexC];
   const transitivelyEdgeed = [vertexD, vertexE, vertexF, vertexG];
