@@ -45,6 +45,8 @@ test("Graph - Breadth First Search", () => {
   breadthFirstSearch(myGraph, "S", (d) => items.push(d));
   checkTraversalContainsEverythingOnce(myGraph, items);
 
+  expect(items.length).toBe(myGraph.vertices.length);
+
   const directlyEdgeed = [vertexA, vertexB, vertexC];
   const transitivelyEdgeed = [vertexD, vertexE, vertexF, vertexG];
   directlyEdgeed.forEach((i) =>
