@@ -1,6 +1,5 @@
 import { NO_MATCH } from "../common";
-import { SearchUtilities, MatchComparator } from "../../../types";
-import { emptyObserver } from "../../../common";
+import { Comparator } from "../../../types";
 
 /**
  * Executes a binary search.
@@ -16,7 +15,8 @@ import { emptyObserver } from "../../../common";
  */
 function binarySearchR<T>(
   data: T[],
-  match: MatchComparator<T>,
+  searchItem: T,
+  compare: Comparator<T>,
   left: number,
   right: number
 ): number {
@@ -29,7 +29,7 @@ function binarySearchR<T>(
   const mid = Math.floor(left + (right - left) / 2);
 
   // Compare the midpoint to our criteria
-  const compareMid: number = match(data[mid], mid);
+  const compareMid: number = compare(searchItem, data[mid]);
 
   // If the element is present in the middle itself
   if (compareMid === 0) {
@@ -37,16 +37,16 @@ function binarySearchR<T>(
   } else if (compareMid < 0) {
     // If element is smaller than mid, then
     // it can only be present in left subarray
-    return binarySearchR(data, match, left, mid - 1);
+    return binarySearchR(data, searchItem, compare, left, mid - 1);
   } else {
     // Else the element can only be present
     // in right subarray
-    return binarySearchR(data, match, mid + 1, right);
+    return binarySearchR(data, searchItem, compare, mid + 1, right);
   }
 }
 
-function binarySearch<T>(data: T[], match: MatchComparator<T>) {
-  return binarySearchR(data, match, 0, data.length - 1);
+function binarySearch<T>(data: T[], searchItem: T, compare: Comparator<T>) {
+  return binarySearchR(data, searchItem, compare, 0, data.length - 1);
 }
 
 export default binarySearch;

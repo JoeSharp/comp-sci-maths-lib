@@ -14,11 +14,12 @@ import { emptyObserver } from "../../../common";
  */
 function linearSearch<T>(
   data: T[],
-  { match, observe = emptyObserver }: SearchUtilities<T>
+  searchItem: T,
+  { compare, observe = emptyObserver }: SearchUtilities<T>
 ): number {
   for (let i = 0; i < data.length; i++) {
     observe("Looking", { i });
-    if (match(data[i], i) === 0) {
+    if (compare(data[i], searchItem) === 0) {
       return i;
     }
   }

@@ -1,3 +1,4 @@
+import { Comparator } from "../../../types";
 import { NO_MATCH } from "../common";
 
 /**
@@ -10,9 +11,13 @@ import { NO_MATCH } from "../common";
  * +ve if item is 'greater than'
  * @return {object} The matching item in the array
  */
-function linearSearch<T>(data: T[], match: (a: T) => number): number {
+function linearSearch<T>(
+  data: T[],
+  searchItem: T,
+  compare: Comparator<T>
+): number {
   for (let i = 0; i < data.length; i++) {
-    if (match(data[i]) === 0) {
+    if (compare(data[i], searchItem) === 0) {
       return i;
     }
   }

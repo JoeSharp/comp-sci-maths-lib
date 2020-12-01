@@ -47,11 +47,6 @@ export interface WorkingLists<T> {
   [k: string]: T[];
 }
 
-
-
-// Searching
-export type MatchComparator<T> = (a: T, aIndex: number) => number;
-
 export type SearchObserver = (
   stageName: string,
   positionVars?: PositionVars
@@ -75,7 +70,7 @@ export type JoinObserver<T> = (
 ) => void;
 
 export interface SearchUtilities<T> {
-  match: MatchComparator<T>;
+  compare: Comparator<T>;
   observe?: SearchObserver;
   split?: SplitObserver<T>;
   join?: JoinObserver<T>;
@@ -83,6 +78,7 @@ export interface SearchUtilities<T> {
 
 export type SearchFunction = <T>(
   inputList: T[],
+  searchItem: T,
   utilities: SearchUtilities<T>
 ) => number;
 

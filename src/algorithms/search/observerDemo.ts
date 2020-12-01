@@ -29,8 +29,8 @@ algorithms.forEach(({ name, search }) => {
     simpleLogger.info(`Searching for inputList[${index}]=${inputList[index]}`);
 
     // Search for the 15th one
-    const found = search(inputList, {
-      match: (d) => inputList[index] - d,
+    const found = search(inputList, inputList[index], {
+      compare: arithmeticComparator,
       observe,
     });
 

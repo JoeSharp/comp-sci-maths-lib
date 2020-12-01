@@ -1,6 +1,9 @@
+import { Comparator } from "../../types";
+
 export type GenericSearchFunction = <T>(
   inputList: T[],
-  match: (a: T) => number
+  searchItem: T,
+  comparator: Comparator<T>
 ) => number;
 
 export interface NamedGenericSearchFunction {

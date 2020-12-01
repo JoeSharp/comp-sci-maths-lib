@@ -16,6 +16,7 @@ import { emptyObserver } from "../../../common";
  */
 function binarySearchR<T>(
   data: T[],
+  searchItem: T,
   utilities: SearchUtilities<T>,
   left: number,
   right: number
@@ -25,14 +26,14 @@ function binarySearchR<T>(
     return NO_MATCH;
   }
 
-  const { observe = emptyObserver, match } = utilities;
+  const { observe = emptyObserver, compare } = utilities;
 
   // Calculate the mid point
   const mid = Math.floor(left + (right - left) / 2);
   observe("Recursing", { left, right, mid });
 
   // Compare the midpoint to our criteria
-  const compareMid: number = match(data[mid], mid);
+  const compareMid: number = compare(searchItem, data[mid]);
 
   // If the element is present in the middle itself
   if (compareMid === 0) {
@@ -40,16 +41,20 @@ function binarySearchR<T>(
   } else if (compareMid < 0) {
     // If element is smaller than mid, then
     // it can only be present in left subarray
-    return binarySearchR(data, utilities, left, mid - 1);
+    return binarySearchR(data, searchItem, utilities, left, mid - 1);
   } else {
     // Else the element can only be present
     // in right subarray
-    return binarySearchR(data, utilities, mid + 1, right);
+    return binarySearchR(data, searchItem, utilities, mid + 1, right);
   }
 }
 
-function binarySearch<T>(data: T[], utilities: SearchUtilities<T>) {
-  return binarySearchR(data, utilities, 0, data.length - 1);
+function binarySearch<T>(
+  data: T[],
+  searchItem: T,
+  utilities: SearchUtilities<T>
+) {
+  return binarySearchR(data, searchItem, utilities, 0, data.length - 1);
 }
 
 export default binarySearch;
