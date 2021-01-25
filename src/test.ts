@@ -1,5 +1,6 @@
 import { simpleSwap, arithmeticComparator, stringComparator } from "./common";
 
+
 test("Swap (numbers)", () => {
   const data = [5, 6, 9, 1, 3];
   simpleSwap(data, 2, 4);
