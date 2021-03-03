@@ -18,6 +18,7 @@ import PriorityQueue from "./dataStructures/queue/PriorityQueue";
 import CircularQueue from "./dataStructures/queue/CircularQueue";
 import Queue from "./dataStructures/queue/Queue";
 import Stack from "./dataStructures/stack/Stack";
+import NumberBase, { binary, hexadecimal, denary } from './dataRepresentation/numberBases';
 import {
   initialisePageRank,
   iteratePageRank,
@@ -65,4 +66,9 @@ export {
   dijstraks,
   getPathTo,
   walkPath,
+  // Data Representation
+  NumberBase,
+  binary,
+  hexadecimal,
+  denary
 };
