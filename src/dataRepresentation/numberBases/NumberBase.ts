@@ -51,6 +51,10 @@ export default class NumberBase {
 
         return value;
     }
+
+    withPadding(newPadding: number) {
+        return new NumberBase(this.name, this.symbols, this.emojis, newPadding);
+    }
 }
 
 export const binary: NumberBase = new NumberBase(
