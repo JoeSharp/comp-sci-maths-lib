@@ -9,6 +9,12 @@ interface TestCase {
 
 const testCases: TestCase[] = [
     {
+        value: 0,
+        asBinary: '00000000',
+        asDenary: '0',
+        asHexadecimal: '00'
+    },
+    {
         value: 1,
         asBinary: '00000001',
         asDenary: '1',
@@ -67,7 +73,13 @@ const testCases: TestCase[] = [
         asBinary: '11100110',
         asDenary: '230',
         asHexadecimal: 'E6'
-    }
+    },
+    {
+        value: 255,
+        asBinary: '11111111',
+        asDenary: '255',
+        asHexadecimal: 'FF'
+    },
 ]
 
 testCases.forEach(({ value, asBinary, asDenary, asHexadecimal }) => {

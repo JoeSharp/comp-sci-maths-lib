@@ -66,7 +66,7 @@ export const denary: NumberBase = new NumberBase(
     'Denary',
     ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
     ['0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'],
-    0);
+    1);
 export const hexadecimal: NumberBase = new NumberBase(
     'Hexadecimal',
     ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'],
