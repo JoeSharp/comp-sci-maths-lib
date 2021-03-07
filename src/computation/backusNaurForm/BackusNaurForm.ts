@@ -8,6 +8,9 @@ import { Rule, MatchPart, RulePart } from "./types";
     It can then be used to validate any number of strings against that definition.
 */
 class BackusNaurForm {
+    static TAG_START = '<';
+    static TAG_END = '>';
+    static SINGLE_QUOTE = "'";
     static GIVEN_BY: string = '::=';
     static OR: string = '|';
 
@@ -87,7 +90,7 @@ class BackusNaurForm {
         let isBuildingLiteral: boolean = false
         let currentLiteral: string = ""
         Array.from(alternativeStr).forEach(c => {
-            if (c === "<") {
+            if (c === BackusNaurForm.TAG_START) {
                 if (isBuildingLiteral) {
                     currentLiteral += c;
                 } else {
@@ -100,7 +103,7 @@ class BackusNaurForm {
                     // Register the fact we are building a tag
                     isBuildingTag = true;
                 }
-            } else if (c === ">") {
+            } else if (c === BackusNaurForm.TAG_END) {
                 // If we aren't already building a tag, assume this close bracket is a literal
                 if (!isBuildingTag) {
                     currentLiteral = '>'
@@ -110,7 +113,7 @@ class BackusNaurForm {
                     form.push({ isTag: true, ruleValue: currentLiteral })
                     currentLiteral = ""
                 }
-            } else if (c == "'") {
+            } else if (c == BackusNaurForm.SINGLE_QUOTE) {
                 // If we are not already within quotes, but have accumulated some literal value
                 // Add whatever value is accumulated as a literal and start again
                 if (!isBuildingLiteral) {
