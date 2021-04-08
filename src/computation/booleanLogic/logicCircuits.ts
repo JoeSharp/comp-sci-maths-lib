@@ -1,22 +1,6 @@
 import { LogicCircuit, LogicCircuitInterface, NamedPinsAndBuses, PinsAndBuses } from './types';
-
-class MissingInputError extends Error {
-    chipName: string;
-    inputNames: string[];
-    constructor(chipName: string, inputNames: string[]) {
-        super(`Missing Inputs for ${chipName} - ${inputNames}`)
-        this.inputNames = inputNames;
-    }
-}
-class IncorrectBusError extends Error {
-    chipName: string;
-    busNames: string[];
-    constructor(chipName: string, busNames: string[]) {
-        super(`Busses Incorrect for ${chipName} - ${busNames}`)
-        this.chipName = chipName;
-        this.busNames = busNames;
-    }
-}
+import MissingInputError from './error/MissingInputError';
+import IncorrectBusError from './error/IncorrectBusError';
 
 const decorateLogicCircuit = (logicCircuit: LogicCircuit, {name, expectedInputs }: LogicCircuitInterface): LogicCircuit => {
     return (inputs: NamedPinsAndBuses): NamedPinsAndBuses => {
@@ -34,8 +18,8 @@ const decorateLogicCircuit = (logicCircuit: LogicCircuit, {name, expectedInputs 
         }
 
         const incorrectBuses: string[] = Object.entries(expectedInputs.buses)
-            .filter(([name, values]) => buses[name].length !== values)
-            .map(([name,]) => name);
+            .filter(([busName, values]) => buses[busName].length !== values)
+            .map(([busName,]) => busName);
         if (missingBuses.length > 0) {
             throw new IncorrectBusError(name, incorrectBuses)
         }

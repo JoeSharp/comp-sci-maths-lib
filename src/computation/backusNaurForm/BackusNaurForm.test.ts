@@ -35,6 +35,17 @@ describe('Backus-Naur Form', () => {
                 }
             ]
         }, {
+            name: 'Multi-line Numbers',
+            bnf: new BackusNaurForm()
+                .addRule("<digit> ::= 0|1|2|3|4|5|6|7|8|9")
+                .addRule("<integer> ::= <digit> | <digit><integer>")
+                .addRule("<line> ::= <integer> | <integer>\n<line>"),
+            cases: [{
+                testInput: `36
+46`,expectedOutput: 'line'
+            }]
+
+        }, {
             name: 'Integer',
             bnf: new BackusNaurForm()
                 .addRule("<digit> ::= 0|1|2|3|4|5|6|7|8|9")
@@ -126,7 +137,7 @@ describe('Backus-Naur Form', () => {
     testCases.forEach(({ name, bnf, cases }) => {
         test(name, () => {
             cases.forEach(({ testInput, expectedOutput }) => {
-                let actualOutput: Optional<Tree<MatchPart>> = bnf.findMatch(testInput);
+                const actualOutput: Optional<Tree<MatchPart>> = bnf.findMatch(testInput);
                 if (!!expectedOutput) {
                     expect(actualOutput).toBeDefined();
                     expect(actualOutput.getValue().ruleName).toEqual(expectedOutput)
