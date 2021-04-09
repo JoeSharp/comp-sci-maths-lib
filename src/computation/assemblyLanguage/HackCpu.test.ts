@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
-import { parseAsm } from "./assemblyLanguage";
-import HackCpu from "./HackCpu";
+import HackCpu, {parseAsm} from "./HackCpu";
 import { ComputeComputation, ComputeDestination, ComputeInstruction, ComputeJump, CpuInstructionType, DirectAddressInstruction, NamedAddressInstruction } from "./types";
 
 interface TestCase {
@@ -120,12 +119,13 @@ describe('Assembly Language (Hack ASM)', () => {
         const cpu = new HackCpu();
         cpu.loadProgram(data);
         cpu.setMemory(0, 56);
-        cpu.setMemory(0, 73);
+        cpu.setMemory(1, 73);
 
         for (let x=0; x<26; x++) {
             cpu.tick();
         }
 
+        console.log(cpu.toString());
         expect(cpu.getMemory(2)).toBe(73);
     })
 });
