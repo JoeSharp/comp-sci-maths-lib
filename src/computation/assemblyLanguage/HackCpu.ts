@@ -12,6 +12,9 @@ import {
 import { Optional } from "../../types";
 import { escapeRegExp } from 'lodash';
 
+export const SCREEN = 0x4000;
+export const KBD = 0x6000;
+
 const MEMORY_SIZE = Math.pow(2, 15);
 
 const LABEL_REGEX = /\((?<label>[_A-Za-z0-9]+)\)/
@@ -138,8 +141,8 @@ ${this.memory.filter((_, i) => i < 100).map((x, i) => `\t${i.toString(10)}: ${x.
         }
         this.namedRegisters = {
             ...Array(16).fill(null).map((_, i) => `R${i}`).reduce((acc, curr, i) => ({ ...acc, [curr]: i }), {}),
-            'SCREEN': 0x4000,
-            'KBD': 0x6000
+            SCREEN,
+            KBD
         }
         this.nextNamedRegisterAddress = 16;
     }
