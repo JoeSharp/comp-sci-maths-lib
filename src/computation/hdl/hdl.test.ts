@@ -8,7 +8,7 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
         expect(isComment('  * This is part of big comment')).toBe(true);
         expect(isComment('This is not a comment')).toBe(false);
     });
-    
+
     test("Opening Line", () => {
         const chipName = parseOpeningLine('CHIP Xor {');
         expect(chipName).toBe('Xor');

@@ -1,7 +1,7 @@
 import { DIRECTION, HdlChip, HdlCodeLine, HdlIOLine, HdlParameter } from "./types";
 
 export const parseHdlFile = (input: string): HdlChip => {
-    // Remove any comments, and empyt lines, strip each line.
+    // Remove any comments, and empty lines, strip each line.
     const lines = input.split('\n')
         .map(s => s.trim())
         .filter(l => l.length > 0)
@@ -30,7 +30,7 @@ const OPEN_LINE_REGEX = /(CHIP)\s+(?<chipName>[A-Za-z]+)\s({)/
 export const parseOpeningLine = (input: string): string => {
     const openLineMatch = input.trim().match(OPEN_LINE_REGEX);
     if (openLineMatch === null) throw new Error('HDL Opening Line Invalid');
-    return openLineMatch.groups['chipName'];
+    return openLineMatch.groups.chipName;
 }
 
 const IO_LINE_REGEX = /(?<direction>IN|OUT)\s(?<pins>([a-zA-Z]+(,\s){0,1})*);{1}/
@@ -39,8 +39,8 @@ export const parseIOLine = (input: string): HdlIOLine => {
 
     if (ioLineMatch === null) throw new Error('Invalid IO Line');
 
-    const direction = ioLineMatch.groups['direction'] as DIRECTION;
-    const pins = ioLineMatch.groups['pins'].split(',').map(l => l.trim());
+    const direction = ioLineMatch.groups.direction as DIRECTION;
+    const pins = ioLineMatch.groups.pins.split(',').map(l => l.trim());
 
     return {
         direction,
@@ -54,8 +54,8 @@ export const parseCodeLine = (input: string): HdlCodeLine => {
 
     if (codeLineMatch === null) throw new Error('Invalid code line');
 
-    const chipName = codeLineMatch.groups['chipName'];
-    const parameterStr = codeLineMatch.groups['parameters'];
+    const chipName = codeLineMatch.groups.chipName;
+    const parameterStr = codeLineMatch.groups.parameters;
     const parameters = parameterStr
         .split(',')
         .map(l => l.trim())
