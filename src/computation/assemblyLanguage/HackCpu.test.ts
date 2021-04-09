@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
-import HackCpu, {parseAsm} from "./HackCpu";
+import {parseSymbolicAsm} from './hackAssembler';
+import HackCpu from "./HackCpu";
 import { ComputeComputation, ComputeDestination, ComputeInstruction, ComputeJump, CpuInstructionType, DirectAddressInstruction, NamedAddressInstruction } from "./types";
 
 interface TestCase {
@@ -54,7 +55,7 @@ const TEST_CASES: TestCase[] = [
 
 describe('Assembly Language (Hack ASM)', () => {
     test('Address Instruction - Direct (Single)', () => {
-        const res = parseAsm(`@78`);
+        const res = parseSymbolicAsm(`@78`);
         expect(res.type).toBe(CpuInstructionType.directAddress);
         const { address } = res as DirectAddressInstruction;
         expect(address).toBe(78);
@@ -63,7 +64,7 @@ describe('Assembly Language (Hack ASM)', () => {
 
     test('Address Instruction - Direct (Array)', () => {
         [56, 128, 9000].forEach(testAddress => {
-            const res1 = parseAsm(`@${testAddress}`);
+            const res1 = parseSymbolicAsm(`@${testAddress}`);
             expect(res1.type).toBe(CpuInstructionType.directAddress);
             const { address } = res1 as DirectAddressInstruction;
             expect(address).toBe(testAddress);
@@ -72,7 +73,7 @@ describe('Assembly Language (Hack ASM)', () => {
     })
 
     test('Address Instruction - Named Register (Single)', () => {
-        const res = parseAsm(`@KBD`);
+        const res = parseSymbolicAsm(`@KBD`);
         expect(res.type).toBe(CpuInstructionType.namedAddress);
         const { registerName } = res as NamedAddressInstruction;
         expect(registerName).toBe('KBD');
@@ -80,7 +81,7 @@ describe('Assembly Language (Hack ASM)', () => {
 
     test('Address Instruction - Named Register (Array)', () => {
         ["R1", "SCREEN", "myVariable"].forEach(testRegisterName => {
-            const res = parseAsm(`@${testRegisterName}`);
+            const res = parseSymbolicAsm(`@${testRegisterName}`);
             expect(res.type).toBe(CpuInstructionType.namedAddress);
             const { registerName } = res as NamedAddressInstruction;
             expect(registerName).toBe(testRegisterName);
@@ -89,7 +90,7 @@ describe('Assembly Language (Hack ASM)', () => {
 
     TEST_CASES.forEach(({symbolic, expected}) => {
         test(`Compute Instruction ${symbolic}`, () => {
-            const instruction = parseAsm(symbolic);
+            const instruction = parseSymbolicAsm(symbolic);
             expect(instruction.type).toBe(CpuInstructionType.compute);
             const {computation, jump, destination, comment} = instruction as ComputeInstruction;
             expect(destination).toBe(expected.destination);
