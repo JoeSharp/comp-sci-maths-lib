@@ -107,16 +107,16 @@ class HackCpu {
         this.reset();
     }
 
-    toString() {
+    toString(firstMemBytes: number = 100) {
         return `D: ${this.dataRegister}
 A: ${this.addressRegister},
 PC: ${this.programCounter},
 Named Registers:
 ${Object.entries(this.namedRegisters).map(([key, value]) => `\t${key}=${value.toString(10)}`).join('\n')}
 Program:
-${this.program.map(s => `\t${JSON.stringify(s)}`).join('\n')}
+${this.program.map((s, i) => `\t${i} - ${JSON.stringify(s)}`).join('\n')}
 Memory:
-${this.memory.filter((_, i) => i < 100).map((x, i) => `\t${i.toString(10)}: ${x.toString(10)}`).join('\n')}
+${this.memory.filter((_, i) => i < firstMemBytes).map((x, i) => `\t${i.toString(10)}: ${x.toString(10)}`).join('\n')}
 `
     }
 
@@ -193,6 +193,7 @@ ${this.memory.filter((_, i) => i < 100).map((x, i) => `\t${i.toString(10)}: ${x.
             this.namedRegisters[registerName] = this.nextNamedRegisterAddress;
             this.nextNamedRegisterAddress++;
         }
+        this.addressRegister = this.namedRegisters[registerName];
         this.programCounter++;
     }
 

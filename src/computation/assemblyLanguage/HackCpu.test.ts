@@ -125,7 +125,6 @@ describe('Assembly Language (Hack ASM)', () => {
             cpu.tick();
         }
 
-        console.log(cpu.toString());
         expect(cpu.getMemory(2)).toBe(73);
     })
 });
