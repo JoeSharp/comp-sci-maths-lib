@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import {parseSymbolicAsm} from './hackAssembler';
+import {parseSymbolicAsm, toSymbolicAsm} from './hackAssembler';
 import HackCpu from "./HackCpu";
 import { ComputeComputation, ComputeDestination, ComputeInstruction, ComputeJump, CpuInstructionType, DirectAddressInstruction, NamedAddressInstruction } from "./types";
 
@@ -119,8 +119,7 @@ describe('Assembly Language (Hack ASM)', () => {
 
         const cpu = new HackCpu();
         cpu.loadProgram(data);
-        cpu.setMemory(0, 56);
-        cpu.setMemory(1, 73);
+        cpu.setMemory(0, [56, 73]);
 
         for (let x=0; x<26; x++) {
             cpu.tick();

@@ -16,8 +16,6 @@ export const KBD = 0x6000;
 
 const MEMORY_SIZE = Math.pow(2, 15);
 
-
-
 class HackCpu {
     // Program
     program: CpuInstruction[];
@@ -57,10 +55,11 @@ ${this.memory.filter((_, i) => i < firstMemBytes).map((x, i) => `\t${i.toString(
 `
     }
 
-    setMemory(location: number, value: number) {
-        if (location >= this.memory.length || location < 0) throw new Error('Invalid Memory Location')
+    setMemory(startAddress: number, values: number[]) {
+        if ((startAddress + values.length) > this.memory.length || startAddress < 0)
+            throw new Error('Invalid Memory Location')
 
-        this.memory[location] = value;
+        values.forEach((value, i) => this.memory[startAddress + i] = value);
     }
 
     getMemory(location: number) {
@@ -85,7 +84,6 @@ ${this.memory.filter((_, i) => i < firstMemBytes).map((x, i) => `\t${i.toString(
     }
 
     loadProgram(input: string) {
-        this.program = [];
         const rawInstructions: CpuInstruction[] = input.split('\n')
             .map(s => s.trim())
             .map(s => parseSymbolicAsm(s))
@@ -100,6 +98,19 @@ ${this.memory.filter((_, i) => i < firstMemBytes).map((x, i) => `\t${i.toString(
                 this.program.push(instruction);
             }
         }
+
+        // Replace any named register jumps with specific jumps
+        this.program = this.program.map(p => {
+            if (p.type === CpuInstructionType.namedAddress) {
+                return {
+                    type: CpuInstructionType.directAddress,
+                    address: this.namedRegisters[p.registerName],
+                    comment: p.comment
+                }
+            }
+
+            return p;
+        })
     }
 
     tick() {
