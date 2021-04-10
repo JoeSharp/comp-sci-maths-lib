@@ -1,7 +1,7 @@
 import Queue from "../../dataStructures/queue/Queue";
 import Tree from "../../dataStructures/tree";
 import { Optional } from "../../types";
-import { Rule, MatchPart, RulePart } from "./types";
+import { Rule, MatchPart, RulePart, matchPartToString } from "./types";
 
 /*
     An instance of this class can be used to store a set of rules for a particular BNF definition.
@@ -38,18 +38,28 @@ class BackusNaurForm {
     }
 
     /**
+     * Add multiple lines in one go
+     * @param ruleStrings Lines containing rules to be added
+     * @returns This object, to allow method chaining
+     */
+    addRules(ruleStrings: string[]): BackusNaurForm {
+        ruleStrings.forEach(r => this.addRule(r));
+        return this;
+    }
+
+    /**
      * Add a line from a BNF definition to this definition
      * @param ruleStr The line containing the rule for a particular type
      * @returns This object, to allow method chaining
      */
     addRule(ruleStr: string): BackusNaurForm {
         // Separate out the name of the definition from what it is given by
-        let outerParts: string[] = ruleStr.split(BackusNaurForm.GIVEN_BY).map(x => x.trim());
+        const outerParts: string[] = ruleStr.split(BackusNaurForm.GIVEN_BY).map(x => x.trim());
         if (outerParts.length !== 2) {
             throw new Error(`Could not parse ${ruleStr}, unexpected number of parts divided by ${BackusNaurForm.GIVEN_BY}`)
         }
 
-        const rule_name: string = outerParts[0].slice(1, -1);
+        const ruleName: string = outerParts[0].slice(1, -1);
 
         // Separate out all the alternatives using the OR delimiter
         const alternatives: Rule[] = outerParts[1]
@@ -57,7 +67,7 @@ class BackusNaurForm {
             .map(c => c.trim())
             .map(a => BackusNaurForm._parseAlternative(a));
 
-        this.rules[rule_name] = alternatives
+        this.rules[ruleName] = alternatives
 
         return this;
     }
@@ -113,7 +123,7 @@ class BackusNaurForm {
                     form.push({ isTag: true, ruleValue: currentLiteral })
                     currentLiteral = ""
                 }
-            } else if (c == BackusNaurForm.SINGLE_QUOTE) {
+            } else if (c === BackusNaurForm.SINGLE_QUOTE) {
                 // If we are not already within quotes, but have accumulated some literal value
                 // Add whatever value is accumulated as a literal and start again
                 if (!isBuildingLiteral) {
@@ -152,7 +162,7 @@ class BackusNaurForm {
      * this function to return a tree.
      * If the given rule part is a meta-tag, it recurses into __check_value_against_rule to check the string against
      * that entire rule.
-     * 
+     *
      * @param inputStr The entire input string
      * @param fromIndex The index from which we are to try and match
      * @param toIndex The index up to which we are trying to match
@@ -177,7 +187,7 @@ class BackusNaurForm {
             // Work through the alternatives, recursing into __check_value_against_rule
             return subRuleAlternatives.map(subRule => this._checkValueAgainstRule(inputString, fromIndex, toIndex, ruleValue, subRule)).find(s => !!s);
         } else if (ruleValue === inputString.slice(fromIndex, toIndex)) {
-            return new Tree({ ruleName, inputString: inputString.slice(fromIndex, toIndex) }, s => s.toString())
+            return new Tree({ ruleName, inputString: inputString.slice(fromIndex, toIndex) }, s => matchPartToString(s))
         }
 
 
@@ -188,7 +198,7 @@ class BackusNaurForm {
      * This function attempts to match a given portion of the input string against an entire rule.
      * It must iterate through all the parts of the rule, greedily attempting matches.
      * If the entire string portion is consumed by all of the rule parts, this is considered a match.
-     * 
+     *
      * @param inputStr The entire input string being validated
      * @param fromIndex The index from which to check
      * @param toIndex The end index to which we check
@@ -202,8 +212,8 @@ class BackusNaurForm {
         ruleName: string,
         rule: Rule
     ): Optional<Tree<MatchPart>> {
-        const potential_return: Tree<MatchPart> = new Tree(
-            { ruleName, inputString: inputString.slice(fromIndex, toIndex) }, s => s.toString());
+        const potentialReturn: Tree<MatchPart> = new Tree(
+            { ruleName, inputString: inputString.slice(fromIndex, toIndex) }, s => matchPartToString(s));
 
         // Build a Queue of Rule Parts to satisfy
         const rulePartQueue: Queue<RulePart> = new Queue()
@@ -231,7 +241,7 @@ class BackusNaurForm {
                     // If this is a sub tag rule part, add to the tree to return
                     // Otherwise its a literal match, and the tree created in this function will already serve
                     if (rulePart.isTag) {
-                        potential_return.addChild(match)
+                        potentialReturn.addChild(match)
                     }
                     // The next rule needs to match 'from' the end of the string we just matched against
                     fromIndex = tempToIndex
@@ -248,7 +258,7 @@ class BackusNaurForm {
         }
 
         // If we satisfied all the rule parts AND consumed the whole string, this is a match
-        return rulePartQueue.isEmpty() && fromIndex === toIndex ? potential_return : undefined;
+        return rulePartQueue.isEmpty() && fromIndex === toIndex ? potentialReturn : undefined;
     }
 }
 

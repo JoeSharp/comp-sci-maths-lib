@@ -15,3 +15,5 @@ export interface MatchPart {
     ruleName: string;
     inputString: string;
 }
+
+export const matchPartToString = ({ruleName, inputString}: MatchPart): string => `${ruleName}: ${inputString}`
