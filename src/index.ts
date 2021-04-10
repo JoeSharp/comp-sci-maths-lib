@@ -18,6 +18,7 @@ import PriorityQueue from "./dataStructures/queue/PriorityQueue";
 import CircularQueue from "./dataStructures/queue/CircularQueue";
 import Queue from "./dataStructures/queue/Queue";
 import Stack from "./dataStructures/stack/Stack";
+import NumberBase, { binary, hexadecimal, denary } from './dataRepresentation/numberBases';
 import {
   initialisePageRank,
   iteratePageRank,
@@ -27,6 +28,7 @@ import {
 import { dijstraks, getPathTo, walkPath } from "./algorithms/routing/dijkstras";
 import binarySearch from "./algorithms/search/binarySearch/monitoredSearch";
 import linearSearch from "./algorithms/search/linearSearch/monitoredSearch";
+import { HackCpu } from './computation/assemblyLanguage'
 
 export {
   // Data Structures
@@ -65,4 +67,11 @@ export {
   dijstraks,
   getPathTo,
   walkPath,
+  // Data Representation
+  NumberBase,
+  binary,
+  hexadecimal,
+  denary,
+  // Computation
+  HackCpu
 };
