@@ -1,6 +1,6 @@
 {
   "name": "comp-sci-maths-lib",
-  "version": "9.1.2",
+  "version": "9.1.3",
   "description": "Collection of Algorithms and Data Structures Learnt During Secondary Education in Computer Science and Maths",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
