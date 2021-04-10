@@ -89,6 +89,7 @@ ${this.memory.filter((_, i) => i < firstMemBytes).map((x, i) => `\t${i.toString(
             .map(s => parseSymbolicAsm(s))
             .filter(l => l !== undefined);
 
+        this.program = [];
         while(rawInstructions.length > 0) {
             const instruction = rawInstructions.shift();
 
