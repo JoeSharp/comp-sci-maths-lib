@@ -19,6 +19,18 @@ describe("Hack CPU", () => {
     expect(cpu.getMemory(0)).toBe(5);
   });
 
+  const runToEnd = (cpu: HackCpu, endLabel: string, tickLimit: number) => {
+    const end = cpu.namedRegisters[endLabel];
+    expect(end).toBeGreaterThan(0);
+    let ticks = 0;
+    while (cpu.programCounter !== end) {
+      cpu.tick();
+      ticks++;
+
+      if (ticks > tickLimit) throw new Error("Took far too long to get to END");
+    }
+  };
+
   test("ASM Code File (Max)", () => {
     const data = readFileSync(
       "src/computation/assemblyLanguage/testData/Max.asm",
@@ -29,9 +41,7 @@ describe("Hack CPU", () => {
     cpu.loadProgram(data);
     cpu.setMemory(0, [56, 73]);
 
-    for (let x = 0; x < 100; x++) {
-      cpu.tick();
-    }
+    runToEnd(cpu, "INFINITE_LOOP", 10000);
 
     expect(cpu.getMemory(2)).toBe(73);
   });
@@ -44,12 +54,10 @@ describe("Hack CPU", () => {
 
     const cpu = new HackCpu();
     cpu.loadProgram(data);
-    cpu.setMemory(0, [1, 0, -1]);
+    cpu.setMemory(0, [6, 8, -1]);
 
-    for (let x = 0; x < 80; x++) {
-      cpu.tick();
-    }
+    runToEnd(cpu, "END", 10000);
 
-    expect(cpu.getMemory(2)).toBe(0);
+    expect(cpu.getMemory(2)).toBe(48);
   });
 });
