@@ -12,6 +12,7 @@ import {
   ALUState,
 } from "./types";
 
+export const VARIABLE_START = 0x10;
 export const SCREEN = 0x4000;
 export const KBD = 0x6000;
 
@@ -73,6 +74,18 @@ ${this.memory
 `;
   }
 
+  setPC(value: number) {
+    this.programCounter = value;
+  }
+
+  setA(value: number) {
+    this.addressRegister = value;
+  }
+
+  setD(value: number) {
+    this.dataRegister = value;
+  }
+
   setMemory(startAddress: number, values: number[]) {
     if (startAddress + values.length > this.memory.length || startAddress < 0)
       throw new Error("Invalid Memory Location");
@@ -124,14 +137,27 @@ ${this.memory
       }
     }
 
+    let nextVariable = VARIABLE_START;
+
     // Replace any named register jumps with specific jumps
     this.program = this.program.map((p) => {
       if (p.type === CpuInstructionType.namedAddress) {
-        return {
-          type: CpuInstructionType.directAddress,
-          address: this.namedRegisters[p.registerName],
-          comment: p.comment,
-        };
+        if (p.registerName in this.namedRegisters) {
+          return {
+            type: CpuInstructionType.directAddress,
+            address: this.namedRegisters[p.registerName],
+            comment: p.comment,
+          };
+        } else {
+          // Create new variable from 16 onwards
+          this.namedRegisters[p.registerName] = nextVariable;
+          nextVariable++;
+          return {
+            type: CpuInstructionType.directAddress,
+            address: this.namedRegisters[p.registerName],
+            comment: p.comment,
+          };
+        }
       }
 
       return p;
@@ -242,7 +268,7 @@ ${this.memory
       case ComputeComputation.M_PLUS_ONE:
         result = this.memory[this.addressRegister] + 1;
         break;
-      case ComputeComputation.M_MINUS_D:
+      case ComputeComputation.M_MINUS_ONE:
         result = this.memory[this.addressRegister] - 1;
         break;
       case ComputeComputation.D_PLUS_M:
@@ -250,6 +276,9 @@ ${this.memory
         break;
       case ComputeComputation.D_MINUS_M:
         result = this.dataRegister - this.memory[this.addressRegister];
+        break;
+      case ComputeComputation.M_MINUS_D:
+        result = this.memory[this.addressRegister] - 1;
         break;
       case ComputeComputation.M_MINUS_D:
         result = this.memory[this.addressRegister] - this.dataRegister;

@@ -12,8 +12,8 @@
 // Put your code here.
 // numberOfTimes = R[0]
 // R[1] = base number
-@total // 16
-M=0
+@R2 // 2
+M=0 // Clear the current value
 
 @R0
 D=M+1
@@ -27,11 +27,11 @@ D=M
 @END
 D;JEQ // if n === 0, GOTO END
 
-@total
+@R2
 D=M
 @R1
 D=D+M
-@total
+@R2
 M=D
 
 @LOOP

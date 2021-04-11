@@ -104,6 +104,7 @@ export type CpuInstruction =
 
 export enum CpuTestInstructionType {
   setRam,
+  setPC,
   ticktock,
   repeat,
   output,
@@ -116,6 +117,11 @@ export interface AbstractCpuTestInstruction {
 export interface CpuTestSetRAM extends AbstractCpuTestInstruction {
   type: CpuTestInstructionType.setRam;
   address: number;
+  value: number;
+}
+
+export interface CpuTestSetPC extends AbstractCpuTestInstruction {
+  type: CpuTestInstructionType.setPC;
   value: number;
 }
 
@@ -135,6 +141,7 @@ export interface CpuTestRepeat extends AbstractCpuTestInstruction {
 
 export type CpuTestInstruction =
   | CpuTestSetRAM
+  | CpuTestSetPC
   | CpuTestRepeat
   | CpuTestTickTockInstruction
   | CpuTestOutputInstruction;
@@ -152,3 +159,5 @@ export interface CpuTestScript {
   outputList: CpuTestOutputFragment[];
   testInstructions: CpuTestInstruction[];
 }
+
+export type FileLoader = (filename: string) => string;
