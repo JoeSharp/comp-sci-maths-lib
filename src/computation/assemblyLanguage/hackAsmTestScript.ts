@@ -8,7 +8,7 @@ import {
 } from "./types";
 import { COMMENT_REGEX } from "./hackAsm";
 import { Optional } from "../../types";
-import { map } from "lodash";
+import Stack from "../../dataStructures/stack/Stack";
 
 const LOAD_REGEX = /^(?:load)\s(?<load>.+)(?:,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
 const OUTPUT_FILE_REGEX = /^(?:output\-file)\s(?<outputFile>.+)(?:,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
@@ -19,6 +19,7 @@ const SET_RAM_REGEX = /^(set\sRAM\[)(?<address>[0-9])+(\]\s)(?<value>[\-0-9]+)(,
 const TICKTOCK_REGEX = /^\s*(ticktock;)$/;
 const REPEAT_START_REGEX = /^\s*(?:repeat)\s*(?<count>[0-9]+)\s*(?:{)\s*(?:\/\/(?<comment>.*)){0,1}$/;
 const REPEAT_END_REGEX = /^\s*(})\s*$/;
+const OUTPUT_REGEX = /^\s*(output;)$/;
 
 export interface NamedRegExps {
   load: RegExp;
@@ -76,8 +77,11 @@ export const parseSetRam = (input: string): Optional<CpuTestSetRAM> => {
   return;
 };
 
-export const parseTickTock = (input: string): boolean =>
+export const parseTickTockInstruction = (input: string): boolean =>
   input.match(TICKTOCK_REGEX) !== null;
+
+export const parseOutputInstruction = (input: string): boolean =>
+  input.match(OUTPUT_REGEX) !== null;
 
 export const parseRepeatStart = (input: string): Optional<CpuTestRepeat> => {
   const match = input.match(REPEAT_START_REGEX);
@@ -102,6 +106,9 @@ export const parseTestScript = (input: string): CpuTestScript => {
   let load: string;
   const outputList: CpuTestOutputFragment[] = [];
   const testInstructions: CpuTestInstruction[] = [];
+
+  const stackInstructions: Stack<CpuTestInstruction[]> = new Stack();
+  stackInstructions.push(testInstructions);
 
   input
     .split("\n")
@@ -133,20 +140,45 @@ export const parseTestScript = (input: string): CpuTestScript => {
       }
 
       // Now we are into commands
-      if (parseTickTock(s)) {
-        testInstructions.push({
+      // Repeat Start
+      const repeatCommand = parseRepeatStart(s);
+      if (!!repeatCommand) {
+        stackInstructions.peek().push(repeatCommand);
+        stackInstructions.push(repeatCommand.instructions);
+        return;
+      }
+
+      // Repeat End
+      if (parseRepeatEnd(s)) {
+        stackInstructions.pop();
+        return;
+      }
+
+      // Tick Tock
+      if (parseTickTockInstruction(s)) {
+        stackInstructions.peek().push({
           type: CpuTestInstructionType.ticktock,
         });
+        return;
+      }
+
+      // Output
+      if (parseOutputInstruction(s)) {
+        stackInstructions.peek().push({
+          type: CpuTestInstructionType.output,
+        });
+        return;
       }
 
       // Check for Set RAM
       const setRamMatch = s.match(SET_RAM_REGEX);
       if (!!setRamMatch) {
-        testInstructions.push({
+        stackInstructions.peek().push({
           type: CpuTestInstructionType.setRam,
           address: parseInt(setRamMatch.groups["address"], 10),
           value: parseInt(setRamMatch.groups["value"], 10),
         });
+        return;
       }
     });
 

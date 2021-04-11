@@ -106,6 +106,7 @@ export enum CpuTestInstructionType {
   setRam,
   ticktock,
   repeat,
+  output,
 }
 
 export interface AbstractCpuTestInstruction {
@@ -122,6 +123,10 @@ export interface CpuTestTickTockInstruction {
   type: CpuTestInstructionType.ticktock;
 }
 
+export interface CpuTestOutputInstruction {
+  type: CpuTestInstructionType.output;
+}
+
 export interface CpuTestRepeat extends AbstractCpuTestInstruction {
   type: CpuTestInstructionType.repeat;
   count: number;
@@ -131,7 +136,8 @@ export interface CpuTestRepeat extends AbstractCpuTestInstruction {
 export type CpuTestInstruction =
   | CpuTestSetRAM
   | CpuTestRepeat
-  | CpuTestTickTockInstruction;
+  | CpuTestTickTockInstruction
+  | CpuTestOutputInstruction;
 
 export interface CpuTestOutputFragment {
   address: number;

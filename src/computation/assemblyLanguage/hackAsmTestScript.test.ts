@@ -7,11 +7,13 @@ import {
   parseSetRam,
   NamedRegExps,
   parseTestScript,
-  parseTickTock,
+  parseTickTockInstruction,
   parseRepeatStart,
   parseRepeatEnd,
+  parseOutputInstruction,
 } from "./hackAsmTestScript";
 import {
+  CpuTestInstruction,
   CpuTestInstructionType,
   CpuTestOutputFragment,
   CpuTestRepeat,
@@ -35,11 +37,17 @@ interface RepeatTestCase {
 }
 
 describe("Hack ASM Test Scripts", () => {
+  test("Output", () => {
+    expect(parseOutputInstruction("   output;")).toBeTruthy();
+    expect(parseOutputInstruction("output;")).toBeTruthy();
+    expect(parseOutputInstruction(" input")).toBeFalsy();
+    expect(parseOutputInstruction("floutput   ")).toBeFalsy();
+  });
   test("Tick Tock", () => {
-    expect(parseTickTock("   ticktock;")).toBeTruthy();
-    expect(parseTickTock("ticktock;")).toBeTruthy();
-    expect(parseTickTock(" flicktock")).toBeFalsy();
-    expect(parseTickTock("sticktock   ")).toBeFalsy();
+    expect(parseTickTockInstruction("   ticktock;")).toBeTruthy();
+    expect(parseTickTockInstruction("ticktock;")).toBeTruthy();
+    expect(parseTickTockInstruction(" flicktock")).toBeFalsy();
+    expect(parseTickTockInstruction("sticktock   ")).toBeFalsy();
   });
 
   const repeatTestCases: RepeatTestCase[] = [
@@ -181,5 +189,47 @@ describe("Hack ASM Test Scripts", () => {
     expect(testScript.outputList[2].address).toBe(2);
     expect(testScript.outputList[2].format).toBe("D");
     expect(testScript.outputList[2].spacing).toEqual([2, 6, 2]);
+
+    expect(testScript.testInstructions.length).toBeGreaterThan(7);
+
+    const expectSetRam = (
+      instruction: CpuTestInstruction,
+      expectedAddress: number,
+      expectedValue: number
+    ) => {
+      expect(instruction.type).toBe(CpuTestInstructionType.setRam);
+      const { address, value } = instruction as CpuTestSetRAM;
+      expect(address).toBe(expectedAddress);
+      expect(value).toBe(expectedValue);
+    };
+    const expectRepeat = (
+      instruction: CpuTestInstruction,
+      expectedCount: number,
+      furtherAssertions: (repeatInstruction: CpuTestRepeat) => void
+    ) => {
+      expect(instruction.type).toBe(CpuTestInstructionType.repeat);
+      const repeatInstruction = instruction as CpuTestRepeat;
+      expect(repeatInstruction.count).toBe(expectedCount);
+
+      furtherAssertions(repeatInstruction);
+    };
+    const expectTickTockInstruction = (instruction: CpuTestInstruction) => {
+      expect(instruction.type).toBe(CpuTestInstructionType.ticktock);
+    };
+    const expectOutputInstruction = (instruction: CpuTestInstruction) => {
+      expect(instruction.type).toBe(CpuTestInstructionType.output);
+    };
+
+    expectSetRam(testScript.testInstructions[0], 0, 0);
+    expectSetRam(testScript.testInstructions[1], 1, 0);
+    expectSetRam(testScript.testInstructions[2], 2, -1);
+    expectRepeat(testScript.testInstructions[3], 20, (r) => {
+      expect(r.instructions.length).toBe(1);
+      expectTickTockInstruction(r.instructions[0]);
+    });
+
+    expectSetRam(testScript.testInstructions[4], 0, 0);
+    expectSetRam(testScript.testInstructions[5], 1, 0);
+    expectOutputInstruction(testScript.testInstructions[6]);
   });
 });
