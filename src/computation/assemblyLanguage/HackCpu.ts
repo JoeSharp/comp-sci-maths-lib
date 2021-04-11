@@ -1,10 +1,10 @@
-import { parseSymbolicAsm } from "./hackAssembler";
+import { parseSymbolicAsm } from "./hackAsm";
 import {
   Registers,
   CpuInstruction,
   CpuInstructionType,
-  DirectAddressInstruction,
-  NamedAddressInstruction,
+  CpuDirectAddressInstruction,
+  CpuNamedAddressInstruction,
   ComputeInstruction,
   ComputeComputation,
   ComputeDestination,
@@ -156,12 +156,12 @@ ${this.memory
     }
   }
 
-  goToDirectAddress({ address }: DirectAddressInstruction) {
+  goToDirectAddress({ address }: CpuDirectAddressInstruction) {
     this.addressRegister = address;
     this.programCounter++;
   }
 
-  goToNamedAddress({ registerName }: NamedAddressInstruction) {
+  goToNamedAddress({ registerName }: CpuNamedAddressInstruction) {
     if (!(registerName in this.namedRegisters)) {
       this.namedRegisters[registerName] = this.nextNamedRegisterAddress;
       this.nextNamedRegisterAddress++;

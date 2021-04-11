@@ -29,12 +29,12 @@ export interface CpuInstructionLabel extends AbstractCpuInstruction {
   label: string;
 }
 
-export interface DirectAddressInstruction extends AbstractCpuInstruction {
+export interface CpuDirectAddressInstruction extends AbstractCpuInstruction {
   type: CpuInstructionType.directAddress;
   address: number;
 }
 
-export interface NamedAddressInstruction extends AbstractCpuInstruction {
+export interface CpuNamedAddressInstruction extends AbstractCpuInstruction {
   type: CpuInstructionType.namedAddress;
   registerName: string;
 }
@@ -98,6 +98,51 @@ export interface ComputeInstruction extends AbstractCpuInstruction {
 
 export type CpuInstruction =
   | CpuInstructionLabel
-  | DirectAddressInstruction
-  | NamedAddressInstruction
+  | CpuDirectAddressInstruction
+  | CpuNamedAddressInstruction
   | ComputeInstruction;
+
+export enum CpuTestInstructionType {
+  setRam,
+  ticktock,
+  repeat,
+}
+
+export interface AbstractCpuTestInstruction {
+  type: CpuTestInstructionType;
+}
+
+export interface CpuTestSetRAM extends AbstractCpuTestInstruction {
+  type: CpuTestInstructionType.setRam;
+  address: number;
+  value: number;
+}
+
+export interface CpuTestTickTockInstruction {
+  type: CpuTestInstructionType.ticktock;
+}
+
+export interface CpuTestRepeat extends AbstractCpuTestInstruction {
+  type: CpuTestInstructionType.repeat;
+  count: number;
+  instructions: CpuTestInstruction[];
+}
+
+export type CpuTestInstruction =
+  | CpuTestSetRAM
+  | CpuTestRepeat
+  | CpuTestTickTockInstruction;
+
+export interface CpuTestOutputFragment {
+  address: number;
+  format: string;
+  spacing: number[];
+}
+
+export interface CpuTestScript {
+  load: string;
+  outputFile: string;
+  compareTo: string;
+  outputList: CpuTestOutputFragment[];
+  testInstructions: CpuTestInstruction[];
+}
