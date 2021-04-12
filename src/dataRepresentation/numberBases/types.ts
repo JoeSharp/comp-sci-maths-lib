@@ -1,4 +1,4 @@
-export interface ISpacing {
+export interface INumberSpacing {
   character: string;
   digits: number;
 }
@@ -8,7 +8,7 @@ export interface INumberBase {
   width: number;
   max: number;
   min: number;
-  spacing: ISpacing;
+  spacing: INumberSpacing;
 
   toString: (value: number) => string;
   toDigits: (value: number) => string[];

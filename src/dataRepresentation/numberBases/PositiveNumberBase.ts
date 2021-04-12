@@ -1,6 +1,6 @@
-import { INumberBase, ISpacing } from "./types";
+import { INumberBase, INumberSpacing } from "./types";
 
-export const addSpacing = (value: string, spacing: ISpacing) => {
+export const addSpacing = (value: string, spacing: INumberSpacing) => {
   return [...value]
     .map((s, i) =>
       i > 0 && (value.length - i) % spacing.digits === 0
@@ -17,13 +17,13 @@ export default class PositiveNumberBase implements INumberBase {
   width: number;
   max: number;
   min: number;
-  spacing: ISpacing;
+  spacing: INumberSpacing;
 
   constructor(
     name: string,
     symbols: string[],
     emojis: string[],
-    spacing: ISpacing,
+    spacing: INumberSpacing,
     width: number = 0
   ) {
     this.name = name;

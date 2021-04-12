@@ -7,7 +7,7 @@ import {
 
 import { signed8bitBinary } from "./TwosComplement";
 import { signed8bitHex } from "./TwosComplementHex";
-import { ISpacing } from "./types";
+import { INumberSpacing } from "./types";
 
 interface IntegerTestCase {
   value: number;
@@ -133,7 +133,7 @@ const signed8bitTestCases: NumberToStringTestCase[] = [
 interface SpacingTestCase {
   input: string;
   expected: string;
-  spacing: ISpacing;
+  spacing: INumberSpacing;
 }
 
 const spacingTestCases: SpacingTestCase[] = [

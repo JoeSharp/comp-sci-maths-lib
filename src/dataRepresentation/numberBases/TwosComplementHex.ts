@@ -1,4 +1,4 @@
-import { INumberBase, ISpacing } from "./types";
+import { INumberBase, INumberSpacing } from "./types";
 
 import {
   addSpacing,
@@ -16,7 +16,7 @@ export default class TwosComplementHex implements INumberBase {
   name: string;
   width: number;
   twosComplementBinary: TwosComplement;
-  spacing: ISpacing;
+  spacing: INumberSpacing;
   min: number;
   max: number;
 
