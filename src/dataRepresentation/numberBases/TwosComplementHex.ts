@@ -15,6 +15,7 @@ const hexSingleDigit = hexadecimalInteger.withWidth(1);
 export default class TwosComplementHex implements INumberBase {
   name: string;
   width: number;
+  base: number;
   twosComplementBinary: TwosComplement;
   spacing: INumberSpacing;
   min: number;
@@ -23,6 +24,7 @@ export default class TwosComplementHex implements INumberBase {
   constructor(name: string, twosComplementBinary: TwosComplement) {
     this.name = name;
     this.width = twosComplementBinary.width / 4;
+    this.base = 16;
     this.spacing = hexadecimalInteger.spacing;
     this.twosComplementBinary = twosComplementBinary;
 

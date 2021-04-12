@@ -12,6 +12,7 @@ export const addSpacing = (value: string, spacing: INumberSpacing) => {
 
 export default class PositiveNumberBase implements INumberBase {
   name: string;
+  base: number;
   symbols: string[];
   emojis: string[];
   width: number;
@@ -28,6 +29,7 @@ export default class PositiveNumberBase implements INumberBase {
   ) {
     this.name = name;
     this.symbols = symbols;
+    this.base = this.symbols.length;
     this.emojis = emojis;
     this.spacing = spacing;
     this.width = width;
@@ -46,9 +48,9 @@ export default class PositiveNumberBase implements INumberBase {
     // Works out from LSD to MSD
     let divValue = value;
     while (divValue > 0) {
-      const remainder = divValue % this.symbols.length;
+      const remainder = divValue % this.base;
       digits.unshift(this.symbols[remainder]);
-      divValue = Math.floor(divValue / this.symbols.length);
+      divValue = Math.floor(divValue / this.base);
     }
 
     // Add any required padding
@@ -74,7 +76,7 @@ export default class PositiveNumberBase implements INumberBase {
       .forEach((digit) => {
         const indexOf = this.symbols.indexOf(digit);
         value += indexOf * placeValue;
-        placeValue *= this.symbols.length;
+        placeValue *= this.base;
       });
 
     return value;

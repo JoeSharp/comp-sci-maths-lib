@@ -6,6 +6,7 @@ export interface INumberSpacing {
 export interface INumberBase {
   name: string;
   width: number;
+  base: number;
   max: number;
   min: number;
   spacing: INumberSpacing;

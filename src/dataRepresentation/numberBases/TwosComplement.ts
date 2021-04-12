@@ -8,6 +8,7 @@ import PositiveNumberBase, {
 export default class TwosComplement implements INumberBase {
   name: string;
   width: number;
+  base: number;
   binaryLessOne: PositiveNumberBase;
   spacing: INumberSpacing;
   min: number;
@@ -16,6 +17,7 @@ export default class TwosComplement implements INumberBase {
   constructor(name: string, width: number) {
     this.name = name;
     this.width = width;
+    this.base = 2;
     this.spacing = binaryInteger.spacing;
     this.binaryLessOne = binaryInteger.withWidth(width - 1);
 
