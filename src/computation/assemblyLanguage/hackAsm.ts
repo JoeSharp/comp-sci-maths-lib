@@ -48,7 +48,10 @@ export const toSymbolicAsm = (
   }
 };
 
-export const parseSymbolicAsm = (input: string): Optional<CpuInstruction> => {
+export const parseSymbolicAsm = (
+  input: string,
+  originalLineNumber: number = 0
+): Optional<CpuInstruction> => {
   // Blank lines...
   if (input.trim().length === 0) return;
 
@@ -61,6 +64,7 @@ export const parseSymbolicAsm = (input: string): Optional<CpuInstruction> => {
   if (label !== null) {
     return {
       type: CpuInstructionType.label,
+      originalLineNumber,
       label: label.groups.label,
     };
   }
@@ -70,6 +74,7 @@ export const parseSymbolicAsm = (input: string): Optional<CpuInstruction> => {
   if (aDirect !== null) {
     return {
       type: CpuInstructionType.directAddress,
+      originalLineNumber,
       address: parseInt(aDirect.groups.address, 10),
       comment: aDirect.groups.comment,
     };
@@ -80,6 +85,7 @@ export const parseSymbolicAsm = (input: string): Optional<CpuInstruction> => {
   if (aNamed !== null) {
     return {
       type: CpuInstructionType.namedAddress,
+      originalLineNumber,
       registerName: aNamed.groups.label,
       comment: aNamed.groups.comment,
     };
@@ -90,6 +96,7 @@ export const parseSymbolicAsm = (input: string): Optional<CpuInstruction> => {
   if (compute !== null) {
     return {
       type: CpuInstructionType.compute,
+      originalLineNumber,
       destination: compute.groups.destination as ComputeDestination,
       computation: compute.groups.computation as ComputeComputation,
       jump: compute.groups.jump as ComputeJump,

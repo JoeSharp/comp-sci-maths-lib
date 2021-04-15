@@ -21,6 +21,7 @@ export interface ALUState {
 
 export interface AbstractCpuInstruction {
   type: CpuInstructionType;
+  originalLineNumber: number;
   comment?: string;
 }
 
@@ -112,6 +113,7 @@ export enum CpuTestInstructionType {
 
 export interface AbstractCpuTestInstruction {
   type: CpuTestInstructionType;
+  originalLineNumber: number;
 }
 
 export interface CpuTestSetRAM extends AbstractCpuTestInstruction {
@@ -125,11 +127,11 @@ export interface CpuTestSetPC extends AbstractCpuTestInstruction {
   value: number;
 }
 
-export interface CpuTestTickTockInstruction {
+export interface CpuTestTickTockInstruction extends AbstractCpuTestInstruction {
   type: CpuTestInstructionType.ticktock;
 }
 
-export interface CpuTestOutputInstruction {
+export interface CpuTestOutputInstruction extends AbstractCpuTestInstruction {
   type: CpuTestInstructionType.output;
 }
 

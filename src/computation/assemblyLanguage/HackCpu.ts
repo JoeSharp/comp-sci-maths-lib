@@ -123,7 +123,7 @@ ${this.memory
     const rawInstructions: CpuInstruction[] = input
       .split("\n")
       .map((s) => s.trim())
-      .map((s) => parseSymbolicAsm(s))
+      .map((s, i) => parseSymbolicAsm(s, i))
       .filter((l) => l !== undefined);
 
     this.program = [];
@@ -145,6 +145,7 @@ ${this.memory
         if (p.registerName in this.namedRegisters) {
           return {
             type: CpuInstructionType.directAddress,
+            originalLineNumber: p.originalLineNumber,
             address: this.namedRegisters[p.registerName],
             comment: p.comment,
           };
@@ -154,6 +155,7 @@ ${this.memory
           nextVariable++;
           return {
             type: CpuInstructionType.directAddress,
+            originalLineNumber: p.originalLineNumber,
             address: this.namedRegisters[p.registerName],
             comment: p.comment,
           };

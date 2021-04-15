@@ -66,11 +66,15 @@ export const parseOutputFormat = (
   }
 };
 
-export const parseSetRam = (input: string): Optional<CpuTestSetRAM> => {
+export const parseSetRam = (
+  input: string,
+  originalLineNumber: number
+): Optional<CpuTestSetRAM> => {
   const match = input.match(SET_RAM_REGEX);
   if (!!match) {
     return {
       type: CpuTestInstructionType.setRam,
+      originalLineNumber,
       address: parseInt(match.groups.address, 10),
       value: parseInt(match.groups.value, 10),
     };
@@ -79,11 +83,15 @@ export const parseSetRam = (input: string): Optional<CpuTestSetRAM> => {
   return;
 };
 
-export const parseSetPC = (input: string): Optional<CpuTestSetPC> => {
+export const parseSetPC = (
+  input: string,
+  originalLineNumber: number
+): Optional<CpuTestSetPC> => {
   const match = input.match(SET_PC_REGEX);
   if (!!match) {
     return {
       type: CpuTestInstructionType.setPC,
+      originalLineNumber,
       value: parseInt(match.groups.value, 10),
     };
   }
@@ -130,12 +138,16 @@ export const parseTickTockInstruction = (input: string): boolean =>
 export const parseOutputInstruction = (input: string): boolean =>
   input.match(OUTPUT_REGEX) !== null;
 
-export const parseRepeatStart = (input: string): Optional<CpuTestRepeat> => {
+export const parseRepeatStart = (
+  input: string,
+  originalLineNumber: number
+): Optional<CpuTestRepeat> => {
   const match = input.match(REPEAT_START_REGEX);
 
   if (!!match) {
     return {
       type: CpuTestInstructionType.repeat,
+      originalLineNumber,
       count: parseInt(match.groups.count, 10),
       instructions: [],
     };
@@ -160,35 +172,36 @@ export const parseTestScript = (input: string): CpuTestScript => {
   input
     .split("\n")
     .map((s) => s.trim()) // Trim any indentation
-    .filter((s) => s.length > 0) // Get rid of empty lines
-    .filter((s) => s.match(COMMENT_REGEX) === null) // Get rid of comments
-    .forEach((s) => {
+    .map((s, i) => ({ lineContent: s, originalLineNumber: i }))
+    .filter(({ lineContent }) => lineContent.length > 0) // Get rid of empty lines
+    .filter(({ lineContent }) => lineContent.match(COMMENT_REGEX) === null) // Get rid of comments
+    .forEach(({ lineContent, originalLineNumber }) => {
       // Check for load file (if not already seen)
       if (!load) {
-        load = parseRequiredFile(s, "load");
+        load = parseRequiredFile(lineContent, "load");
         if (!!load) return;
       }
 
       // Check for output file (if not already seen)
       if (!outputFile) {
-        outputFile = parseRequiredFile(s, "outputFile");
+        outputFile = parseRequiredFile(lineContent, "outputFile");
         if (!!outputFile) return;
       }
 
       // Check for output file (if not already seen)
       if (!compareTo) {
-        compareTo = parseRequiredFile(s, "compareTo");
+        compareTo = parseRequiredFile(lineContent, "compareTo");
         if (!!compareTo) return;
       }
 
       if (outputList.length === 0) {
-        parseOutputFormat(s, outputList);
+        parseOutputFormat(lineContent, outputList);
         if (outputList.length > 0) return;
       }
 
       // Now we are into commands
       // Repeat Start
-      const repeatCommand = parseRepeatStart(s);
+      const repeatCommand = parseRepeatStart(lineContent, originalLineNumber);
       if (!!repeatCommand) {
         stackInstructions.peek().push(repeatCommand);
         stackInstructions.push(repeatCommand.instructions);
@@ -196,43 +209,47 @@ export const parseTestScript = (input: string): CpuTestScript => {
       }
 
       // Repeat End
-      if (parseRepeatEnd(s)) {
+      if (parseRepeatEnd(lineContent)) {
         stackInstructions.pop();
         return;
       }
 
       // Tick Tock
-      if (parseTickTockInstruction(s)) {
+      if (parseTickTockInstruction(lineContent)) {
         stackInstructions.peek().push({
           type: CpuTestInstructionType.ticktock,
+          originalLineNumber,
         });
         return;
       }
 
       // Output
-      if (parseOutputInstruction(s)) {
+      if (parseOutputInstruction(lineContent)) {
         stackInstructions.peek().push({
           type: CpuTestInstructionType.output,
+          originalLineNumber,
         });
         return;
       }
 
       // Check for Set RAM
-      const setRam = parseSetRam(s);
+      const setRam = parseSetRam(lineContent, originalLineNumber);
       if (!!setRam) {
         stackInstructions.peek().push(setRam);
         return;
       }
 
       // Check for Set PC
-      const setPC = parseSetPC(s);
+      const setPC = parseSetPC(lineContent, originalLineNumber);
       if (!!setPC) {
         stackInstructions.peek().push(setPC);
         return;
       }
 
       // Not recognised in any way...throw error
-      throw new Error(`Invalid test script line: ${s}`);
+      throw new Error(
+        `Invalid test script line: ${lineContent} on line ${originalLineNumber}`
+      );
     });
 
   return {

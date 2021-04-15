@@ -1,5 +1,4 @@
 import { readFileSync } from "fs";
-import { toSymbolicAsm } from "./hackAsm";
 import HackCpu from "./HackCpu";
 
 describe("Hack CPU", () => {

@@ -39,7 +39,7 @@ import {
 import { dijstraks, getPathTo, walkPath } from "./algorithms/routing/dijkstras";
 import binarySearch from "./algorithms/search/binarySearch/monitoredSearch";
 import linearSearch from "./algorithms/search/linearSearch/monitoredSearch";
-import { HackCpu } from "./computation/assemblyLanguage";
+import { HackCpu, HackCpuTestRunner } from "./computation/assemblyLanguage";
 
 export {
   // Data Structures
@@ -91,4 +91,5 @@ export {
   TwosComplementHex,
   // Computation
   HackCpu,
+  HackCpuTestRunner,
 };

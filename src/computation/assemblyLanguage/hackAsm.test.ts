@@ -19,6 +19,7 @@ const TEST_CASES: TestCase[] = [
     symbolic: "A=D",
     expected: {
       type: CpuInstructionType.compute,
+      originalLineNumber: 0,
       destination: ComputeDestination.A,
       computation: ComputeComputation.D,
     },
@@ -27,6 +28,7 @@ const TEST_CASES: TestCase[] = [
     symbolic: "A=D-1",
     expected: {
       type: CpuInstructionType.compute,
+      originalLineNumber: 0,
       destination: ComputeDestination.A,
       computation: ComputeComputation.D_MINUS_ONE,
     },
@@ -35,6 +37,7 @@ const TEST_CASES: TestCase[] = [
     symbolic: "=D;JMP",
     expected: {
       type: CpuInstructionType.compute,
+      originalLineNumber: 0,
       computation: ComputeComputation.D,
       jump: ComputeJump.JMP,
     },
@@ -43,6 +46,7 @@ const TEST_CASES: TestCase[] = [
     symbolic: "M=D+A;JLT",
     expected: {
       type: CpuInstructionType.compute,
+      originalLineNumber: 0,
       destination: ComputeDestination.M,
       computation: ComputeComputation.D_PLUS_A,
       jump: ComputeJump.JLT,
@@ -52,6 +56,7 @@ const TEST_CASES: TestCase[] = [
     symbolic: "D=M              // D = first number",
     expected: {
       type: CpuInstructionType.compute,
+      originalLineNumber: 0,
       destination: ComputeDestination.D,
       computation: ComputeComputation.M,
       comment: " D = first number",
