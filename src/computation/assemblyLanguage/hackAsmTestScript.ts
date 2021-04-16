@@ -21,8 +21,8 @@ const OUTPUT_FRAGMENT_REGEX = /^(?:RAM\[)(?<address>[0-9]+)(?:\]\%(?<format>D))(
 const SET_RAM_REGEX = /^(set\sRAM\[)(?<address>[0-9])+(\]\s)(?<value>[\-0-9]+)(,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
 const SET_PC_REGEX = /^(set\sPC\s)(?<value>[0-9]+)(,|;)$/;
 const TICKTOCK_REGEX = /^\s*(ticktock;)$/;
-const REPEAT_START_REGEX = /^\s*(?:repeat)\s*(?<count>[0-9]+)\s*(?:{)\s*(?:\/\/(?<comment>.*)){0,1}$/;
-const REPEAT_END_REGEX = /^\s*(})\s*$/;
+const REPEAT_START_REGEX = /^\s*(?:repeat)\s*(?<count>[0-9]+)\s*(?:\{)\s*(?:\/\/(?<comment>.*)){0,1}$/;
+const REPEAT_END_REGEX = /^\s*(\})\s*$/;
 const OUTPUT_REGEX = /^\s*(output;)$/;
 
 export interface NamedRegExps {
