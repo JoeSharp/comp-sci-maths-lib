@@ -14,6 +14,7 @@ import {
   FileLoader,
 } from "./types";
 import Stack from "../../dataStructures/stack/Stack";
+import { Optional } from "../../types";
 
 export default class HackCpuTestRunner {
   fileLoader: FileLoader;
@@ -22,29 +23,33 @@ export default class HackCpuTestRunner {
   commandStack: Stack<CpuTestInstruction[]>;
   compareTo: string[];
   testOutput: string[];
+  lastInstruction: Optional<CpuTestInstruction>;
 
-  constructor(fileLoader: FileLoader) {
+  constructor(cpu: HackCpu, fileLoader: FileLoader) {
     this.fileLoader = fileLoader;
+    this.cpu = cpu;
   }
 
-  loadScript(data: string) {
-    this.cpu = new HackCpu();
-
+  reset() {
     this.testOutput = [];
-    this.testScript = parseTestScript(data);
     this.commandStack = new Stack();
     this.commandStack.push([...this.testScript.testInstructions]);
     this.compareTo = this.fileLoader(this.testScript.compareTo)
       .split("\n")
       .map((s) => s.trim());
-
-    const program = this.fileLoader(this.testScript.load);
-    this.cpu.loadProgram(program);
-
     const log = this.testScript.outputList
       .map(({ address, spacing }) => formatString(`RAM[${address}]`, spacing))
       .join("|");
     this.addToLog(`|${log}|`);
+  }
+
+  loadScript(data: string) {
+    this.testScript = parseTestScript(data);
+
+    const program = this.fileLoader(this.testScript.load);
+    this.cpu.loadProgram(program);
+
+    this.reset();
   }
 
   addToLog(log: string) {
@@ -83,6 +88,8 @@ export default class HackCpuTestRunner {
   }
 
   runInstruction(instruction: CpuTestInstruction) {
+    this.lastInstruction = instruction;
+
     switch (instruction.type) {
       case CpuTestInstructionType.output:
         return this.handleOutputInstruction();

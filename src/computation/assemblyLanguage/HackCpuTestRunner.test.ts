@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import HackCpu from "./HackCpu";
 
 import HackCpuTestRunner from "./HackCpuTestRunner";
 import { FileLoader } from "./types";
@@ -12,7 +13,8 @@ describe("Hack CPU Test Script Runner", () => {
       );
     const testScriptRaw = fileLoader("Mult.tst");
 
-    const runner = new HackCpuTestRunner(fileLoader);
+    const cpu = new HackCpu();
+    const runner = new HackCpuTestRunner(cpu, fileLoader);
     runner.loadScript(testScriptRaw);
 
     runner.runToEnd();

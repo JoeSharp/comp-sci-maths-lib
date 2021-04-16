@@ -112,7 +112,8 @@ describe("Hack ASM Test Scripts", () => {
       input: "set RAM[0] 4,   // Set test arguments",
       expected: {
         type: CpuTestInstructionType.setRam,
-        originalLineNumber: 0,
+        lineContent: "set RAM[0] 4,   // Set test arguments",
+        lineNumber: 0,
         address: 0,
         value: 4,
       },
@@ -121,7 +122,8 @@ describe("Hack ASM Test Scripts", () => {
       input: "set RAM[1] 78,",
       expected: {
         type: CpuTestInstructionType.setRam,
-        originalLineNumber: 0,
+        lineContent: "set RAM[1] 78,",
+        lineNumber: 0,
         address: 1,
         value: 78,
       },
@@ -130,7 +132,9 @@ describe("Hack ASM Test Scripts", () => {
       input: "set RAM[2] -1;  // Test that program initialized product to 0",
       expected: {
         type: CpuTestInstructionType.setRam,
-        originalLineNumber: 0,
+        lineContent:
+          "set RAM[2] -1;  // Test that program initialized product to 0",
+        lineNumber: 0,
         address: 2,
         value: -1,
       },
@@ -142,6 +146,8 @@ describe("Hack ASM Test Scripts", () => {
       expect(result).toBeDefined();
       expect(result.address).toBe(expected.address);
       expect(result.value).toBe(expected.value);
+      expect(result.lineContent).toBe(expected.lineContent);
+      expect(result.lineNumber).toBe(expected.lineNumber);
     });
   });
 

@@ -108,12 +108,14 @@ export enum CpuTestInstructionType {
   setPC,
   ticktock,
   repeat,
+  repeatEnd,
   output,
 }
 
 export interface AbstractCpuTestInstruction {
   type: CpuTestInstructionType;
-  originalLineNumber: number;
+  lineContent: string;
+  lineNumber: number;
 }
 
 export interface CpuTestSetRAM extends AbstractCpuTestInstruction {
@@ -141,10 +143,15 @@ export interface CpuTestRepeat extends AbstractCpuTestInstruction {
   instructions: CpuTestInstruction[];
 }
 
+export interface CpuTestRepeatEnd extends AbstractCpuTestInstruction {
+  type: CpuTestInstructionType.repeatEnd;
+}
+
 export type CpuTestInstruction =
   | CpuTestSetRAM
   | CpuTestSetPC
   | CpuTestRepeat
+  | CpuTestRepeatEnd
   | CpuTestTickTockInstruction
   | CpuTestOutputInstruction;
 
@@ -159,6 +166,7 @@ export interface CpuTestScript {
   outputFile: string;
   compareTo: string;
   outputList: CpuTestOutputFragment[];
+  rawTestInstructions: CpuTestInstruction[];
   testInstructions: CpuTestInstruction[];
 }
 
