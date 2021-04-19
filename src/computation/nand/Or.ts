@@ -1,4 +1,4 @@
-import { Consumer } from "../../../types";
+import { Consumer } from "../../types";
 
 import Not from './Not';
 import Nand from './Nand';

@@ -1,6 +1,6 @@
-import { Consumer } from "../../../types";
+import { Consumer } from "../../types";
 
-import Splitter from '../Splitter';
+import Splitter from './Splitter';
 
 import Nand from './Nand';
 

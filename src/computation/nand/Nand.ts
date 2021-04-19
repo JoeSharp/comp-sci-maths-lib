@@ -1,6 +1,6 @@
-import { Optional, Consumer } from "../../../types";
+import { Optional, Consumer } from "../../types";
 
-import Splitter from '../Splitter';
+import Splitter from './Splitter';
 
 class Nand {
     a: boolean;

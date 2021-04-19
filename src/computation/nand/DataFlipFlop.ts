@@ -1,6 +1,6 @@
 import { Consumer } from "../../types";
 import { Clock, IClocked } from "./Clocked";
-import Mux from "./chips/Mux";
+import Mux from "./Mux";
 
 import Splitter from './Splitter';
 
