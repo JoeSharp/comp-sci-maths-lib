@@ -1,6 +1,6 @@
 import { Consumer } from "../../../types";
 
-import Nand from './Nand2';
+import Nand from './Nand';
 import Not from './Not';
 
 /**

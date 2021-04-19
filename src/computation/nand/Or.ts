@@ -1,7 +1,7 @@
 import { Consumer } from "../../../types";
 
 import Not from './Not';
-import Nand from './Nand2';
+import Nand from './Nand';
 
  /**
  * Or gate:

@@ -2,7 +2,7 @@ import { Consumer } from "../../../types";
 
 import Splitter from '../Splitter';
 
-import Nand from './Nand2';
+import Nand from './Nand';
 
 /**
  * Not gate:

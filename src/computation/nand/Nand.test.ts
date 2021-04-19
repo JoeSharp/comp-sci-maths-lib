@@ -1,6 +1,6 @@
 import { TwoInOneOutTestCase } from './types';
 
-import Nand from "./Nand2";
+import Nand from "./Nand";
 
 const NAND_TEST_CASES: TwoInOneOutTestCase[] = [
     {
