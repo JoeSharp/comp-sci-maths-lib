@@ -1,10 +1,12 @@
+import { Clock } from './Clocked';
 import DataFlipFlop, { OneBitRegister } from './DataFlipFlop';
-import { Mux } from './nand';
 
 describe('D-Type Flip Flop', () => {
     test('Simple', () => {
         const receiver = jest.fn();
+        const clock = new Clock();
         const dff = new DataFlipFlop();
+        clock.registerClocked(dff);
 
         dff.connectOutput(receiver);
 
@@ -15,13 +17,14 @@ describe('D-Type Flip Flop', () => {
 
         expect(receiver).toBeCalledTimes(0);
 
-        dff.ticktock();
+        clock.ticktock();
         expect(receiver).toHaveBeenCalledWith(false);
 
         dff.sendInput(true);
         dff.sendInput(false);
         dff.sendInput(true);
-        dff.ticktock();
+        dff.tick();
+        dff.tock();
         expect(receiver).toHaveBeenLastCalledWith(true);
 
         // Two clocks should have resulted in two outputs
@@ -31,7 +34,8 @@ describe('D-Type Flip Flop', () => {
 
     test('1-bit Register', () => {
         const receiver = jest.fn();
-        const register = new OneBitRegister();
+        const clock = new Clock();
+        const register = new OneBitRegister(clock);
         register.connectOutput(receiver);
 
         register.sendInput(false);
@@ -39,10 +43,10 @@ describe('D-Type Flip Flop', () => {
         register.sendInput(false);
         register.sendLoad(true);
         expect(receiver).toHaveBeenCalledTimes(0);
-        register.ticktock();
+        clock.ticktock();
         expect(receiver).toHaveBeenCalledWith(false); // first call
         register.sendInput(true);
-        register.ticktock();
+        clock.ticktock();
         expect(receiver).toHaveBeenCalledWith(true); // second time
         register.sendLoad(false);
         register.sendInput(false);

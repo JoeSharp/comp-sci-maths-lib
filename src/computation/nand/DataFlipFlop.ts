@@ -1,9 +1,10 @@
-import { Optional, Consumer } from "../../types";
-import { Mux } from "./nand";
+import { Consumer } from "../../types";
+import { Clock, IClocked } from "./Clocked";
+import Mux from "./chips/Mux";
 
 import Splitter from './Splitter';
 
-class DataFlipFlop {
+class DataFlipFlop implements IClocked {
     input: boolean;
     output: Splitter<boolean>;
     
@@ -23,7 +24,10 @@ class DataFlipFlop {
         this.output.connectOutput(receiver);
     }
 
-    ticktock() {
+    tick() {
+    }
+
+    tock() {
         this.output.send(this.input);
     }
 }
@@ -47,15 +51,12 @@ class OneBitRegister {
     mux: Mux;
     dff: DataFlipFlop;
 
-    constructor() {
+    constructor(clock: Clock) {
         this.mux = new Mux();
         this.dff = new DataFlipFlop();
         this.dff.connectOutput(this.mux.connectB()); // t1
         this.mux.connectOutput(this.dff.connectInput()); // w1
-    }
-
-    ticktock() {
-        this.dff.ticktock();
+        clock.registerClocked(this.dff);
     }
 
     connectInput() {
