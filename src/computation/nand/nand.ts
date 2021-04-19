@@ -1,42 +1,17 @@
-import { Optional } from "../../types";
+import { Optional, Consumer } from "../../types";
 
-type Consumer<T> = (v: T) => void;
-
-class Splitter<T> {
-    lastOutput: Optional<T>;
-    receivers: Consumer<T>[] = [];
-
-    constructor(receivers: Consumer<T>[] = []) {
-        receivers.forEach(r => this.receivers.push(r));
-    }
-
-    connectOutput(receiver: Consumer<T>): Splitter<T> {
-        this.receivers.push(receiver);
-        return this;
-    }
-
-    send(newValue: T, force: boolean = false) {
-        if (force || !this.lastOutput || newValue !== this.lastOutput) {
-            this.lastOutput = newValue;
-            this.receivers.forEach(r => r(newValue));
-        }
-    }
-
-    connectInput(): Consumer<T> {
-        return this.send.bind(this);
-    }
-}
+import Splitter from './Splitter';
 
 class Nand {
     a: boolean;
     b: boolean;
     lastOutput: Optional<boolean>;
-    out: Splitter<boolean>;
+    output: Splitter<boolean>;
 
     constructor() {
         this.a = false;
         this.b = false;
-        this.out = new Splitter();
+        this.output = new Splitter();
         this.updateValue();
     }
 
@@ -58,14 +33,14 @@ class Nand {
         this.updateValue();
     }
 
-    connectOut(receiver: Consumer<boolean>) {
-        this.out.connectOutput(receiver);
+    connectOutput(receiver: Consumer<boolean>) {
+        this.output.connectOutput(receiver);
         this.updateValue(true);
     }
 
     updateValue(force: boolean = false) {
         const newValue = !(this.a && this.b);
-        this.out.send(newValue, force);
+        this.output.send(newValue, force);
     }
 }
 
@@ -89,8 +64,8 @@ class Not {
         this.splitter.send(i);
     }
 
-    connectOut(receiver: Consumer<boolean>) {
-        this.nand.connectOut(receiver);
+    connectOutput(receiver: Consumer<boolean>) {
+        this.nand.connectOutput(receiver);
     }
 }
 
@@ -106,8 +81,8 @@ class Or {
         this.nandNotB = new Not();
 
         this.nandNotANotB = new Nand();
-        this.nandNotA.connectOut(this.nandNotANotB.connectA());
-        this.nandNotB.connectOut(this.nandNotANotB.connectB());
+        this.nandNotA.connectOutput(this.nandNotANotB.connectA());
+        this.nandNotB.connectOutput(this.nandNotANotB.connectB());
     }
 
     sendA(i: boolean) {
@@ -118,8 +93,8 @@ class Or {
         this.nandNotB.sendIn(i);
     }
 
-    connectOut(receiver: Consumer<boolean>) {
-        this.nandNotANotB.connectOut(receiver);
+    connectOutput(receiver: Consumer<boolean>) {
+        this.nandNotANotB.connectOutput(receiver);
     }
 }
 
@@ -130,7 +105,7 @@ class And {
     constructor() {
         this.nand = new Nand();
         this.not = new Not();
-        this.nand.connectOut(this.not.connectInput())
+        this.nand.connectOutput(this.not.connectInput())
     }
 
     sendA(v: boolean) {
@@ -141,8 +116,8 @@ class And {
         this.nand.sendB(v);
     }
 
-    connectOut(r: Consumer<boolean>) {
-        this.not.connectOut(r);
+    connectOutput(r: Consumer<boolean>) {
+        this.not.connectOutput(r);
     }
 }
 
