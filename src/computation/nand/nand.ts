@@ -170,6 +170,18 @@ class Mux {
         this.aAndNotSel.connectOutput(this.aAndNotSelOrBAndSel.connectA());
     }
 
+    connectA() {
+        return this.sendA.bind(this);
+    }
+    
+    connectB() {
+        return this.sendB.bind(this);
+    }
+
+    connectSel() {
+        return this.sendSel.bind(this);
+    }
+
     sendA(a: boolean) {
         this.aAndNotSel.sendA(a);
     }
