@@ -85,6 +85,14 @@ class Or {
         this.nandNotB.connectOutput(this.nandNotANotB.connectB());
     }
 
+    connectA() {
+        return this.sendA.bind(this);
+    }
+    
+    connectB() {
+        return this.sendB.bind(this);
+    }
+
     sendA(i: boolean) {
         this.nandNotA.sendIn(i);
     }
@@ -108,6 +116,14 @@ class And {
         this.nand.connectOutput(this.not.connectInput())
     }
 
+    connectA() {
+        return this.sendA.bind(this);
+    }
+    
+    connectB() {
+        return this.sendB.bind(this);
+    }
+
     sendA(v: boolean) {
         this.nand.sendA(v);
     }
@@ -121,11 +137,63 @@ class And {
     }
 }
 
+/** 
+ * Multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ */
+//  CHIP Mux {
+//     IN a, b, sel;
+//     OUT out;
+
+//     PARTS:
+//     // Put your code here:
+//     And(a=b, b=sel, out=bAndSel);
+//     Not(in=sel, out=notSel);
+//     And(a=a, b=notSel, out=aAndNotSel);
+//     Or(a=aAndNotSel, b=bAndSel, out=out);
+// }
+class Mux {
+    bAndSel: And;
+    notSel: Not;
+    aAndNotSel: And;
+    aAndNotSelOrBAndSel: Or;
+
+    constructor() {
+        this.bAndSel = new And();
+        this.notSel = new Not();
+        this.aAndNotSel = new And();
+        this.aAndNotSelOrBAndSel = new Or();
+
+        this.notSel.connectOutput(this.aAndNotSel.connectB());
+        this.bAndSel.connectOutput(this.aAndNotSelOrBAndSel.connectB());
+        this.aAndNotSel.connectOutput(this.aAndNotSelOrBAndSel.connectA());
+    }
+
+    sendA(a: boolean) {
+        this.aAndNotSel.sendA(a);
+    }
+
+    sendB(b: boolean) {
+        this.bAndSel.sendA(b);
+    }
+
+    sendSel(sel: boolean) {
+        this.bAndSel.sendB(sel);
+        this.notSel.sendIn(sel);
+    }
+
+    connectOutput(r: Consumer<boolean>) {
+        this.aAndNotSelOrBAndSel.connectOutput(r);
+    }
+}
+
 export {
     Splitter,
     Not,
     Or,
-    And
+    And,
+    Mux
 }
 
 export default Nand;

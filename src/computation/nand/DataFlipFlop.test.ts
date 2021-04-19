@@ -25,5 +25,11 @@ describe('D-Type Flip Flop', () => {
 
         // Two clocks should have resulted in two outputs
         expect(receiver).toBeCalledTimes(2);
+    });
+
+    test('1-bit Register', () => {
+        const receiver = jest.fn();
+        const dff = new DataFlipFlop();
+
     })
 })
