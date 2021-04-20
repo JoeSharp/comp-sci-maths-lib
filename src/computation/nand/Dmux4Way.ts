@@ -45,6 +45,10 @@ class Dmux4Way {
         this.inAndSel1.connectOutput(this.dmuxCD.connectInput());
     }
 
+    connectInput() {
+        return this.sendInput.bind(this);
+    }
+
     sendInput(input: boolean) {
         this.inAndNotSel1.sendA(input);
         this.inAndSel1.sendA(input);
