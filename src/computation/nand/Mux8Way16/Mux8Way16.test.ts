@@ -1,4 +1,4 @@
-import { binaryToBoolArray, booleanToBinArray, WORD_LENGTH } from "../types";
+import { binaryToBoolArray, booleanToBinArray, getTestName, WORD_LENGTH } from "../types";
 import Mux8Way16 from "./Mux8Way16"
 
 interface TestCase {
@@ -235,9 +235,7 @@ describe('Mux 8 way 16', () => {
     mux.connectOutput(receivers);
 
     TEST_CASES.forEach(({ a, b, c, d, e, f, g, h, sel, expected }) => {
-        const inputStr = Object.entries({ a, b, c, d, e, f, g, h }).map(([key, value]) => `${key}: ${booleanToBinArray(value)}`).join(', ');
-        const testName = `${inputStr}, sel: ${booleanToBinArray(sel)}, expected: ${booleanToBinArray(expected)}`;
-        test(testName, () => {
+        test(getTestName({ a, b, c, d, e, f, g, h, sel, expected }), () => {
             mux.sendA(a);
             mux.sendB(b);
             mux.sendC(c);
