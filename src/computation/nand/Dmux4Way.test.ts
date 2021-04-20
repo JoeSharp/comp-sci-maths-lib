@@ -28,12 +28,12 @@ const TEST_CASES: TestCase[] = [
     },
     {
         input: false,
-        sel: [false, true],
+        sel: [true, false],
         a: false, b: false, c: false, d: false,
     },
     {
         input: false,
-        sel: [true, false],
+        sel: [false, true],
         a: false, b: false, c: false, d: false,
     },
     {
@@ -48,14 +48,14 @@ const TEST_CASES: TestCase[] = [
     },
     {
         input: true,
-        sel: [false, true],
-        a: false, b: false, c: true, d: false,
+        sel: [true, false],
+        a: false, b: true, c: false, d: false,
     },
     {
         input: true,
-        sel: [true, false],
-        a: false, b: true, c: false, d: false,
-    }, // JOE TODO SOMETHING WRONG HERE
+        sel: [false, true],
+        a: false, b: false, c: true, d: false,
+    },
     {
         input: true,
         sel: [true, true],

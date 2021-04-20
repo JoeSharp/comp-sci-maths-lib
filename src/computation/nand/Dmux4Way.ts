@@ -22,6 +22,7 @@ import Not from "./Not";
 //     And(a=in, b=sel[1], out=inAndSel1);
 //     DMux(in=inAndSel1, sel=sel[0], a=c, b=d);    
 // }
+
 class Dmux4Way {
     notSel1: Not;
     inAndNotSel1: And;
@@ -31,11 +32,13 @@ class Dmux4Way {
     dmuxCD: Dmux;
 
     constructor() {
-        this.notSel1 = new Not();
-        this.inAndNotSel1 = new And();
-        this.dmuxAB = new Dmux();
-        this.inAndSel1 = new And();
-        this.dmuxCD = new Dmux();
+        // in=1, sel=01        
+        // Demux AB, CD, sel = sel[0]
+        this.notSel1 = new Not(); // false
+        this.inAndNotSel1 = new And(); // false
+        this.dmuxAB = new Dmux(); // in=false
+        this.inAndSel1 = new And(); // true
+        this.dmuxCD = new Dmux(); // in=true
     
         this.notSel1.connectOutput(this.inAndNotSel1.connectB());
         this.inAndNotSel1.connectOutput(this.dmuxAB.connectInput());
