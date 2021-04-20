@@ -83,7 +83,9 @@ describe('Mux 4 way 16', () => {
     mux.connectOutput(receivers);
 
     TEST_CASES.forEach(({ a, b, c, d, sel, expected }) => {
-        test(`a: ${booleanToBinArray(a)}, b: ${booleanToBinArray(b)}, c: ${booleanToBinArray(c)}, d: ${booleanToBinArray(d)}, sel: ${booleanToBinArray(sel)}, expected: ${booleanToBinArray(expected)}`, () => {
+        const inputStr = Object.entries({ a, b, c, d }).map(([key, value]) => `${key}: ${booleanToBinArray(value)}`).join(', ');
+        const testName = `${inputStr}, sel: ${booleanToBinArray(sel)}, expected: ${booleanToBinArray(expected)}`;
+        test(testName, () => {
             mux.sendA(a);
             mux.sendB(b);
             mux.sendC(c);

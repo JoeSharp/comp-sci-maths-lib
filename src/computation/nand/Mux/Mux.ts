@@ -40,7 +40,7 @@ class Mux {
     connectA() {
         return this.sendA.bind(this);
     }
-    
+
     connectB() {
         return this.sendB.bind(this);
     }
