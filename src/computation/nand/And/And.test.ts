@@ -1,6 +1,6 @@
 import And from './And';
 
-import { TwoInOneOutTestCase } from '../types';
+import { PIN_A, PIN_B, PIN_OUTPUT, TwoInOneOutTestCase } from '../types';
 
 const AND_TEST_CASES: TwoInOneOutTestCase[] = [
     {
@@ -28,12 +28,12 @@ const AND_TEST_CASES: TwoInOneOutTestCase[] = [
 describe('AND', () => {
     let receiver = jest.fn();
     let myAnd = new And();
-    myAnd.connectOutput(receiver);
+    myAnd.connectToOutputPin(PIN_OUTPUT, receiver);
 
     AND_TEST_CASES.forEach(({ a, b, expected }) => {
         test(`${a} AND ${b} = ${expected}`, () => {
-            myAnd.sendA(a);
-            myAnd.sendB(b);
+            myAnd.sendToInputPin(PIN_A, a);
+            myAnd.sendToInputPin(PIN_B, b);
             expect(receiver).toHaveBeenLastCalledWith(expected);
         })
     });

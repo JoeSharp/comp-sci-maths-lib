@@ -1,7 +1,9 @@
 import { Consumer } from "../../../types";
 import And from "../And";
+import Chip from "../Chip";
 import Dmux from "../Dmux";
 import Not from "../Not";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../types";
 
 /**
  * 4-way demultiplexor:
@@ -23,7 +25,10 @@ import Not from "../Not";
 //     DMux(in=inAndSel1, sel=sel[0], a=c, b=d);    
 // }
 
-class Dmux4Way {
+export const PIN_C = 'c';
+export const PIN_D = 'd';
+
+class Dmux4Way extends Chip {
     notSel1: Not;
     inAndNotSel1: And;
     dmuxAB: Dmux;
@@ -32,6 +37,7 @@ class Dmux4Way {
     dmuxCD: Dmux;
 
     constructor() {
+        super('Dmux4Way')
         // in=1, sel=01        
         // Demux AB, CD, sel = sel[0]
         this.notSel1 = new Not(); // false
@@ -39,48 +45,29 @@ class Dmux4Way {
         this.dmuxAB = new Dmux(); // in=false
         this.inAndSel1 = new And(); // true
         this.dmuxCD = new Dmux(); // in=true
-    
-        this.notSel1.connectOutput(this.inAndNotSel1.connectB());
-        this.inAndNotSel1.connectOutput(this.dmuxAB.connectInput());
-        this.inAndSel1.connectOutput(this.dmuxCD.connectInput());
-    }
 
-    connectInput() {
-        return this.sendInput.bind(this);
-    }
+        // Internal Wiring
+        this.notSel1.connectToOutputPin(PIN_OUTPUT, this.inAndNotSel1.getInputPin(PIN_B));
+        this.inAndNotSel1.connectToOutputPin(PIN_OUTPUT, this.dmuxAB.getInputPin(PIN_INPUT));
+        this.inAndSel1.connectToOutputPin(PIN_OUTPUT, this.dmuxCD.getInputPin(PIN_INPUT));
 
-    sendInput(input: boolean) {
-        this.inAndNotSel1.sendA(input);
-        this.inAndSel1.sendA(input);
-    }
-
-    sendSel(sel: boolean[], startIndex: number = 0) {
-        sel.forEach((s, i) => {
-            const index = startIndex + i;
-            switch(index) {
-                case 0:
-                    this.dmuxAB.sendSel(s);
-                    this.dmuxCD.sendSel(s);
-                    break;
-                case 1:
-                    this.notSel1.sendIn(s);
-                    this.inAndSel1.sendB(s);
-                    break;
+        // External Wiring
+        this.createInputPin(PIN_INPUT, this.inAndNotSel1.getInputPin(PIN_A), this.inAndSel1.getInputPin(PIN_A));
+        this.createInputBus(PIN_SELECTOR, [
+            (v) => {
+                this.dmuxAB.sendToInputPin(PIN_SELECTOR, v)
+                this.dmuxCD.sendToInputPin(PIN_SELECTOR, v)
+            },
+            (v) => {
+                this.notSel1.sendToInputPin(PIN_INPUT, v)
+                this.inAndSel1.sendToInputPin(PIN_B, v)
             }
-        })
-    }
+        ]);
 
-    connectA(receiver: Consumer<boolean>) {
-        this.dmuxAB.connectA(receiver);
-    }
-    connectB(receiver: Consumer<boolean>) {
-        this.dmuxAB.connectB(receiver);
-    }
-    connectC(receiver: Consumer<boolean>) {
-        this.dmuxCD.connectA(receiver);
-    }
-    connectD(receiver: Consumer<boolean>) {
-        this.dmuxCD.connectB(receiver);
+        this.createOutputPin(PIN_A, this.dmuxAB.getOutputPin(PIN_A));
+        this.createOutputPin(PIN_B, this.dmuxAB.getOutputPin(PIN_B));
+        this.createOutputPin(PIN_C, this.dmuxCD.getOutputPin(PIN_A));
+        this.createOutputPin(PIN_D, this.dmuxCD.getOutputPin(PIN_B));
     }
 }
 

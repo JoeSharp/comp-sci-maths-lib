@@ -1,6 +1,8 @@
 import { Consumer } from "../../../types";
 import And from "../And";
+import Chip from "../Chip";
 import Not from "../Not";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../types";
 
 /**
  * Demultiplexor:
@@ -17,42 +19,30 @@ import Not from "../Not";
 //     And(a=in, b=notSel, out=a);
 //     And(a=in, b=sel, out=b);
 // }
-class Dmux {
+class Dmux extends Chip {
     notSel: Not;
     inAndNotSel: And;
     inAndSel: And;
 
     constructor() {
+        super('Dmux');
+
         this.notSel = new Not();
         this.inAndNotSel = new And();
         this.inAndSel = new And();
-        this.notSel.connectOutput(this.inAndNotSel.connectB());
-    }
 
-    connectInput() {
-        return this.sendInput.bind(this);
-    }
+        // Internal Wiring
+        this.notSel.connectToOutputPin(PIN_OUTPUT, this.inAndNotSel.getInputPin(PIN_B));
 
-    connectSel() {
-        return this.sendSel.bind(this);
-    }
-
-    sendInput(input: boolean) {
-        this.inAndSel.sendA(input);
-        this.inAndNotSel.sendA(input);
-    }
-
-    sendSel(sel: boolean) {
-        this.notSel.sendIn(sel);
-        this.inAndSel.sendB(sel);
-    }
-
-    connectA(receiver: Consumer<boolean>) {
-        this.inAndNotSel.connectOutput(receiver);
-    }
-
-    connectB(receiver: Consumer<boolean>) {
-        this.inAndSel.connectOutput(receiver);
+        // External Wiring
+        this.createInputPin(PIN_INPUT,
+            this.inAndNotSel.getInputPin(PIN_A),
+            this.inAndSel.getInputPin(PIN_A));
+        this.createInputPin(PIN_SELECTOR,
+            this.notSel.getInputPin(PIN_INPUT),
+            this.inAndSel.getInputPin(PIN_B));
+        this.createOutputPin(PIN_A, this.inAndNotSel.getOutputPin(PIN_OUTPUT));
+        this.createOutputPin(PIN_B, this.inAndSel.getOutputPin(PIN_OUTPUT));
     }
 }
 

@@ -1,6 +1,7 @@
 import { Consumer } from "../../../types";
-import { WORD_LENGTH } from '../types';
+import { PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from '../types';
 import And from "../And";
+import Chip from "../Chip";
 /**
  * 16-bit bitwise And:
  * for i = 0..15: out[i] = (a[i] and b[i])
@@ -28,23 +29,18 @@ import And from "../And";
 //     And(a=a[14], b=b[14], out=out[14]);
 //     And(a=a[15], b=b[15], out=out[15]);
 // }
-class And16 {
+class And16 extends Chip {
     ands: And[];
 
     constructor() {
+        super('And16');
+
         this.ands = Array(WORD_LENGTH).fill(null).map((_, i) => new And());
-    }
 
-    sendA(as: boolean[], startIndex: number = 0) {
-        as.forEach((a, i) => this.ands[startIndex + i].sendA(a));
-    }
-
-    sendB(bs: boolean[], startIndex: number = 0) {
-        bs.forEach((b, i) => this.ands[startIndex + i].sendB(b));
-    }
-
-    connectOutput(receivers: Consumer<boolean>[], startIndex: number = 0) {
-        receivers.forEach((r, i) => this.ands[i + startIndex].connectOutput(r));
+        // External Wiring
+        this.createInputBus(PIN_A, this.ands.map(a => a.getInputPin(PIN_A)));
+        this.createInputBus(PIN_B, this.ands.map(a => a.getInputPin(PIN_B)));
+        this.createOutputBus(PIN_OUTPUT, this.ands.map(a => a.getOutputPin(PIN_OUTPUT)));
     }
 }
 

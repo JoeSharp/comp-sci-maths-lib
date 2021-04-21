@@ -1,26 +1,19 @@
-import { Consumer } from "../../../types";
+import Chip from "../Chip";
 import { IClocked } from "../Clocked";
 
 import Splitter from '../Splitter';
+import { PIN_INPUT, PIN_OUTPUT } from "../types";
 
-class DataFlipFlop implements IClocked {
+class DataFlipFlop extends Chip implements IClocked {
     input: boolean;
     output: Splitter<boolean>;
-    
+
     constructor() {
+        super('DFF');
         this.output = new Splitter();
-    }
 
-    sendInput(n: boolean) {
-        this.input = n;
-    }
-
-    connectInput(): Consumer<boolean> {
-        return this.sendInput.bind(this);
-    }
-
-    connectOutput(receiver: Consumer<boolean>) {
-        this.output.connectOutput(receiver);
+        this.createInputPin(PIN_INPUT, v => this.input = v);
+        this.createOutputPin(PIN_OUTPUT, rs => this.output.connectOutputs(rs));
     }
 
     tick() {

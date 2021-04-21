@@ -9,7 +9,8 @@
 // |  1  |  11  |  0  |  0  |  0  |  1  |
 
 import Dmux4Way from ".";
-import { booleanToBinArray, boolToBin } from "../types";
+import { booleanToBinArray, boolToBin, PIN_A, PIN_B, PIN_INPUT, PIN_SELECTOR } from "../types";
+import { PIN_C, PIN_D } from "./Dmux4Way";
 
 interface TestCase {
     input: boolean;
@@ -69,15 +70,15 @@ describe('Dmux 4 Way', () => {
     const cReceiver = jest.fn();
     const dReceiver = jest.fn();
     const demux = new Dmux4Way();
-    demux.connectA(aReceiver);
-    demux.connectB(bReceiver);
-    demux.connectC(cReceiver);
-    demux.connectD(dReceiver);
+    demux.connectToOutputPin(PIN_A, aReceiver);
+    demux.connectToOutputPin(PIN_B, bReceiver);
+    demux.connectToOutputPin(PIN_C, cReceiver);
+    demux.connectToOutputPin(PIN_D, dReceiver);
 
     TEST_CASES.forEach(({ input, sel, a, b, c, d }) => {
         test(`In: ${boolToBin(input)}, Sel: ${booleanToBinArray(sel)}, a: ${boolToBin(a)}, b: ${boolToBin(b)}, c: ${boolToBin(c)}, d: ${boolToBin(d)}`, () => {
-            demux.sendInput(input);
-            demux.sendSel(sel);
+            demux.sendToInputPin(PIN_INPUT, input);
+            demux.sendToInputBus(PIN_SELECTOR, sel);
             expect(aReceiver).toHaveBeenLastCalledWith(a);
             expect(bReceiver).toHaveBeenLastCalledWith(b);
             expect(cReceiver).toHaveBeenLastCalledWith(c);

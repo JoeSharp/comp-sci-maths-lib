@@ -1,6 +1,7 @@
 import { Consumer } from "../../../types";
-import { WORD_LENGTH } from '../types';
+import { PIN_INPUT, PIN_OUTPUT, WORD_LENGTH } from '../types';
 import Not from "../Not";
+import Chip from "../Chip";
 /**
  * 16-bit Not:
  * for i=0..15: out[i] = not in[i]
@@ -29,23 +30,16 @@ import Not from "../Not";
     Not(in=in[15], out=out[15]);
 }
  */
-class Not16 {
+class Not16 extends Chip {
     nots: Not[];
 
     constructor() {
+        super('Not16');
         this.nots = Array(WORD_LENGTH).fill(null).map((_, i) => new Not());
-    }
 
-    connectInput() {
-        return this.sendInput.bind(this)
-    }
-
-    sendInput(inputs: boolean[], startIndex: number = 0) {
-        inputs.forEach((a, i) => this.nots[startIndex + i].sendIn(a));
-    }
-
-    connectOutput(receivers: Consumer<boolean>[], startIndex: number = 0) {
-        receivers.forEach((r, i) => this.nots[i + startIndex].connectOutput(r));
+        // External Wiring
+        this.createInputBus(PIN_INPUT, this.nots.map(n => n.getInputPin(PIN_INPUT)));
+        this.createOutputBus(PIN_OUTPUT, this.nots.map(n => n.getOutputPin(PIN_OUTPUT)));
     }
 }
 

@@ -1,3 +1,4 @@
+import { PIN_A, PIN_B, PIN_INPUT, PIN_SELECTOR } from "../types";
 import Dmux from "./Dmux";
 
 /**
@@ -40,12 +41,12 @@ describe('Dmux', () => {
         const dmux = new Dmux();
         const receiverA = jest.fn();
         const receiverB = jest.fn();
-        dmux.connectA(receiverA);
-        dmux.connectB(receiverB);
+        dmux.connectToOutputPin(PIN_A, receiverA);
+        dmux.connectToOutputPin(PIN_B, receiverB);
 
         test(`Input: ${input}, Sel: ${sel}, A: ${expectedA}, B: ${expectedB}`, () => {
-            dmux.sendInput(input);
-            dmux.sendSel(sel);
+            dmux.sendToInputPin(PIN_INPUT, input);
+            dmux.sendToInputPin(PIN_SELECTOR, sel);
             expect(receiverA).toHaveBeenLastCalledWith(expectedA);
             expect(receiverB).toHaveBeenLastCalledWith(expectedB);
         })

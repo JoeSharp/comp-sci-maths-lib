@@ -1,6 +1,6 @@
-import { Consumer } from '../../../types';
+import Chip from '../Chip';
 import Mux from '../Mux';
-import { WORD_LENGTH } from '../types'
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from '../types'
 
 /**
  * 16-bit multiplexor: 
@@ -33,39 +33,18 @@ import { WORD_LENGTH } from '../types'
 
 // }
 
-class Mux16 {
+class Mux16 extends Chip {
     muxes: Mux[];
 
     constructor() {
+        super('Mux16');
         this.muxes = Array(WORD_LENGTH).fill(null).map((_, i) => new Mux());
-    }
 
-    connectSel() {
-        return this.sendSel.bind(this);
-    }
-
-    sendSel(sel: boolean) {
-        this.muxes.forEach(m => m.sendSel(sel));
-    }
-
-    connectA() {
-        return this.muxes.map(m => m.connectA());
-    }
-
-    sendA(as: boolean[], startIndex: number = 0) {
-        as.forEach((a, i) => this.muxes[startIndex + i].sendA(a));
-    }
-
-    connectB() {
-        return this.muxes.map(m => m.connectB());
-    }
-
-    sendB(bs: boolean[], startIndex: number = 0) {
-        bs.forEach((b, i) => this.muxes[startIndex + i].sendB(b));
-    }
-
-    connectOutput(receivers: Consumer<boolean>[], startIndex: number = 0) {
-        receivers.forEach((r, i) => this.muxes[i + startIndex].connectOutput(r));
+        // External Wiring
+        this.createInputPin(PIN_SELECTOR, ...this.muxes.map(m => m.getInputPin(PIN_SELECTOR)));
+        this.createInputBus(PIN_A, this.muxes.map(m => m.getInputPin(PIN_A)));
+        this.createInputBus(PIN_B, this.muxes.map(m => m.getInputPin(PIN_B)));
+        this.createOutputBus(PIN_OUTPUT, this.muxes.map(m => m.getOutputPin(PIN_OUTPUT)));
     }
 }
 

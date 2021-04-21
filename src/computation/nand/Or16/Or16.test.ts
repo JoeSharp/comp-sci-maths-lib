@@ -1,6 +1,6 @@
 import { Consumer } from "../../../types";
 import Or16 from "./Or16";
-import { booleanToBinArray, binaryToBoolArray } from "../types";
+import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_A, PIN_B } from "../types";
 
 interface TestCase {
     a: boolean[];
@@ -45,12 +45,12 @@ const TEST_CASES: TestCase[] = [
 describe('OR 16', () => {
     const or16 = new Or16();
     const receivers: Consumer<boolean>[] = Array(16).fill(null).map(() => jest.fn());
-    or16.connectOutput(receivers);
+    or16.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ a, b, expected }) => {
         test(`${booleanToBinArray(a)} AND ${booleanToBinArray(b)} = ${booleanToBinArray(expected)}`, () => {
-            or16.sendA(a);
-            or16.sendB(b);
+            or16.sendToInputBus(PIN_A, a);
+            or16.sendToInputBus(PIN_B, b);
 
             expected.forEach((e, i) => expect(receivers[i]).toHaveBeenLastCalledWith(e));
         })

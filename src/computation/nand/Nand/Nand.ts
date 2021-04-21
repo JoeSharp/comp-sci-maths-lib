@@ -1,41 +1,35 @@
 import { Optional, Consumer } from "../../../types";
+import Chip from "../Chip";
 
 import Splitter from '../Splitter';
+import { PIN_A, PIN_B, PIN_OUTPUT } from "../types";
 
-class Nand {
+class Nand extends Chip {
     a: boolean;
     b: boolean;
     lastOutput: Optional<boolean>;
     output: Splitter<boolean>;
 
     constructor() {
+        super('Nand');
+
         this.a = false;
         this.b = false;
         this.output = new Splitter();
         this.updateValue();
-    }
 
-    connectA(): Consumer<boolean> {
-        return this.sendA.bind(this);
-    }
-
-    connectB(): Consumer<boolean> {
-        return this.sendB.bind(this);
-    }
-
-    sendA(a: boolean): void {
-        this.a = a;
-        this.updateValue();
-    }
-
-    sendB(b: boolean): void {
-        this.b = b;
-        this.updateValue();
-    }
-
-    connectOutput(receiver: Consumer<boolean>) {
-        this.output.connectOutput(receiver);
-        this.updateValue(true);
+        this.createInputPin(PIN_A, v => {
+            this.a = v;
+            this.updateValue();
+        });
+        this.createInputPin(PIN_B, v => {
+            this.b = v;
+            this.updateValue();
+        });
+        this.createOutputPin(PIN_OUTPUT, (r: Consumer<boolean>[]) => {
+            this.output.connectOutputs(r);
+            this.updateValue(true);
+        });
     }
 
     updateValue(force: boolean = false) {

@@ -1,8 +1,10 @@
 import { Consumer } from "../../../types";
 
 import And from '../And';
+import Chip from "../Chip";
 import Not from '../Not';
 import Or from '../Or';
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../types";
 
 /** 
  * Multiplexor:
@@ -20,50 +22,29 @@ import Or from '../Or';
 //     And(a=a, b=notSel, out=aAndNotSel);
 //     Or(a=aAndNotSel, b=bAndSel, out=out);
 // }
-class Mux {
+class Mux extends Chip {
     bAndSel: And;
     notSel: Not;
     aAndNotSel: And;
     aAndNotSelOrBAndSel: Or;
 
     constructor() {
+        super('Mux')
         this.bAndSel = new And();
         this.notSel = new Not();
         this.aAndNotSel = new And();
         this.aAndNotSelOrBAndSel = new Or();
 
-        this.notSel.connectOutput(this.aAndNotSel.connectB());
-        this.bAndSel.connectOutput(this.aAndNotSelOrBAndSel.connectB());
-        this.aAndNotSel.connectOutput(this.aAndNotSelOrBAndSel.connectA());
-    }
+        // Internal Wiring
+        this.notSel.connectToOutputPin(PIN_OUTPUT, this.aAndNotSel.getInputPin(PIN_B));
+        this.bAndSel.connectToOutputPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getInputPin(PIN_B));
+        this.aAndNotSel.connectToOutputPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getInputPin(PIN_A));
 
-    connectA() {
-        return this.sendA.bind(this);
-    }
-
-    connectB() {
-        return this.sendB.bind(this);
-    }
-
-    connectSel() {
-        return this.sendSel.bind(this);
-    }
-
-    sendA(a: boolean) {
-        this.aAndNotSel.sendA(a);
-    }
-
-    sendB(b: boolean) {
-        this.bAndSel.sendA(b);
-    }
-
-    sendSel(sel: boolean) {
-        this.bAndSel.sendB(sel);
-        this.notSel.sendIn(sel);
-    }
-
-    connectOutput(r: Consumer<boolean>) {
-        this.aAndNotSelOrBAndSel.connectOutput(r);
+        // External Wiring
+        this.createInputPin(PIN_A, this.aAndNotSel.getInputPin(PIN_A));
+        this.createInputPin(PIN_B, this.bAndSel.getInputPin(PIN_A));
+        this.createInputPin(PIN_SELECTOR, this.notSel.getInputPin(PIN_INPUT), this.bAndSel.getInputPin(PIN_B));
+        this.createOutputPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getOutputPin(PIN_OUTPUT));
     }
 }
 

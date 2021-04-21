@@ -1,7 +1,8 @@
-import { Consumer } from "../../../types";
+import Chip from "../Chip";
 
 import Nand from '../Nand';
 import Not from '../Not';
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
 
 /**
  * And gate: 
@@ -9,34 +10,23 @@ import Not from '../Not';
  *       0 otherwise
  */
 
-class And {
+class And extends Chip {
     nand: Nand;
     not: Not;
 
     constructor() {
+        super('And');
+
         this.nand = new Nand();
         this.not = new Not();
-        this.nand.connectOutput(this.not.connectInput())
-    }
 
-    connectA() {
-        return this.sendA.bind(this);
-    }
-    
-    connectB() {
-        return this.sendB.bind(this);
-    }
+        // Internal Wiring
+        this.nand.connectToOutputPin(PIN_OUTPUT, this.not.getInputPin(PIN_INPUT))
 
-    sendA(v: boolean) {
-        this.nand.sendA(v);
-    }
-
-    sendB(v: boolean) {
-        this.nand.sendB(v);
-    }
-
-    connectOutput(r: Consumer<boolean>) {
-        this.not.connectOutput(r);
+        // External wiring
+        this.createInputPin(PIN_A, this.nand.getInputPin(PIN_A));
+        this.createInputPin(PIN_B, this.nand.getInputPin(PIN_B));
+        this.createOutputPin(PIN_OUTPUT, this.not.getOutputPin(PIN_OUTPUT));
     }
 }
 

@@ -13,6 +13,11 @@ class Splitter<T> {
         return this;
     }
 
+    connectOutputs(receivers: Consumer<T>[]): Splitter<T> {
+        receivers.forEach(r => this.connectOutput(r));
+        return this;
+    }
+
     send(newValue: T, force: boolean = false) {
         if (force || !this.lastOutput || newValue !== this.lastOutput) {
             this.lastOutput = newValue;

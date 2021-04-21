@@ -5,8 +5,10 @@
 
 import { Consumer } from "../../../types";
 import And from "../And";
+import Chip from "../Chip";
 import Not from "../Not";
 import Or from "../Or";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
 
 //  CHIP Xor {
 //     IN a, b;
@@ -20,7 +22,7 @@ import Or from "../Or";
 //     Or (a=aAndNotb, b=notaAndb, out=out);
 // }
 
-class Xor {
+class Xor extends Chip {
     notA: Not;
     notB: Not;
     aAndNotB: And;
@@ -28,39 +30,24 @@ class Xor {
     outOr: Or;
 
     constructor() {
+        super('Xor');
+
         this.notA = new Not();
         this.notB = new Not();
         this.aAndNotB = new And();
         this.notaAndB = new And();
         this.outOr = new Or();
 
-        this.notA.connectOutput(this.notaAndB.connectA());
+        // Internal Wiring
+        this.notA.connectToOutputPin(PIN_OUTPUT, this.notaAndB.getInputPin(PIN_A));
+        this.notB.connectToOutputPin(PIN_OUTPUT, this.aAndNotB.getInputPin(PIN_B));
+        this.aAndNotB.connectToOutputPin(PIN_OUTPUT, this.outOr.getInputPin(PIN_A));
+        this.notaAndB.connectToOutputPin(PIN_OUTPUT, this.outOr.getInputPin(PIN_B));
 
-        this.notB.connectOutput(this.aAndNotB.connectB());
-        this.aAndNotB.connectOutput(this.outOr.connectA());
-        this.notaAndB.connectOutput(this.outOr.connectB());
-    }
-
-    connectA() {
-        return this.sendA.bind(this);
-    }
-
-    connectB() {
-        return this.sendB.bind(this);
-    }
-
-    sendA(a: boolean) {
-        this.notA.sendIn(a);
-        this.aAndNotB.sendA(a);
-    }
-
-    sendB(b: boolean) {
-        this.notB.sendIn(b);
-        this.notaAndB.sendB(b);
-    }
-
-    connectOutput(receiver: Consumer<boolean>) {
-        this.outOr.connectOutput(receiver);
+        // External Wiring
+        this.createInputPin(PIN_A, this.notA.getInputPin(PIN_INPUT), this.aAndNotB.getInputPin(PIN_A));
+        this.createInputPin(PIN_B, this.notB.getInputPin(PIN_INPUT), this.notaAndB.getInputPin(PIN_B));
+        this.createOutputPin(PIN_OUTPUT, this.outOr.getOutputPin(PIN_OUTPUT));
     }
 }
 

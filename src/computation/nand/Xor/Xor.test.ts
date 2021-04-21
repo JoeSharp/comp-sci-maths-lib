@@ -1,4 +1,4 @@
-import { TwoInOneOutTestCase } from '../types';
+import { PIN_A, PIN_B, PIN_OUTPUT, TwoInOneOutTestCase } from '../types';
 
 import Xor from '.';
 
@@ -27,12 +27,12 @@ const XOR_TEST_CASES: TwoInOneOutTestCase[] = [
 describe('XOR', () => {
     let receiver = jest.fn();
     let xor = new Xor();
-    xor.connectOutput(receiver);
+    xor.connectToOutputPin(PIN_OUTPUT, receiver);
 
     XOR_TEST_CASES.forEach(({ a, b, expected }) => {
         test(`${a} OR ${b} = ${expected}`, () => {
-            xor.sendA(a);
-            xor.sendB(b);
+            xor.sendToInputPin(PIN_A, a);
+            xor.sendToInputPin(PIN_B, b);
             expect(receiver).toHaveBeenLastCalledWith(expected);
         })
     });

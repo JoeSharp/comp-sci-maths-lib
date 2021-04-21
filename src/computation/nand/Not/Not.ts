@@ -1,8 +1,6 @@
-import { Consumer } from "../../../types";
-
-import Splitter from '../Splitter';
-
 import Nand from '../Nand';
+import Chip from "../Chip";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
 
 /**
  * Not gate:
@@ -16,27 +14,17 @@ import Nand from '../Nand';
 //     PARTS:
 //     Nand(a=in, b=in, out=out);
 // }
-class Not {
-    splitter: Splitter<boolean>
+class Not extends Chip {
     nand: Nand;
 
     constructor() {
+        super('Not');
+
         this.nand = new Nand();
-        this.splitter = new Splitter();
-        this.splitter.connectOutput(this.nand.connectA());
-        this.splitter.connectOutput(this.nand.connectB());
-    }
 
-    connectInput() {
-        return this.splitter.connectInput();
-    }
-
-    sendIn(i: boolean) {
-        this.splitter.send(i);
-    }
-
-    connectOutput(receiver: Consumer<boolean>) {
-        this.nand.connectOutput(receiver);
+        // External Wiring
+        this.createInputPin(PIN_INPUT, this.nand.getInputPin(PIN_A), this.nand.getInputPin(PIN_B));
+        this.createOutputPin(PIN_OUTPUT, this.nand.getOutputPin(PIN_OUTPUT));
     }
 }
 

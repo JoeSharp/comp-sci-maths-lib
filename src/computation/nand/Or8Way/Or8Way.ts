@@ -2,9 +2,9 @@
  * 8-way Or: 
  * out = (in[0] or in[1] or ... or in[7])
  */
-
-import { Consumer } from "../../../types";
+import Chip from "../Chip";
 import Or from "../Or/Or";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
 
 //  CHIP Or8Way {
 //     IN in[8];
@@ -19,7 +19,7 @@ import Or from "../Or/Or";
 //     Or(a=or5, b=in[6], out=or6);
 //     Or(a=or6, b=in[7], out=out);
 // }
-class Or8Way {
+class Or8Way extends Chip {
     or1: Or;
     or2: Or;
     or3: Or;
@@ -29,6 +29,8 @@ class Or8Way {
     orOut: Or;
 
     constructor() {
+        super('Or8Way');
+
         this.or1 = new Or();
         this.or2 = new Or();
         this.or3 = new Or();
@@ -36,48 +38,19 @@ class Or8Way {
         this.or5 = new Or();
         this.or6 = new Or();
         this.orOut = new Or();
-        this.or1.connectOutput(this.or2.connectA());
-        this.or2.connectOutput(this.or3.connectA());
-        this.or3.connectOutput(this.or4.connectA());
-        this.or4.connectOutput(this.or5.connectA());
-        this.or5.connectOutput(this.or6.connectA());
-        this.or6.connectOutput(this.orOut.connectA());
-    }
 
-    sendInput(inputs: boolean[], startIndex: number = 0) {
-        inputs.forEach((input, i) => {
-            const index = startIndex + i;
-            switch (index) {
-                case 0:
-                    this.or1.sendA(input);
-                    break;
-                case 1:
-                    this.or1.sendB(input);
-                    break;
-                case 2:
-                    this.or2.sendB(input);
-                    break;
-                case 3:
-                    this.or3.sendB(input);
-                    break;
-                case 4:
-                    this.or4.sendB(input);
-                    break;
-                case 5:
-                    this.or5.sendB(input);
-                    break;
-                case 6:
-                    this.or6.sendB(input);
-                    break;
-                case 7:
-                    this.orOut.sendB(input);
-                    break;
-            }
-        });
-    }
+        // Internal Wiring
+        this.or1.connectToOutputPin(PIN_OUTPUT, this.or2.getInputPin(PIN_A));
+        this.or2.connectToOutputPin(PIN_OUTPUT, this.or3.getInputPin(PIN_A));
+        this.or3.connectToOutputPin(PIN_OUTPUT, this.or4.getInputPin(PIN_A));
+        this.or4.connectToOutputPin(PIN_OUTPUT, this.or5.getInputPin(PIN_A));
+        this.or5.connectToOutputPin(PIN_OUTPUT, this.or6.getInputPin(PIN_A));
+        this.or6.connectToOutputPin(PIN_OUTPUT, this.orOut.getInputPin(PIN_A));
 
-    connectOutput(receiver: Consumer<boolean>) {
-        this.orOut.connectOutput(receiver);
+        // External Wiring
+        this.createInputBus(PIN_INPUT, [this.or1.getInputPin(PIN_A),
+        ...[this.or1, this.or2, this.or3, this.or4, this.or5, this.or6, this.orOut].map(o => o.getInputPin(PIN_B))])
+        this.createOutputPin(PIN_OUTPUT, this.orOut.getOutputPin(PIN_OUTPUT));
     }
 }
 

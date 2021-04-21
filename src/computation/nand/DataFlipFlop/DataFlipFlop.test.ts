@@ -1,4 +1,5 @@
 import { Clock } from '../Clocked';
+import { PIN_INPUT, PIN_OUTPUT } from '../types';
 import DataFlipFlop from './DataFlipFlop';
 
 describe('D-Type Flip Flop', () => {
@@ -8,21 +9,21 @@ describe('D-Type Flip Flop', () => {
         const dff = new DataFlipFlop();
         clock.registerClocked(dff);
 
-        dff.connectOutput(receiver);
+        dff.connectToOutputPin(PIN_OUTPUT, receiver);
 
         // Send some values, but no clock
-        dff.sendInput(false);
-        dff.sendInput(true);
-        dff.sendInput(false);
+        dff.sendToInputPin(PIN_INPUT, false);
+        dff.sendToInputPin(PIN_INPUT, true);
+        dff.sendToInputPin(PIN_INPUT, false);
 
         expect(receiver).toBeCalledTimes(0);
 
         clock.ticktock();
         expect(receiver).toHaveBeenCalledWith(false);
 
-        dff.sendInput(true);
-        dff.sendInput(false);
-        dff.sendInput(true);
+        dff.sendToInputPin(PIN_INPUT, true);
+        dff.sendToInputPin(PIN_INPUT, false);
+        dff.sendToInputPin(PIN_INPUT, true);
         dff.tick();
         dff.tock();
         expect(receiver).toHaveBeenLastCalledWith(true);

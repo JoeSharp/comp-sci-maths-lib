@@ -1,6 +1,6 @@
-import { Consumer } from "../../../types";
-import { WORD_LENGTH } from '../types';
+import { PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from '../types';
 import Or from "../Or";
+import Chip from "../Chip";
 /**
  * 16-bit bitwise Or:
  * for i = 0..15 out[i] = (a[i] or b[i])
@@ -28,23 +28,17 @@ import Or from "../Or";
 //     Or(a=a[14], b=b[14], out=out[14]);
 //     Or(a=a[15], b=b[15], out=out[15]);
 // }
-class Or16 {
+class Or16 extends Chip {
     ors: Or[];
 
     constructor() {
+        super('Or16')
         this.ors = Array(WORD_LENGTH).fill(null).map((_, i) => new Or());
-    }
 
-    sendA(as: boolean[], startIndex: number = 0) {
-        as.forEach((a, i) => this.ors[startIndex + i].sendA(a));
-    }
-
-    sendB(bs: boolean[], startIndex: number = 0) {
-        bs.forEach((b, i) => this.ors[startIndex + i].sendB(b));
-    }
-
-    connectOutput(receivers: Consumer<boolean>[], startIndex: number = 0) {
-        receivers.forEach((r, i) => this.ors[i + startIndex].connectOutput(r));
+        // External Wiring
+        this.createInputBus(PIN_A, this.ors.map(o => o.getInputPin(PIN_A)))
+        this.createInputBus(PIN_B, this.ors.map(o => o.getInputPin(PIN_B)))
+        this.createOutputBus(PIN_OUTPUT, this.ors.map(o => o.getOutputPin(PIN_OUTPUT)));
     }
 }
 

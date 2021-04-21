@@ -1,5 +1,7 @@
 import Dmux8Way from '.';
-import { binaryToBoolArray, booleanToBinArray, boolToBin } from '../types';
+import { PIN_C, PIN_D } from '../Dmux4Way/Dmux4Way';
+import { binaryToBoolArray, booleanToBinArray, boolToBin, PIN_A, PIN_B, PIN_INPUT, PIN_SELECTOR } from '../types';
+import { PIN_E, PIN_F, PIN_G, PIN_H } from './Dmux8Way';
 
 interface TestCase {
     input: boolean;
@@ -106,19 +108,19 @@ describe('DMux 8 Way', () => {
     const receiverF = jest.fn();
     const receiverG = jest.fn();
     const receiverH = jest.fn();
-    dmux.connectA(receiverA);
-    dmux.connectB(receiverB);
-    dmux.connectC(receiverC);
-    dmux.connectD(receiverD);
-    dmux.connectE(receiverE);
-    dmux.connectF(receiverF);
-    dmux.connectG(receiverG);
-    dmux.connectH(receiverH);
+    dmux.connectToOutputPin(PIN_A, receiverA);
+    dmux.connectToOutputPin(PIN_B, receiverB);
+    dmux.connectToOutputPin(PIN_C, receiverC);
+    dmux.connectToOutputPin(PIN_D, receiverD);
+    dmux.connectToOutputPin(PIN_E, receiverE);
+    dmux.connectToOutputPin(PIN_F, receiverF);
+    dmux.connectToOutputPin(PIN_G, receiverG);
+    dmux.connectToOutputPin(PIN_H, receiverH);
 
-    TEST_CASES.forEach(({input, sel, a, b, c, d, e, f, g, h}) => {
-        test(`in: ${boolToBin(input)}, sel: ${booleanToBinArray(sel)}, abcdefgh: ${[a,b,c,d,e,f,g,h].map(boolToBin)}`, () => {
-            dmux.sendInput(input);
-            dmux.sendSel(sel);
+    TEST_CASES.forEach(({ input, sel, a, b, c, d, e, f, g, h }) => {
+        test(`in: ${boolToBin(input)}, sel: ${booleanToBinArray(sel)}, abcdefgh: ${[a, b, c, d, e, f, g, h].map(boolToBin)}`, () => {
+            dmux.sendToInputPin(PIN_INPUT, input);
+            dmux.sendToInputBus(PIN_SELECTOR, sel);
 
             expect(receiverA).toHaveBeenLastCalledWith(a);
             expect(receiverB).toHaveBeenLastCalledWith(b);
