@@ -8,12 +8,12 @@ describe('NOT', () => {
         not.connectToOutputPin(PIN_OUTPUT, receiver);
 
         not.sendToInputPin(PIN_INPUT, false);
-        expect(receiver).toHaveBeenCalledWith(true);
+        expect(receiver).toHaveBeenLastCalledWith(true);
 
         not.sendToInputPin(PIN_INPUT, true);
-        expect(receiver).toHaveBeenCalledWith(false);
+        expect(receiver).toHaveBeenLastCalledWith(false);
 
         not.sendToInputPin(PIN_INPUT, false);
-        expect(receiver).toHaveBeenCalledWith(true);
+        expect(receiver).toHaveBeenLastCalledWith(true);
     })
 })

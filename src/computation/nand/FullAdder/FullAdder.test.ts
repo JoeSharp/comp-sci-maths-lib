@@ -46,8 +46,8 @@ describe('Full Adder', () => {
             adder.sendToInputPin(PIN_B, b);
             adder.sendToInputPin(PIN_C, c);
 
-            expect(sumReceiver).toHaveBeenCalledWith(sum);
-            expect(carryReceiver).toHaveBeenCalledWith(carry);
+            expect(sumReceiver).toHaveBeenLastCalledWith(sum);
+            expect(carryReceiver).toHaveBeenLastCalledWith(carry);
         })
     })
 });

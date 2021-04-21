@@ -38,7 +38,7 @@ describe('Or 8 Way', () => {
     TEST_CASES.forEach(({ input, expected }) => {
         test(booleanToBinArray(input), () => {
             or.sendToInputBus(PIN_INPUT, input);
-            expect(receiever).toHaveBeenCalledWith(expected);
+            expect(receiever).toHaveBeenLastCalledWith(expected);
         })
     });
 })

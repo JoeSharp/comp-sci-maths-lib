@@ -18,7 +18,7 @@ const TEST_CASES: TestCase[] = [
     { a: false, b: false, sum: false, carry: false },
     { a: false, b: true, sum: true, carry: false },
     { a: true, b: false, sum: true, carry: false },
-    { a: true, b: true, sum: true, carry: true }
+    { a: true, b: true, sum: false, carry: true }
 ]
 
 describe('Half Adder', () => {
@@ -33,8 +33,8 @@ describe('Half Adder', () => {
             halfAdder.sendToInputPin(PIN_A, a);
             halfAdder.sendToInputPin(PIN_B, b);
 
-            expect(sumReceiver).toHaveBeenCalledWith(sum);
-            expect(carryReceiver).toHaveBeenCalledWith(carry);
+            expect(sumReceiver).toHaveBeenLastCalledWith(sum);
+            expect(carryReceiver).toHaveBeenLastCalledWith(carry);
         })
     })
 })

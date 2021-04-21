@@ -10,12 +10,12 @@ describe('NAND - Splitter', () => {
         splitter.connectOutput(receiver2);
 
         splitter.send(true);
-        expect(receiver1).toHaveBeenCalledWith(true);
-        expect(receiver2).toHaveBeenCalledWith(true);
+        expect(receiver1).toHaveBeenLastCalledWith(true);
+        expect(receiver2).toHaveBeenLastCalledWith(true);
 
         splitter.send(false);
-        expect(receiver1).toHaveBeenCalledWith(false);
-        expect(receiver2).toHaveBeenCalledWith(false);
+        expect(receiver1).toHaveBeenLastCalledWith(false);
+        expect(receiver2).toHaveBeenLastCalledWith(false);
     });
 
     test('Number', () => {
@@ -26,11 +26,11 @@ describe('NAND - Splitter', () => {
         splitter.connectOutput(receiver2);
 
         splitter.send(56);
-        expect(receiver1).toHaveBeenCalledWith(56);
-        expect(receiver2).toHaveBeenCalledWith(56);
+        expect(receiver1).toHaveBeenLastCalledWith(56);
+        expect(receiver2).toHaveBeenLastCalledWith(56);
 
         splitter.send(-905);
-        expect(receiver1).toHaveBeenCalledWith(-905);
-        expect(receiver2).toHaveBeenCalledWith(-905);
+        expect(receiver1).toHaveBeenLastCalledWith(-905);
+        expect(receiver2).toHaveBeenLastCalledWith(-905);
     })
 })

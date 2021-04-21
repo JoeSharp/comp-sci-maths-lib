@@ -19,7 +19,7 @@ describe('D-Type Flip Flop', () => {
         expect(receiver).toBeCalledTimes(0);
 
         clock.ticktock();
-        expect(receiver).toHaveBeenCalledWith(false);
+        expect(receiver).toHaveBeenLastCalledWith(false);
 
         dff.sendToInputPin(PIN_INPUT, true);
         dff.sendToInputPin(PIN_INPUT, false);
