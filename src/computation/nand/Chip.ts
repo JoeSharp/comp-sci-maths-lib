@@ -88,9 +88,19 @@ class Chip {
         })
     }
 
-    getOutputBus(name: string) {
+    getOutputBus(name: string, startIndex: number = 0, endIndex: number = -1): Consumer<Consumer<boolean>[]>[] {
         if (!(name in this.outputBuses)) throw new Error(`Output Bus ${name} doesn't exist on ${this.name}`);
-        return this.outputBuses[name];
+        const bus = this.outputBuses[name];
+
+        if (endIndex !== -1) {
+            return bus.slice(startIndex, endIndex);
+        }
+
+        if (startIndex > 0) {
+            return bus.slice(startIndex);
+        }
+
+        return bus;
     }
 }
 

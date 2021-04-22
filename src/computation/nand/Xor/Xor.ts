@@ -3,7 +3,6 @@
  * out = not (a == b)
  */
 
-import { Consumer } from "../../../types";
 import And from "../And";
 import Chip from "../Chip";
 import Not from "../Not";

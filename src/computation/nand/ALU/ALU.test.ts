@@ -1,6 +1,5 @@
-import { PIN_F } from "../Dmux8Way/Dmux8Way";
 import { binaryToBoolArray, getTestName, PIN_OUTPUT, WORD_LENGTH } from "../types";
-import ALU, { PIN_NG, PIN_NO, PIN_NX, PIN_NY, PIN_X, PIN_Y, PIN_ZR, PIN_ZX, PIN_ZY } from "./ALU";
+import ALU, { PIN_F, PIN_NG, PIN_NO, PIN_NX, PIN_NY, PIN_X, PIN_Y, PIN_ZR, PIN_ZX, PIN_ZY } from "./ALU";
 
 interface TestCase {
     x: string;

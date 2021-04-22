@@ -17,7 +17,7 @@ import Not from "../Not";
 import Not16 from "../Not16";
 import Or from "../Or";
 import Or8Way from "../Or8Way";
-import { WORD_LENGTH } from "../types";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../types";
 
 // Implementation: the ALU logic manipulates the x and y inputs
 // and operates on the resulting values, as follows:
@@ -130,84 +130,52 @@ class ALU extends Chip {
         this.nzr = new Or();
         this.zr = new Not();
 
-        // this.xZero.sendB(Array(WORD_LENGTH).fill(false));
-        // this.xZero.connectOutput(this.notXZero.connectInput());
-        // this.xZero.connectOutput(this.xProcessed.connectA());
-        // this.notXZero.connectOutput(this.xProcessed.connectB());
+        this.xZero.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(false));
+        this.xZero.connectToOutputBus(PIN_OUTPUT, this.notXZero.getInputBus(PIN_INPUT));
+        this.xZero.connectToOutputBus(PIN_OUTPUT, this.xProcessed.getInputBus(PIN_A));
+        this.notXZero.connectToOutputBus(PIN_OUTPUT, this.xProcessed.getInputBus(PIN_B));
+        
+        this.yZero.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(false));
+        this.yZero.connectToOutputBus(PIN_OUTPUT, this.notYZero.getInputBus(PIN_INPUT));
+        this.yZero.connectToOutputBus(PIN_OUTPUT, this.yProcessed.getInputBus(PIN_A));
+        this.notYZero.connectToOutputBus(PIN_OUTPUT, this.yProcessed.getInputBus(PIN_B));
 
-        // this.yZero.sendB(Array(WORD_LENGTH).fill(false));
-        // this.yZero.connectOutput(this.notYZero.connectInput());
-        // this.yZero.connectOutput(this.yProcessed.connectA());
-        // this.notYZero.connectOutput(this.yProcessed.connectB());
+        this.xProcessed.connectToOutputBus(PIN_OUTPUT, this.xPlusy.getInputBus(PIN_A));
+        this.yProcessed.connectToOutputBus(PIN_OUTPUT, this.xPlusy.getInputBus(PIN_B));
+        
+        this.xProcessed.connectToOutputBus(PIN_OUTPUT, this.xAndy.getInputBus(PIN_A));
+        this.yProcessed.connectToOutputBus(PIN_OUTPUT, this.xAndy.getInputBus(PIN_B));
 
-        // this.xProcessed.connectOutput(this.xPlusy.connectA());
-        // this.yProcessed.connectOutput(this.xPlusy.connectB());
+        this.xAndy.connectToOutputBus(PIN_OUTPUT, this.fOut.getInputBus(PIN_A));
+        this.xPlusy.connectToOutputBus(PIN_OUTPUT, this.fOut.getInputBus(PIN_B));
 
-        // this.xProcessed.connectOutput(this.xAndy.connectA());
-        // this.yProcessed.connectOutput(this.xAndy.connectB());
+        this.fOut.connectToOutputBus(PIN_OUTPUT, this.notFOut.getInputBus(PIN_INPUT));
+        this.fOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_A));
+        this.notFOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_B));
 
-        // this.xAndy.connectOutput(this.fOut.connectA());
-        // this.xPlusy.connectOutput(this.fOut.connectB());
+        this.fOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_A));
+        this.notFOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_B));
+        
+        this.out.connectToOutputBus(PIN_OUTPUT, this.zrLsb.getInputBus(PIN_INPUT), 0); // preOut1
+        this.out.connectToOutputBus(PIN_OUTPUT, this.zrMsb.getInputBus(PIN_INPUT), 8); // preOut2
+        
+        this.zrLsb.connectToOutputPin(PIN_OUTPUT, this.nzr.getInputPin(PIN_A));
+        this.zrMsb.connectToOutputPin(PIN_OUTPUT, this.nzr.getInputPin(PIN_B));
+        
+        // External Wiring
+        this.createInputBus(PIN_X, this.xZero.getInputBus(PIN_A));
+        this.createInputBus(PIN_Y, this.yZero.getInputBus(PIN_A));
+        this.createInputPin(PIN_ZX, this.xZero.getInputPin(PIN_SELECTOR));
+        this.createInputPin(PIN_ZY, this.yZero.getInputPin(PIN_SELECTOR));
+        this.createInputPin(PIN_NX, this.xProcessed.getInputPin(PIN_SELECTOR));
+        this.createInputPin(PIN_NY, this.yProcessed.getInputPin(PIN_SELECTOR));
+        this.createInputPin(PIN_F, this.fOut.getInputPin(PIN_SELECTOR));
+        this.createInputPin(PIN_NO, this.out.getInputPin(PIN_SELECTOR));
 
-        // this.fOut.connectOutput(this.notFOut.connectInput());
-        // this.fOut.connectOutput(this.out.connectA());
-        // this.notFOut.connectOutput(this.out.connectB());
-
-        // SORT OF UP TO HERE
-
-        // Calculate negation of output and select negative flag, output, and split version of output for evaluation of zero
-        // Mux16(a=fOut, b=notFOut, sel=no, out[15]=ng, out[0..7]=preOut1, out[8..15]=preOut2, out=out);
-
-        // // Set the is zero flag
-        // Or8Way(in=preOut1, out=zrLsb);
-        // Or8Way(in=preOut2, out=zrMsb);
-        // Or(a=zrLsb, b=zrMsb, out=nzr);
-        // Not(in=nzr, out=zr);
+        this.createOutputBus(PIN_OUTPUT, this.out.getOutputBus(PIN_OUTPUT));
+        this.createOutputPin(PIN_NG, this.out.getOutputBus(PIN_OUTPUT, 15)[0]);
+        this.createOutputPin(PIN_ZR, this.nzr.getOutputPin(PIN_OUTPUT));
     }
-
-    // sendF(f: boolean) {
-    //     this.fOut.sendSel(f);
-    // }
-
-    // sendX(as: boolean[], startIndex: number = 0) {
-    //     this.xZero.sendA(as, startIndex);
-    // }
-
-    // sendY(as: boolean[], startIndex: number = 0) {
-    //     this.yZero.sendA(as, startIndex);
-    // }
-
-    // sendZX(zx: boolean) {
-    //     this.xZero.sendSel(zx);
-    // }
-
-    // sendNX(nx: boolean) {
-    //     this.xProcessed.sendSel(nx);
-    // }
-
-    // sendZY(zy: boolean) {
-    //     this.yZero.sendSel(zy);
-    // }
-
-    // sendNY(ny: boolean) {
-    //     this.yProcessed.sendSel(ny);
-    // }
-
-    // sendNO(no: boolean) {
-    //     this.out.sendSel(no);
-    // }
-
-    // connectZR(receiver: Consumer<boolean>) {
-    //     this.zr.connectOutput(receiver);
-    // }
-
-    // connectNG(receiver: Consumer<boolean>) {
-    //     this.out.connectOutput([receiver], 15);
-    // }
-
-    // connectOutput(receivers: Consumer<boolean>[], startIndex: number = 0) {
-    //     this.out.connectOutput(receivers, startIndex);
-    // }
 }
 
 export default ALU;
