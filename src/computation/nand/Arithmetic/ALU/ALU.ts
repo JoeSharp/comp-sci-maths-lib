@@ -11,10 +11,10 @@
 import Add16 from "../Add16";
 import Chip from "../../Chip";
 import Mux16 from "../../Multiplexing/Mux16";
-import Not from "../../Not";
-import Not16 from "../../Not16";
-import Or from "../../Or";
-import Or8Way from "../../Or8Way";
+import Not from "../../Logic/Not";
+import Not16 from "../../Logic/Not16";
+import Or from "../../Logic/Or";
+import Or8Way from "../../Logic/Or8Way";
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../../types";
 
 // Implementation: the ALU logic manipulates the x and y inputs

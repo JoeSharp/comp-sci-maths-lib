@@ -1,7 +1,6 @@
-import { Consumer } from "../../../types";
-import { PIN_INPUT, PIN_OUTPUT, WORD_LENGTH } from '../types';
+import { PIN_INPUT, PIN_OUTPUT, WORD_LENGTH } from '../../types';
 import Not from "../Not";
-import Chip from "../Chip";
+import Chip from "../../Chip";
 /**
  * 16-bit Not:
  * for i=0..15: out[i] = not in[i]

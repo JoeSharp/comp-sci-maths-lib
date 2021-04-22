@@ -1,8 +1,8 @@
-import { Optional, Consumer } from "../../../types";
-import Chip from "../Chip";
+import { Optional, Consumer } from "../../../../types";
+import Chip from "../../Chip";
 
-import Splitter from '../Splitter';
-import { PIN_A, PIN_B, PIN_OUTPUT } from "../types";
+import Splitter from '../../Splitter';
+import { PIN_A, PIN_B, PIN_OUTPUT } from "../../types";
 
 class Nand extends Chip {
     a: boolean;

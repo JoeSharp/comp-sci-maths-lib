@@ -4,10 +4,10 @@
  */
 
 import And from "../And";
-import Chip from "../Chip";
+import Chip from "../../Chip";
 import Not from "../Not";
 import Or from "../Or";
-import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 //  CHIP Xor {
 //     IN a, b;

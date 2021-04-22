@@ -2,9 +2,9 @@
  * 8-way Or:
  * out = (in[0] or in[1] or ... or in[7])
  */
-import Chip from "../Chip";
-import Or from "../Or/Or";
-import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
+import Chip from "../../Chip";
+import Or from "../Or";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 //  CHIP Or8Way {
 //     IN in[8];

@@ -1,6 +1,6 @@
-import And from "../../And";
+import And from "../../Logic/And";
 import Chip from "../../Chip";
-import Not from "../../Not";
+import Not from "../../Logic/Not";
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
 
 /**

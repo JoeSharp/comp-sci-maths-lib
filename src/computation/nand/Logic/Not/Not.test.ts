@@ -1,5 +1,5 @@
 import Not from '.';
-import { PIN_INPUT, PIN_OUTPUT } from '../types';
+import { PIN_INPUT, PIN_OUTPUT } from '../../types';
 
 describe('NOT', () => {
     test('Simple', () => {

@@ -1,6 +1,6 @@
-import { PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from '../types';
+import { PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from '../../types';
 import Or from "../Or";
-import Chip from "../Chip";
+import Chip from "../../Chip";
 /**
  * 16-bit bitwise Or:
  * for i = 0..15 out[i] = (a[i] or b[i])

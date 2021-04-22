@@ -4,7 +4,7 @@
 import Chip from "../../Chip";
 import HalfAdder from "../HalfAdder";
 import { PIN_CARRY, PIN_SUM } from "../HalfAdder/HalfAdder";
-import Or from "../../Or";
+import Or from "../../Logic/Or";
 import { PIN_A, PIN_B, PIN_OUTPUT } from "../../types";
 import { PIN_C } from "../../Multiplexing/Dmux4Way/Dmux4Way";
 

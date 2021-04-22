@@ -1,6 +1,6 @@
 import Nand from '../Nand';
-import Chip from "../Chip";
-import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
+import Chip from "../../Chip";
+import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 /**
  * Not gate:

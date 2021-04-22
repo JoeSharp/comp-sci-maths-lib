@@ -1,6 +1,6 @@
-import { Consumer } from "../../../types";
+import { Consumer } from "../../../../types";
 import Not16 from "./Not16";
-import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_INPUT } from "../types";
+import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_INPUT } from "../../types";
 
 interface TestCase {
     input: boolean[];

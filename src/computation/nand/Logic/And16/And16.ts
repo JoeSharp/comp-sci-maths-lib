@@ -1,7 +1,6 @@
-import { Consumer } from "../../../types";
-import { PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from '../types';
+import { PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from '../../types';
 import And from "../And";
-import Chip from "../Chip";
+import Chip from "../../Chip";
 /**
  * 16-bit bitwise And:
  * for i = 0..15: out[i] = (a[i] and b[i])
