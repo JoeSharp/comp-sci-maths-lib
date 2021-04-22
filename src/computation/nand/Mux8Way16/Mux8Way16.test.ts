@@ -231,8 +231,8 @@ const TEST_CASES: TestCase[] = [
 ]
 
 describe('Mux 8 way 16', () => {
-    let mux = new Mux8Way16();
-    let receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
+    const mux = new Mux8Way16();
+    const receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
     mux.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ a, b, c, d, e, f, g, h, sel, expected }) => {

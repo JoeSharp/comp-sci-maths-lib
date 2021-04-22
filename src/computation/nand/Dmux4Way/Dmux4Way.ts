@@ -22,7 +22,7 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../types";
 //     DMux(in=inAndNotSel1, sel=sel[0], a=a, b=b);
 
 //     And(a=in, b=sel[1], out=inAndSel1);
-//     DMux(in=inAndSel1, sel=sel[0], a=c, b=d);    
+//     DMux(in=inAndSel1, sel=sel[0], a=c, b=d);
 // }
 
 export const PIN_C = 'c';
@@ -38,7 +38,7 @@ class Dmux4Way extends Chip {
 
     constructor() {
         super('Dmux4Way')
-        // in=1, sel=01        
+        // in=1, sel=01
         // Demux AB, CD, sel = sel[0]
         this.notSel1 = new Not(); // false
         this.inAndNotSel1 = new And(); // false

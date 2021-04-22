@@ -31,8 +31,8 @@ const TEST_CASES: TestCase[] = [{
 },]
 
 describe('Or 8 Way', () => {
-    let or = new Or8Way();
-    let receiever = jest.fn();
+    const or = new Or8Way();
+    const receiever = jest.fn();
     or.connectToOutputPin(PIN_OUTPUT, receiever);
 
     TEST_CASES.forEach(({ input, expected }) => {

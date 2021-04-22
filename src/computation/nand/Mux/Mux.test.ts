@@ -43,8 +43,8 @@ const MUX_TEST_CASES: MuxTestCase[] = [
 ]
 
 describe('Mux', () => {
-    let receiver = jest.fn();
-    let mux = new Mux();
+    const receiver = jest.fn();
+    const mux = new Mux();
     mux.connectToOutputPin(PIN_OUTPUT, receiver);
 
     MUX_TEST_CASES.forEach(({ a, b, sel, expected }) => {

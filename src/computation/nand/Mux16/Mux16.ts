@@ -3,8 +3,8 @@ import Mux from '../Mux';
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from '../types'
 
 /**
- * 16-bit multiplexor: 
- * for i = 0..15 out[i] = a[i] if sel == 0 
+ * 16-bit multiplexor:
+ * for i = 0..15 out[i] = a[i] if sel == 0
  *                        b[i] if sel == 1
  */
 

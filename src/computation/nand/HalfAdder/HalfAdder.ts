@@ -1,8 +1,6 @@
 /**
  * Computes the sum of two bits.
  */
-
-import { Consumer } from "../../../types";
 import And from "../And";
 import Chip from "../Chip";
 import { PIN_A, PIN_B, PIN_OUTPUT } from "../types";
@@ -10,7 +8,7 @@ import Xor from "../Xor";
 
 //  CHIP HalfAdder {
 //     IN a, b;    // 1-bit inputs
-//     OUT sum,    // Right bit of a + b 
+//     OUT sum,    // Right bit of a + b
 //         carry;  // Left bit of a + b
 
 //     PARTS:

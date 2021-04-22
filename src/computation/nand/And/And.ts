@@ -5,7 +5,7 @@ import Not from '../Not';
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../types";
 
 /**
- * And gate: 
+ * And gate:
  * out = 1 if (a == 1 and b == 1)
  *       0 otherwise
  */

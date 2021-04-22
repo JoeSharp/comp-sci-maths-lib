@@ -26,8 +26,8 @@ const AND_TEST_CASES: TwoInOneOutTestCase[] = [
 ]
 
 describe('AND', () => {
-    let receiver = jest.fn();
-    let myAnd = new And();
+    const receiver = jest.fn();
+    const myAnd = new And();
     myAnd.connectToOutputPin(PIN_OUTPUT, receiver);
 
     AND_TEST_CASES.forEach(({ a, b, expected }) => {

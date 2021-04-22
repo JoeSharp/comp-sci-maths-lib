@@ -3,8 +3,8 @@ import { PIN_INPUT, PIN_OUTPUT } from '../types';
 
 describe('NOT', () => {
     test('Simple', () => {
-        let receiver = jest.fn();
-        let not = new Not();
+        const receiver = jest.fn();
+        const not = new Not();
         not.connectToOutputPin(PIN_OUTPUT, receiver);
 
         not.sendToInputPin(PIN_INPUT, false);

@@ -25,8 +25,8 @@ const OR_TEST_CASES: TwoInOneOutTestCase[] = [
     }
 ]
 describe('OR', () => {
-    let receiver = jest.fn();
-    let or = new Or();
+    const receiver = jest.fn();
+    const or = new Or();
     or.connectToOutputPin(PIN_OUTPUT, receiver);
 
     OR_TEST_CASES.forEach(({ a, b, expected }) => {

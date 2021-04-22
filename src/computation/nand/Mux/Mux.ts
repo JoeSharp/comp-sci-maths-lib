@@ -6,7 +6,7 @@ import Not from '../Not';
 import Or from '../Or';
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../types";
 
-/** 
+/**
  * Multiplexor:
  * out = a if sel == 0
  *       b otherwise

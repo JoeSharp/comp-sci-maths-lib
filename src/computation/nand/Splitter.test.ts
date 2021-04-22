@@ -3,9 +3,9 @@ import Splitter from './Splitter';
 describe('NAND - Splitter', () => {
 
     test('Boolean', () => {
-        let receiver1 = jest.fn();
-        let receiver2 = jest.fn();
-        let splitter: Splitter<boolean> = new Splitter();
+        const receiver1 = jest.fn();
+        const receiver2 = jest.fn();
+        const splitter: Splitter<boolean> = new Splitter();
         splitter.connectOutput(receiver1);
         splitter.connectOutput(receiver2);
 
@@ -19,9 +19,9 @@ describe('NAND - Splitter', () => {
     });
 
     test('Number', () => {
-        let receiver1 = jest.fn();
-        let receiver2 = jest.fn();
-        let splitter: Splitter<number> = new Splitter();
+        const receiver1 = jest.fn();
+        const receiver2 = jest.fn();
+        const splitter: Splitter<number> = new Splitter();
         splitter.connectOutput(receiver1);
         splitter.connectOutput(receiver2);
 

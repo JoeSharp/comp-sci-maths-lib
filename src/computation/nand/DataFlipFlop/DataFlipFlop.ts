@@ -17,6 +17,7 @@ class DataFlipFlop extends Chip implements IClocked {
     }
 
     tick() {
+        ((): undefined => undefined)(); // No-op
     }
 
     tock() {

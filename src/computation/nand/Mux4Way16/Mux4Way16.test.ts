@@ -79,9 +79,9 @@ const TEST_CASES: TestCase[] = [
 ]
 
 describe('Mux 4 way 16', () => {
-    let mux = new Mux4Way16();
+    const mux = new Mux4Way16();
     const output: boolean[] = []
-    let receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
+    const receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
     mux.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ a, b, c, d, sel, expected }) => {

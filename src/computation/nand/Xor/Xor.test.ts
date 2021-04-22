@@ -25,8 +25,8 @@ const XOR_TEST_CASES: TwoInOneOutTestCase[] = [
     }
 ]
 describe('XOR', () => {
-    let receiver = jest.fn();
-    let xor = new Xor();
+    const receiver = jest.fn();
+    const xor = new Xor();
     xor.connectToOutputPin(PIN_OUTPUT, receiver);
 
     XOR_TEST_CASES.forEach(({ a, b, expected }) => {

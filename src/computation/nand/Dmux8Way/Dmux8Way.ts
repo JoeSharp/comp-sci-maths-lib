@@ -25,7 +25,7 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../types";
 //     DMux4Way(in=inAndNotSel2, sel=sel[0..1], a=a, b=b, c=c, d=d);
 
 //     And(a=in, b=sel[2], out=inAndSel2);
-//     DMux4Way(in=inAndSel2, sel=sel[0..1], a=e, b=f, c=g, d=h);    
+//     DMux4Way(in=inAndSel2, sel=sel[0..1], a=e, b=f, c=g, d=h);
 // }
 
 export const PIN_E = 'e';

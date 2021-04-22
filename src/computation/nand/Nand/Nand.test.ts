@@ -26,8 +26,8 @@ const NAND_TEST_CASES: TwoInOneOutTestCase[] = [
 ]
 
 describe('NAND', () => {
-    let receiver = jest.fn();
-    let nand = new Nand();
+    const receiver = jest.fn();
+    const nand = new Nand();
     nand.connectToOutputPin(PIN_OUTPUT, receiver);
 
     NAND_TEST_CASES.forEach(({ a, b, expected }) => {
