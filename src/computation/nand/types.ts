@@ -25,3 +25,4 @@ export const PIN_INPUT = 'input';
 export const PIN_OUTPUT = 'output';
 export const PIN_SELECTOR = 'sel';
 export const PIN_LOAD = 'load';
+export const PIN_ADDRESS = 'address';

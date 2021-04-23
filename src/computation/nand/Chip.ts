@@ -1,7 +1,7 @@
 import { Consumer } from "../../types";
 import { BinaryPin, BinaryBus } from "./types";
 
-abstract class Chip {
+class Chip {
     name: string;
     inputPins: {
         [name: string]: BinaryPin
