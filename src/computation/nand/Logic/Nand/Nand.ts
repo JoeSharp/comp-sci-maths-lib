@@ -1,8 +1,8 @@
-import { Optional, Consumer } from "../../../../types";
+import { Optional } from "../../../../types";
 import Chip from "../../Chip";
 
 import Splitter from '../../Splitter';
-import { PIN_A, PIN_B, PIN_OUTPUT } from "../../types";
+import { BinaryBus, PIN_A, PIN_B, PIN_OUTPUT } from "../../types";
 
 class Nand extends Chip {
     a: boolean;
@@ -26,7 +26,7 @@ class Nand extends Chip {
             this.b = v;
             this.updateValue();
         });
-        this.createOutputPin(PIN_OUTPUT, (r: Consumer<boolean>[]) => {
+        this.createOutputPin(PIN_OUTPUT, (r: BinaryBus) => {
             this.output.connectOutputs(r);
             this.updateValue(true);
         });

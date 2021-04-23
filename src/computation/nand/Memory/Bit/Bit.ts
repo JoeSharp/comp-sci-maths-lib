@@ -19,12 +19,12 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, PIN_SELECTOR } from "../
 //     Mux(a=t1, b=in, sel=load, out=w1);
 //     DFF(in=w1, out=t1, out=out);
 // }
-class OneBitRegister extends Chip {
+class Bit extends Chip {
     mux: Mux;
     dff: DataFlipFlop;
 
     constructor(clock: Clock) {
-        super('OneBitRegister');
+        super('Bit');
         this.mux = new Mux();
         this.dff = new DataFlipFlop();
 
@@ -41,4 +41,4 @@ class OneBitRegister extends Chip {
     }
 }
 
-export default OneBitRegister;
+export default Bit;

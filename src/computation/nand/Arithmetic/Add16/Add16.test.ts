@@ -5,9 +5,7 @@
 // | 1010101010101010 | 0101010101010101 | 1111111111111111 |
 // | 0011110011000011 | 0000111111110000 | 0100110010110011 |
 // | 0001001000110100 | 1001100001110110 | 1010101010101010 |
-
-import { Consumer } from "../../../../types";
-import { binaryToBoolArray, booleanToBinArray, getTestName, PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from "../../types";
+import { BinaryBus, binaryToBoolArray, booleanToBinArray, getTestName, PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from "../../types";
 import Add16 from "./Add16";
 
 interface TestCase {
@@ -28,7 +26,7 @@ const TEST_CASES: TestCase[] = [
 
 describe('Add 16', () => {
     const add16 = new Add16();
-    const receivers: Consumer<boolean>[] = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
+    const receivers: BinaryBus = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
     add16.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ a, b, expected }) => {

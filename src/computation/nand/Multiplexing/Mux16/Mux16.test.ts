@@ -1,6 +1,5 @@
-import { Consumer } from "../../../../types";
 import Mux16 from ".";
-import { booleanToBinArray, binaryToBoolArray, boolToBin, PIN_OUTPUT, PIN_A, PIN_B, PIN_SELECTOR } from "../../types";
+import { booleanToBinArray, binaryToBoolArray, boolToBin, PIN_OUTPUT, PIN_A, PIN_B, PIN_SELECTOR, BinaryBus } from "../../types";
 
 interface TestCase {
     a: boolean[];
@@ -64,7 +63,7 @@ const TEST_CASES: TestCase[] = [
 
 describe('MUX 16', () => {
     const mux16 = new Mux16();
-    const receivers: Consumer<boolean>[] = Array(16).fill(null).map(() => jest.fn());
+    const receivers: BinaryBus = Array(16).fill(null).map(() => jest.fn());
     mux16.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ a, b, sel, expected }) => {

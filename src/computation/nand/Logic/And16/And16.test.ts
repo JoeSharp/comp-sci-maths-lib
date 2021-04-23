@@ -1,6 +1,5 @@
-import { Consumer } from "../../../../types";
 import And16 from "./And16";
-import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_A, PIN_B } from "../../types";
+import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_A, PIN_B, BinaryBus } from "../../types";
 
 interface TestCase {
     a: boolean[];
@@ -44,7 +43,7 @@ const TEST_CASES: TestCase[] = [
 
 describe('AND 16', () => {
     const and16 = new And16();
-    const receivers: Consumer<boolean>[] = Array(16).fill(null).map(() => jest.fn());
+    const receivers: BinaryBus = Array(16).fill(null).map(() => jest.fn());
     and16.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ a, b, expected }) => {

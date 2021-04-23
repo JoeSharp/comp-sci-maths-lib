@@ -1,12 +1,12 @@
 import { Clock } from '../../Clocked';
 import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from '../../types';
-import OneBitRegister from './OneBitRegister';
+import Bit from './Bit';
 
 describe('D-Type Flip Flop', () => {
     test('1-bit Register', () => {
         const receiver = jest.fn();
         const clock = new Clock();
-        const register = new OneBitRegister(clock);
+        const register = new Bit(clock);
         register.connectToOutputPin(PIN_OUTPUT, receiver);
 
         register.sendToInputPin(PIN_INPUT, false);

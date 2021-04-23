@@ -1,6 +1,5 @@
-import { Consumer } from "../../../../types";
 import Not16 from "./Not16";
-import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_INPUT } from "../../types";
+import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_INPUT, BinaryBus } from "../../types";
 
 interface TestCase {
     input: boolean[];
@@ -34,7 +33,7 @@ const TEST_CASES: TestCase[] = [
 
 describe('NOT 16', () => {
     const or16 = new Not16();
-    const receivers: Consumer<boolean>[] = Array(16).fill(null).map(() => jest.fn());
+    const receivers: BinaryBus = Array(16).fill(null).map(() => jest.fn());
     or16.connectToOutputBus(PIN_OUTPUT, receivers);
 
     TEST_CASES.forEach(({ input, expected }) => {
