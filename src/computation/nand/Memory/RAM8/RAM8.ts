@@ -52,12 +52,10 @@ class RAM8 extends Chip {
         this.inputFork = new BusFork();
 
         this.registers.forEach(r => this.inputFork.withOutput(r.getInputBus(PIN_INPUT)));
-        this.inputFork.build();
 
         this.addressFork
             .withOutput(this.demux.getInputBus(PIN_SELECTOR))
-            .withOutput(this.mux.getInputBus(PIN_SELECTOR))
-            .build();
+            .withOutput(this.mux.getInputBus(PIN_SELECTOR));
 
         [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H].forEach((pin, i) => {
             this.demux.connectToOutputPin(pin, this.registers[i].getInputPin(PIN_LOAD));

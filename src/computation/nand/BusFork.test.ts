@@ -12,8 +12,7 @@ describe('Bus Fork', () => {
         const word3 = generateRandomWord();
         const chip = new BusFork()
             .withOutput(receivers1)
-            .withOutput(receivers2)
-            .build();
+            .withOutput(receivers2);
 
         chip.send(word1);
         [receivers1, receivers2].forEach(rs => rs.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(word1[i])));
