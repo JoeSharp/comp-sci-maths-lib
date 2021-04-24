@@ -1,8 +1,8 @@
 import { readFileSync } from "fs";
+import { FileLoader } from "../TestScripts/types";
 import HackCpu from "./HackCpu";
 
 import HackCpuTestRunner from "./HackCpuTestRunner";
-import { FileLoader } from "./types";
 
 describe("Hack CPU Test Script Runner", () => {
   test("Multiplication", () => {

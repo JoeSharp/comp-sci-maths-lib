@@ -37,6 +37,4 @@ export type NandTestInstruction =
   | NandTestOutput
   | NandTestEval;
 
-export interface NandTestScript extends TestScript {
-  testInstructions: NandTestInstruction[];
-}
+export interface NandTestScript extends TestScript<NandTestInstruction> {}

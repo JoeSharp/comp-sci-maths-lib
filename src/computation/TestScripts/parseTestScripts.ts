@@ -49,6 +49,7 @@ export const parseOutputFormat = (
       .map((p) => p.match(OUTPUT_RAM_FRAGMENT_REGEX))
       .filter((m) => m !== null)
       .map((m) => ({
+        heading: `RAM[${m.groups.address}]`,
         address: parseInt(m.groups.address, 10),
         format: m.groups.format,
         spacing: m.groups.spacing.split(".").map((s) => parseInt(s, 10)),
@@ -58,6 +59,7 @@ export const parseOutputFormat = (
       .map((p) => p.match(OUTPUT_VAR_FRAGMENT_REGEX))
       .filter((m) => m !== null)
       .map((m) => ({
+        heading: m.groups.var,
         variable: m.groups.var,
         format: m.groups.format,
         spacing: m.groups.spacing.split(".").map((s) => parseInt(s, 10)),

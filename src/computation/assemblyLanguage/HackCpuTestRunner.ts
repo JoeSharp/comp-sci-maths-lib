@@ -1,6 +1,4 @@
-import {
-  parseTestScript,
-} from "./hackAsmTestScript";
+import { parseTestScript } from "./hackAsmTestScript";
 import HackCpu from "./HackCpu";
 import {
   CpuTestInstruction,
@@ -9,81 +7,23 @@ import {
   CpuTestScript,
   CpuTestSetPC,
   CpuTestSetRAM,
-  FileLoader,
 } from "./types";
 import Stack from "../../dataStructures/stack/Stack";
-import { Optional } from "../../types";
 import { formatNumber, formatString } from "../TestScripts/parseTestScripts";
+import TestRunner from "../TestScripts/TestRunner";
+import { FileLoader, isOutputRam } from "../TestScripts/types";
 
-export default class HackCpuTestRunner {
-  fileLoader: FileLoader;
-  cpu: HackCpu;
-  testScript: CpuTestScript;
-  commandStack: Stack<CpuTestInstruction[]>;
-  compareTo: string[];
-  testOutput: string[];
-  lastInstruction: Optional<CpuTestInstruction>;
-
+export default class HackCpuTestRunner extends TestRunner<
+  HackCpu,
+  CpuTestInstruction,
+  CpuTestScript
+> {
   constructor(cpu: HackCpu, fileLoader: FileLoader) {
-    this.fileLoader = fileLoader;
-    this.cpu = cpu;
+    super(cpu, fileLoader, parseTestScript);
   }
 
-  reset() {
-    this.testOutput = [];
-    this.commandStack = new Stack();
-    this.commandStack.push([...this.testScript.testInstructions]);
-    this.compareTo = this.fileLoader(this.testScript.compareTo)
-      .split("\n")
-      .map((s) => s.trim());
-    const log = this.testScript.outputList
-      .map(({ address, spacing }) => formatString(`RAM[${address}]`, spacing))
-      .join("|");
-    this.addToLog(`|${log}|`);
-  }
-
-  loadScript(data: string) {
-    this.testScript = parseTestScript(data);
-
-    const program = this.fileLoader(this.testScript.load);
-    this.cpu.loadProgram(program);
-
-    this.reset();
-  }
-
-  addToLog(log: string) {
-    if (this.testOutput.length >= this.compareTo.length) {
-      throw new Error(
-        `Too many log lines output from test, expecting ${this.compareTo.length}`
-      );
-    }
-
-    // Check against compareTo
-    const nextCompareLine = this.compareTo[this.testOutput.length];
-    if (nextCompareLine !== log) {
-      throw new Error(
-        `Comparing Failure on Line ${this.testOutput.length}\n\tExpected: ${nextCompareLine}\n\tReceived: ${log}`
-      );
-    }
-
-    // Assume all is good
-    this.testOutput.push(log);
-  }
-
-  step(toEnd: boolean = false) {
-    while (!this.commandStack.isEmpty()) {
-      while (this.commandStack.peek().length > 0) {
-        const instruction = this.commandStack.peek().shift();
-        this.runInstruction(instruction);
-        if (!toEnd) return; // Just run one command
-      }
-
-      this.commandStack.pop();
-    }
-  }
-
-  runToEnd() {
-    this.step(true);
+  loadProgram(program: string) {
+    this.objectUnderTest.loadProgram(program);
   }
 
   runInstruction(instruction: CpuTestInstruction) {
@@ -103,17 +43,8 @@ export default class HackCpuTestRunner {
     }
   }
 
-  handleOutputInstruction() {
-    const log = this.testScript.outputList
-      .map(({ address, format, spacing }) =>
-        formatNumber(this.cpu.memory[address], format, spacing)
-      )
-      .join("|");
-    this.addToLog(`|${log}|`);
-  }
-
   handleTickTockInstruction() {
-    this.cpu.tick();
+    this.objectUnderTest.tick();
   }
 
   handleRepeatInstruction({ count, instructions }: CpuTestRepeat) {
@@ -125,10 +56,30 @@ export default class HackCpuTestRunner {
   }
 
   handleSetRamInstruction({ address, value }: CpuTestSetRAM) {
-    this.cpu.setMemory(address, [value]);
+    this.objectUnderTest.setMemory(address, [value]);
   }
 
   handleSetPCInstruction({ value }: CpuTestSetPC) {
-    this.cpu.setPC(value);
+    this.objectUnderTest.setPC(value);
+  }
+
+  handleOutputInstruction() {
+    const log = this.testScript.outputList
+      .map((output) => {
+        if (isOutputRam(output)) {
+          const { address, format, spacing } = output;
+          return formatNumber(
+            this.objectUnderTest.memory[address],
+            format,
+            spacing
+          );
+        } else {
+          throw new Error(
+            "Unsupported method, outputting variables from Hack CPU"
+          );
+        }
+      })
+      .join("|");
+    this.addToLog(`|${log}|`);
   }
 }

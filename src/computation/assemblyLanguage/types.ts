@@ -153,9 +153,4 @@ export type CpuTestInstruction =
   | CpuTestTickTockInstruction
   | CpuTestOutputInstruction;
 
-export interface CpuTestScript extends TestScript {
-  rawTestInstructions: CpuTestInstruction[];
-  testInstructions: CpuTestInstruction[];
-}
-
-export type FileLoader = (filename: string) => string;
+export interface CpuTestScript extends TestScript<CpuTestInstruction> {}

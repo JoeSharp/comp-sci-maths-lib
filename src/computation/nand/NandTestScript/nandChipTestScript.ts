@@ -135,6 +135,7 @@ export const parseNandTestScript = (input: string): NandTestScript => {
     load,
     outputList,
     testInstructions,
+    rawTestInstructions: testInstructions,
   };
 };
 
