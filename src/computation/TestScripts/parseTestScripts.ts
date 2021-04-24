@@ -59,8 +59,8 @@ export const parseOutputFormat = (
       .map((p) => p.match(OUTPUT_VAR_FRAGMENT_REGEX))
       .filter((m) => m !== null)
       .map((m) => ({
-        heading: m.groups.var,
-        variable: m.groups.var,
+        heading: m.groups.variable,
+        variable: m.groups.variable,
         format: m.groups.format,
         spacing: m.groups.spacing.split(".").map((s) => parseInt(s, 10)),
       }))
@@ -87,11 +87,12 @@ const RADIX_BY_CODE: RadixByCode = {
 };
 
 export const formatString = (value: string, spacing: number[]): string => {
+  const spacingFiddleFactor = Math.floor((value.length - 1) / 2);
   if (spacing.length === 3) {
-    return `${spacePad("", spacing[0])}${spacePad(value, spacing[1])}${spacePad(
-      "",
-      spacing[2]
-    )}`;
+    return `${spacePad("", spacing[0] - spacingFiddleFactor)}${spacePad(
+      value,
+      spacing[1]
+    )}${spacePad("", spacing[2] - spacingFiddleFactor)}`;
   }
 
   // Not sure, just dump out the value
