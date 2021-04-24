@@ -60,18 +60,18 @@ class PC extends Chip {
         this.incrementer.connectToOutputBus(PIN_OUTPUT, this.incrementMux.getInputBus(PIN_B));
         this.lastPCFork.withOutput(this.incrementer.getInputBus(PIN_INPUT));
         this.lastPCFork.withOutput(this.incrementMux.getInputBus(PIN_A));
-        this.incrementMux.connectToOutputBus(PIN_OUTPUT, this.loadMux.getInputBus(PIN_B));
+        this.incrementMux.connectToOutputBus(PIN_OUTPUT, this.loadMux.getInputBus(PIN_A));
         this.loadMux.connectToOutputBus(PIN_OUTPUT, this.resetMux.getInputBus(PIN_A));
         this.resetMux.connectToOutputBus(PIN_OUTPUT, this.register.getInputBus(PIN_INPUT));
         this.register.sendToInputPin(PIN_LOAD, true);
         this.register.connectToOutputBus(PIN_OUTPUT, this.lastPCFork.getInput());
-        this.resetMux.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(false));
+        this.resetMux.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(null).map(() => false));
 
         // External Wiring
         this.createInputPin(PIN_LOAD, this.loadMux.getInputPin(PIN_SELECTOR));
         this.createInputPin(PIN_INCREMENT, this.incrementMux.getInputPin(PIN_SELECTOR));
         this.createInputPin(PIN_RESET, this.resetMux.getInputPin(PIN_SELECTOR));
-        this.createInputBus(PIN_INPUT, this.loadMux.getInputBus(PIN_A));
+        this.createInputBus(PIN_INPUT, this.loadMux.getInputBus(PIN_B));
         this.createOutputBus(PIN_OUTPUT, this.register.getOutputBus(PIN_OUTPUT));
     }
 }

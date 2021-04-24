@@ -2,7 +2,7 @@ import { binaryToNumber } from "../../../../dataRepresentation/numberBases/simpl
 import BusSink from "../../BusSink";
 import { Clock } from "../../Clocked";
 import { generateRandomWord, PIN_OUTPUT } from "../../types";
-import PC from "./PC"
+import PC, { PIN_INCREMENT } from "./PC"
 
 describe('Program Counter', () => {
     test('Simple', () => {
@@ -12,6 +12,7 @@ describe('Program Counter', () => {
 
         const sink = new BusSink();
         pc.connectToOutputBus(PIN_OUTPUT, sink.getBus());
+        pc.sendToInputPin(PIN_INCREMENT, true);
 
         const pcValue = () => binaryToNumber(sink.getValues());
         expect(pcValue()).toBe(0);
