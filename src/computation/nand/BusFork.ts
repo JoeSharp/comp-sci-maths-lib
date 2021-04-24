@@ -1,3 +1,4 @@
+import { Optional } from "../../types";
 import { BinaryBus, WORD_LENGTH } from "./types";
 
 export const BUS_OUTPUT_1 = 'output1';
@@ -9,14 +10,20 @@ interface ForkOutput {
     bus: BinaryBus;
 }
 
+type BusCallback = (index: number, value: boolean) => void;
+
 class BusFork {
     outputs: ForkOutput[];
     inputBus: BinaryBus;
+    callback: BusCallback;
 
-    constructor(width: number = WORD_LENGTH) {
+    constructor(width: number = WORD_LENGTH, callback: Optional<BusCallback> = undefined) {
         this.outputs = [];
+        this.callback = callback
 
         this.inputBus = Array(width).fill(null).map((_, i) => v => {
+            if (!!this.callback) this.callback(i, v);
+
             this.outputs.forEach(({ bus, startIndex, endIndex }) => {
                 if (i >= startIndex && i < endIndex) {
                     bus[i - startIndex](v);

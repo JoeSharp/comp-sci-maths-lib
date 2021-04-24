@@ -26,9 +26,7 @@ class Bit extends Chip {
     constructor(clock: Clock) {
         super('Bit');
         this.mux = new Mux();
-        this.dff = new DataFlipFlop();
-
-        clock.registerClocked(this.dff);
+        this.dff = new DataFlipFlop(clock);
 
         // Internal Wiring
         this.dff.connectToOutputPin(PIN_OUTPUT, this.mux.getInputPin(PIN_A)); // t1

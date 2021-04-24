@@ -2,20 +2,15 @@ import { readFileSync } from "fs";
 import { Optional } from "../../types";
 
 import {
-  parseOutputFormat,
-  parseRequiredFile,
   parseSetRam,
-  NamedRegExps,
   parseTestScript,
   parseTickTockInstruction,
   parseRepeatStart,
   parseRepeatEnd,
-  parseOutputInstruction,
 } from "./hackAsmTestScript";
 import {
   CpuTestInstruction,
   CpuTestInstructionType,
-  CpuTestOutputFragment,
   CpuTestRepeat,
   CpuTestSetRAM,
 } from "./types";
@@ -25,24 +20,12 @@ interface SetRamTestCase {
   expected: CpuTestSetRAM;
 }
 
-interface RequiredFileTestCase {
-  input: string;
-  name: keyof NamedRegExps;
-  expected: string;
-}
-
 interface RepeatTestCase {
   input: string;
   expectedCount: Optional<number>;
 }
 
 describe("Hack ASM Test Scripts", () => {
-  test("Output", () => {
-    expect(parseOutputInstruction("   output;")).toBeTruthy();
-    expect(parseOutputInstruction("output;")).toBeTruthy();
-    expect(parseOutputInstruction(" input")).toBeFalsy();
-    expect(parseOutputInstruction("floutput   ")).toBeFalsy();
-  });
   test("Tick Tock", () => {
     expect(parseTickTockInstruction("   ticktock;")).toBeTruthy();
     expect(parseTickTockInstruction("ticktock;")).toBeTruthy();
@@ -84,28 +67,7 @@ describe("Hack ASM Test Scripts", () => {
     expect(parseRepeatEnd(" {} ")).toBeFalsy();
   });
 
-  const requiredFileTestCases: RequiredFileTestCase[] = [
-    {
-      input: "load Mult.asm,",
-      name: "load",
-      expected: "Mult.asm",
-    },
-    {
-      input: "output-file Mult.out,",
-      name: "outputFile",
-      expected: "Mult.out",
-    },
-    {
-      input: "compare-to Mult.cmp,",
-      name: "compareTo",
-      expected: "Mult.cmp",
-    },
-  ];
 
-  requiredFileTestCases.forEach(({ input, name, expected }) => {
-    test(`Required File - ${input}`, () =>
-      expect(parseRequiredFile(input, name)).toBe(expected));
-  });
 
   const setRamTestCases: SetRamTestCase[] = [
     {
@@ -149,27 +111,6 @@ describe("Hack ASM Test Scripts", () => {
       expect(result.lineContent).toBe(expected.lineContent);
       expect(result.lineNumber).toBe(expected.lineNumber);
     });
-  });
-
-  test("Output Format", () => {
-    const results: CpuTestOutputFragment[] = [];
-    parseOutputFormat(
-      "output-list RAM[0]%D2.6.2 RAM[1]%D2.6.2 RAM[2]%D2.6.2;",
-      results
-    );
-
-    expect(results.length).toBe(3);
-    expect(results[0].address).toBe(0);
-    expect(results[0].format).toBe("D");
-    expect(results[0].spacing).toEqual([2, 6, 2]);
-
-    expect(results[1].address).toBe(1);
-    expect(results[1].format).toBe("D");
-    expect(results[2].spacing).toEqual([2, 6, 2]);
-
-    expect(results[2].address).toBe(2);
-    expect(results[2].format).toBe("D");
-    expect(results[2].spacing).toEqual([2, 6, 2]);
   });
 
   test("ASM Test Script (Mult)", () => {

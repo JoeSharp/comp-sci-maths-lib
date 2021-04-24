@@ -1,7 +1,5 @@
 import {
   parseTestScript,
-  formatNumber,
-  formatString,
 } from "./hackAsmTestScript";
 import HackCpu from "./HackCpu";
 import {
@@ -15,6 +13,7 @@ import {
 } from "./types";
 import Stack from "../../dataStructures/stack/Stack";
 import { Optional } from "../../types";
+import { formatNumber, formatString } from "../TestScripts/parseTestScripts";
 
 export default class HackCpuTestRunner {
   fileLoader: FileLoader;

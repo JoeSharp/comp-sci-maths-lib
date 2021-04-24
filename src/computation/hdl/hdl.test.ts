@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
-import { isComment, parseCodeLine, parseIOLine, parseOpeningLine, parseHdlFile } from './hdl'
+import { isComment } from '../TestScripts/parseTestScripts';
+import { parseCodeLine, parseIOLine, parseOpeningLine, parseHdlFile } from './hdl'
 
 describe('Hardware Description Lanuage (Hack HDL)', () => {
     test('Detect Comment', () => {

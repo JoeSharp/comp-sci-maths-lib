@@ -15,6 +15,7 @@ describe('D-Type Flip Flop', () => {
         register.sendToInputPin(PIN_LOAD, true);
         expect(receiver).toHaveBeenCalledTimes(0);
         clock.ticktock();
+        expect(receiver).toHaveBeenCalledTimes(1);
         expect(receiver).toHaveBeenCalledWith(false); // first call
         register.sendToInputPin(PIN_INPUT, true);
         clock.ticktock();

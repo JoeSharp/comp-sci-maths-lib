@@ -10,6 +10,7 @@ export type BinaryPin = Consumer<boolean>;
 export type BinaryBus = BinaryPin[];
 
 export const WORD_LENGTH = 16;
+export const ZERO_WORD = Array(WORD_LENGTH).fill(false);
 
 // Arrays need reversing, binary numbers are read right to left
 export const getTestName = (parameters: object) => Object.entries(parameters).map(([k, v]) => `${k}=${v}`).join(', ');
