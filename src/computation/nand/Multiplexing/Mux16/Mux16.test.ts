@@ -1,5 +1,6 @@
 import Mux16 from ".";
-import { booleanToBinArray, binaryToBoolArray, boolToBin, PIN_OUTPUT, PIN_A, PIN_B, PIN_SELECTOR, BinaryBus } from "../../types";
+import { binaryToBoolArray, booleanToBinArray, boolToBin } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { PIN_OUTPUT, PIN_A, PIN_B, PIN_SELECTOR, BinaryBus } from "../../types";
 
 interface TestCase {
     a: boolean[];

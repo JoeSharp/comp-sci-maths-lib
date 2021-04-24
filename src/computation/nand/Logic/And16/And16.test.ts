@@ -1,5 +1,7 @@
 import And16 from "./And16";
-import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_A, PIN_B, BinaryBus } from "../../types";
+import { binaryToBoolArray, booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { PIN_OUTPUT, PIN_A, PIN_B, BinaryBus } from "../../types";
+import BusSink from "../../BusSink";
 
 interface TestCase {
     a: boolean[];
@@ -43,15 +45,15 @@ const TEST_CASES: TestCase[] = [
 
 describe('AND 16', () => {
     const and16 = new And16();
-    const receivers: BinaryBus = Array(16).fill(null).map(() => jest.fn());
-    and16.connectToOutputBus(PIN_OUTPUT, receivers);
+    const result = new BusSink();
+    and16.connectToOutputBus(PIN_OUTPUT, result.getBus());
 
     TEST_CASES.forEach(({ a, b, expected }) => {
         test(`${booleanToBinArray(a)} AND ${booleanToBinArray(b)} = ${booleanToBinArray(expected)}`, () => {
             and16.sendToInputBus(PIN_A, a);
             and16.sendToInputBus(PIN_B, b);
 
-            expected.forEach((e, i) => expect(receivers[i]).toHaveBeenLastCalledWith(e));
+            expect(result.getValues()).toEqual(expected);
         })
     })
 })

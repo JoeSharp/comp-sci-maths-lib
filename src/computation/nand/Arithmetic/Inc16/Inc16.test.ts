@@ -1,4 +1,5 @@
-import { BinaryBus, binaryToBoolArray, booleanToBinArray, getTestName, PIN_INPUT, PIN_OUTPUT } from "../../types"
+import { binaryToBoolArray, booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { BinaryBus, getTestName, PIN_INPUT, PIN_OUTPUT } from "../../types"
 import Inc16 from "./Inc16"
 
 interface TestCase {

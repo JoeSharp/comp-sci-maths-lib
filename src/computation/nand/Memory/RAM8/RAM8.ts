@@ -1,4 +1,4 @@
-import { PIN_F } from "../../Arithmetic/ALU/ALU";
+import { PIN_F } from "../../CPU/ALU/ALU";
 import BusFork from "../../BusFork";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
@@ -11,8 +11,8 @@ import Register from "../Register";
 
 /**
  * Memory of 8 registers, each 16 bit-wide. Out holds the value
- * stored at the memory location specified by address. If load==1, then 
- * the in value is loaded into the memory location specified by address 
+ * stored at the memory location specified by address. If load==1, then
+ * the in value is loaded into the memory location specified by address
  * (the loaded value will be emitted to out from the next time step onward).
  */
 

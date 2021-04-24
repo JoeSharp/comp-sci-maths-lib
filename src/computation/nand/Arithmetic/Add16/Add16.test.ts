@@ -5,7 +5,8 @@
 // | 1010101010101010 | 0101010101010101 | 1111111111111111 |
 // | 0011110011000011 | 0000111111110000 | 0100110010110011 |
 // | 0001001000110100 | 1001100001110110 | 1010101010101010 |
-import { BinaryBus, binaryToBoolArray, booleanToBinArray, getTestName, PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from "../../types";
+import { binaryToBoolArray, booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { BinaryBus, getTestName, PIN_A, PIN_B, PIN_OUTPUT, WORD_LENGTH } from "../../types";
 import Add16 from "./Add16";
 
 interface TestCase {

@@ -1,5 +1,6 @@
 import Not16 from "./Not16";
-import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_INPUT, BinaryBus } from "../../types";
+import { binaryToBoolArray, booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { PIN_OUTPUT, PIN_INPUT, BinaryBus } from "../../types";
 
 interface TestCase {
     input: boolean[];

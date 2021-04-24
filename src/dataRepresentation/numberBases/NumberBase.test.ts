@@ -16,7 +16,7 @@ interface IntegerTestCase {
   asHexadecimal: string;
 }
 
-const integerTestCases: IntegerTestCase[] = [
+export const integerTestCases: IntegerTestCase[] = [
   {
     value: 0,
     asBinary: "0000 0000",

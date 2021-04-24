@@ -1,5 +1,6 @@
 import { PIN_C, PIN_D } from "../Dmux4Way/Dmux4Way";
-import { binaryToBoolArray, PIN_A, PIN_B, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../../types";
+import { binaryToBoolArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { PIN_A, PIN_B, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../../types";
 import Mux4Way16 from "./Mux4Way16"
 
 interface TestCase {

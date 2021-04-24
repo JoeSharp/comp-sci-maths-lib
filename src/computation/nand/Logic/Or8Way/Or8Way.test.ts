@@ -4,7 +4,8 @@
 // |  00010000  |  1  |
 // |  00000001  |  1  |
 
-import { binaryToBoolArray, booleanToBinArray, PIN_INPUT, PIN_OUTPUT } from "../../types";
+import { binaryToBoolArray, booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 import Or8Way from "./Or8Way";
 
 // |  00100110  |  1  |

@@ -1,4 +1,6 @@
-import { binaryToBoolArray, getTestName, PIN_OUTPUT, WORD_LENGTH } from "../../types";
+
+import { binaryToBoolArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { getTestName, PIN_OUTPUT, WORD_LENGTH } from "../../types";
 import ALU, { PIN_F, PIN_NG, PIN_NO, PIN_NX, PIN_NY, PIN_X, PIN_Y, PIN_ZR, PIN_ZX, PIN_ZY } from "./ALU";
 
 interface TestCase {

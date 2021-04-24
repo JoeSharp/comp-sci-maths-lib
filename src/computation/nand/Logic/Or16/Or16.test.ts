@@ -1,5 +1,6 @@
 import Or16 from "./Or16";
-import { booleanToBinArray, binaryToBoolArray, PIN_OUTPUT, PIN_A, PIN_B, BinaryBus } from "../../types";
+import { binaryToBoolArray, booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { PIN_OUTPUT, PIN_A, PIN_B, BinaryBus } from "../../types";
 
 interface TestCase {
     a: boolean[];

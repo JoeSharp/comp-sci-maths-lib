@@ -1,29 +1,29 @@
 import { Clock } from "../../Clocked";
 import { generateRandomWord, PIN_ADDRESS, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, WORD_LENGTH } from "../../types";
-import RAM8 from "./RAM8"
+import RAM64 from "./RAM64"
 
 interface TestData {
     address: boolean[];
     content: boolean[];
 }
 
-describe('RAM8', () => {
+describe('RAM64', () => {
     test('Simple', () => {
         const receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
         const clock = new Clock();
-        const ram = new RAM8(clock);
+        const ram = new RAM64(clock);
         ram.connectToOutputBus(PIN_OUTPUT, receivers);
         const testData = [
             {
-                address: [false, false, true],
+                address: [false, false, true, false, true, false],
                 content: generateRandomWord()
             },
             {
-                address: [false, true, true],
+                address: [false, true, true, false, true, false],
                 content: generateRandomWord()
             },
             {
-                address: [true, false, true],
+                address: [true, false, true, true, true, false],
                 content: generateRandomWord()
             }
         ]

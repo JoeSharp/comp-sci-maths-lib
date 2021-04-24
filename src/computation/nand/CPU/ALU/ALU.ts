@@ -8,7 +8,7 @@
  * if the ALU output == 0, zr is set to 1; otherwise zr is set to 0;
  * if the ALU output < 0, ng is set to 1; otherwise ng is set to 0.
  */
-import Add16 from "../Add16";
+import Add16 from "../../Arithmetic/Add16";
 import Chip from "../../Chip";
 import Mux16 from "../../Multiplexing/Mux16";
 import Not from "../../Logic/Not";
