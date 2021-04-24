@@ -23,9 +23,6 @@ export const parseHdlFile = (input: string): HdlChip => {
     }
 }
 
-const COMMENT_REGEX = /^(\s)*(\/\/|[\/*]|[*])/;
-export const isComment = (input: string): boolean => input.match(COMMENT_REGEX) !== null;
-
 const OPEN_LINE_REGEX = /(CHIP)\s+(?<chipName>[A-Za-z]+)\s({)/
 export const parseOpeningLine = (input: string): string => {
     const openLineMatch = input.trim().match(OPEN_LINE_REGEX);

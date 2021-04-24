@@ -1,4 +1,4 @@
-import { Optional } from "../../types";
+import { CodeLine, TestScript } from "../TestScripts/types";
 
 export interface Registers {
   [name: string]: number;
@@ -112,10 +112,8 @@ export enum CpuTestInstructionType {
   output,
 }
 
-export interface AbstractCpuTestInstruction {
+export interface AbstractCpuTestInstruction extends CodeLine {
   type: CpuTestInstructionType;
-  lineContent: string;
-  lineNumber: number;
 }
 
 export interface CpuTestSetRAM extends AbstractCpuTestInstruction {
@@ -155,17 +153,7 @@ export type CpuTestInstruction =
   | CpuTestTickTockInstruction
   | CpuTestOutputInstruction;
 
-export interface CpuTestOutputFragment {
-  address: number;
-  format: string;
-  spacing: number[];
-}
-
-export interface CpuTestScript {
-  load: string;
-  outputFile: string;
-  compareTo: string;
-  outputList: CpuTestOutputFragment[];
+export interface CpuTestScript extends TestScript {
   rawTestInstructions: CpuTestInstruction[];
   testInstructions: CpuTestInstruction[];
 }

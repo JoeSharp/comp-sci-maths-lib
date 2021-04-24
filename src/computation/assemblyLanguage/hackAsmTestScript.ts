@@ -1,7 +1,6 @@
 import {
   CpuTestInstruction,
   CpuTestInstructionType,
-  CpuTestOutputFragment,
   CpuTestOutputInstruction,
   CpuTestRepeat,
   CpuTestScript,
@@ -9,64 +8,16 @@ import {
   CpuTestSetRAM,
   CpuTestTickTockInstruction,
 } from "./types";
-import { COMMENT_REGEX } from "./hackAsm";
 import { Optional } from "../../types";
 import Stack from "../../dataStructures/stack/Stack";
+import { TestOutputFragment } from "../TestScripts/types";
+import { isComment, parseOutputFormat, parseOutputInstruction, parseRequiredFile } from "../TestScripts/parseTestScripts";
 
-const LOAD_REGEX = /^(?:load)\s(?<load>.+)(?:,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
-const OUTPUT_FILE_REGEX = /^(?:output\-file)\s(?<outputFile>.+)(?:,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
-const COMPARE_TO_REGEX = /^(?:compare\-to)\s(?<compareTo>.+)(?:,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
-const OUTPUT_FORMAT_REGEX = /^(?:output-list)(?<parts>(?:(?:\sRAM\[)(?:[0-9]+)(?:\]\%D)(?:[0-9]\.)*(?:[0-9]+))+)(?:;)+$/;
-const OUTPUT_FRAGMENT_REGEX = /^(?:RAM\[)(?<address>[0-9]+)(?:\]\%(?<format>D))(?<spacing>(?:[0-9]\.)*(?:[0-9]+))$/;
 const SET_RAM_REGEX = /^(set\sRAM\[)(?<address>[0-9])+(\]\s)(?<value>\-{0,1}[0-9]+)(,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
-const SET_PC_REGEX = /^(set\sPC\s)(?<value>[0-9]+)(,|;)$/;
+const SET_PC_REGEX = /^(set\sPC\s)(?<value>[0-9]+)(,|;)\s*(?:\/\/(?<comment>.*)){0,1}$/;
 const TICKTOCK_REGEX = /^\s*(ticktock;)$/;
 const REPEAT_START_REGEX = /^\s*(?:repeat)\s*(?<count>[0-9]+)\s*(?:\{)\s*(?:\/\/(?<comment>.*)){0,1}$/;
 const REPEAT_END_REGEX = /^\s*(\})\s*$/;
-const OUTPUT_REGEX = /^\s*(output;)$/;
-
-export interface NamedRegExps {
-  load: RegExp;
-  outputFile: RegExp;
-  compareTo: RegExp;
-}
-
-const REQUIRED_FILE_REGEXES: NamedRegExps = {
-  load: LOAD_REGEX,
-  outputFile: OUTPUT_FILE_REGEX,
-  compareTo: COMPARE_TO_REGEX,
-};
-
-export const parseRequiredFile = (
-  input: string,
-  name: keyof NamedRegExps
-): Optional<string> => {
-  const match = input.match(REQUIRED_FILE_REGEXES[name]);
-  if (!!match) {
-    return match.groups[name];
-  }
-};
-
-export const parseOutputFormat = (
-  input: string,
-  results: CpuTestOutputFragment[]
-) => {
-  const matches = input.match(OUTPUT_FORMAT_REGEX);
-  if (!!matches) {
-    const parts = matches.groups.parts
-      .trim()
-      .split(" ")
-      .map((t) => t.trim());
-    parts
-      .map((p) => p.match(OUTPUT_FRAGMENT_REGEX))
-      .map((m) => ({
-        address: parseInt(m.groups.address, 10),
-        format: m.groups.format,
-        spacing: m.groups.spacing.split(".").map((s) => parseInt(s, 10)),
-      }))
-      .forEach((of) => results.push(of));
-  }
-};
 
 export const parseSetRam = (
   input: string,
@@ -103,44 +54,9 @@ export const parseSetPC = (
   return;
 };
 
-export const spacePad = (value: string, width: number) => {
-  while (value.length < width) {
-    value = ` ${value}`;
-  }
-  return value;
-};
-
-interface RadixByCode {
-  [code: string]: number;
-}
-
-const RADIX_BY_CODE: RadixByCode = {
-  D: 10,
-};
-
-export const formatString = (value: string, spacing: number[]): string => {
-  if (spacing.length === 3) {
-    return `${spacePad("", spacing[0])}${spacePad(value, spacing[1])}${spacePad(
-      "",
-      spacing[2]
-    )}`;
-  }
-
-  // Not sure, just dump out the value
-  return value.toString();
-};
-
-export const formatNumber = (
-  value: number,
-  format: string,
-  spacing: number[]
-): string => formatString(value.toString(RADIX_BY_CODE[format]), spacing);
-
 export const parseTickTockInstruction = (input: string): boolean =>
   input.match(TICKTOCK_REGEX) !== null;
 
-export const parseOutputInstruction = (input: string): boolean =>
-  input.match(OUTPUT_REGEX) !== null;
 
 export const parseRepeatStart = (
   input: string,
@@ -168,7 +84,7 @@ export const parseTestScript = (input: string): CpuTestScript => {
   let outputFile: string;
   let compareTo: string;
   let load: string;
-  const outputList: CpuTestOutputFragment[] = [];
+  const outputList: TestOutputFragment[] = [];
   const testInstructions: CpuTestInstruction[] = [];
   const rawTestInstructions: CpuTestInstruction[] = [];
 
@@ -180,7 +96,7 @@ export const parseTestScript = (input: string): CpuTestScript => {
     .map((s) => s.trim()) // Trim any indentation
     .map((s, i) => ({ lineContent: s, lineNumber: i }))
     .filter(({ lineContent }) => lineContent.length > 0) // Get rid of empty lines
-    .filter(({ lineContent }) => lineContent.match(COMMENT_REGEX) === null) // Get rid of comments
+    .filter(({ lineContent }) => !isComment(lineContent)) // Get rid of comments
     .forEach(({ lineContent, lineNumber }) => {
       // Check for load file (if not already seen)
       if (!load) {

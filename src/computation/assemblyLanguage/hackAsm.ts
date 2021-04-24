@@ -8,11 +8,11 @@ import {
 } from "./types";
 import { Optional } from "../../types";
 import { escapeRegExp } from "lodash";
+import { isComment } from "../TestScripts/parseTestScripts";
 
 const LABEL_REGEX = /\((?<label>[_A-Za-z0-9\.]+)\)/;
 const A_INSTRUCTION_DIRECT_REGEX = /^@(?<address>[0-9]+)\s*(?:\/\/(?<comment>.*)){0,1}$/;
 const A_INSTRUCTION_NAMED_REGEX = /^@(?<label>[_A-Za-z0-9]+)\s*(?:\/\/(?<comment>.*)){0,1}$/;
-export const COMMENT_REGEX = /^(\s)*(\/\/|[\/*]|[*])/;
 
 const createRegExpOptions = (o: object): string =>
   Object.values(o)
@@ -56,8 +56,7 @@ export const parseSymbolicAsm = (
   if (input.trim().length === 0) return;
 
   // Is this a comment?
-  const isComment = input.match(COMMENT_REGEX);
-  if (isComment) return;
+  if (isComment(input)) return;
 
   // Is this a label?
   const label = input.match(LABEL_REGEX);
