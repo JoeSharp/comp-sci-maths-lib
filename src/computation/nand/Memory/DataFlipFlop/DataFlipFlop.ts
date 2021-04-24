@@ -1,18 +1,20 @@
 import Chip from "../../Chip";
-import { IClocked } from "../../Clocked";
+import { Clock, IClocked } from "../../Clocked";
 
 import Splitter from '../../Splitter';
 import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 class DataFlipFlop extends Chip implements IClocked {
-    input: boolean;
+    value: boolean;
     output: Splitter<boolean>;
 
-    constructor() {
+    constructor(clock: Clock) {
         super('DFF');
+        this.value = false; 
         this.output = new Splitter();
+        clock.registerClocked(this);
 
-        this.createInputPin(PIN_INPUT, v => this.input = v);
+        this.createInputPin(PIN_INPUT, v => this.value = v);
         this.createOutputPin(PIN_OUTPUT, rs => this.output.connectOutputs(rs));
     }
 
@@ -21,7 +23,7 @@ class DataFlipFlop extends Chip implements IClocked {
     }
 
     tock() {
-        this.output.send(this.input);
+        this.output.send(this.value);
     }
 }
 

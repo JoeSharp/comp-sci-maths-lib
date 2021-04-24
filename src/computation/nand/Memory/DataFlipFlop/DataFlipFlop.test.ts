@@ -6,8 +6,7 @@ describe('D-Type Flip Flop', () => {
     test('Simple', () => {
         const receiver = jest.fn();
         const clock = new Clock();
-        const dff = new DataFlipFlop();
-        clock.registerClocked(dff);
+        const dff = new DataFlipFlop(clock);
 
         dff.connectToOutputPin(PIN_OUTPUT, receiver);
 

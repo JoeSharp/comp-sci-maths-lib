@@ -7,18 +7,23 @@ describe('Register', () => {
         const clock = new Clock();
         const register = new Register(clock);
         const receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
-        const word1 = generateRandomWord();
-        const word2 = generateRandomWord();
         register.connectToOutputBus(PIN_OUTPUT, receivers);
 
-        register.sendToInputBus(PIN_INPUT, word1);
-        register.sendToInputPin(PIN_LOAD, true);
-        clock.ticktock();
-        receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(word1[i]));
+        let lastWord: boolean[] = [];
+        for (let x = 0; x < 10; x++) {
+            const word = generateRandomWord();
+            register.sendToInputBus(PIN_INPUT, word);
 
-        register.sendToInputBus(PIN_INPUT, word2);
-        receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(word1[i]));
-        clock.ticktock();
-        receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(word2[i]));
+            if (lastWord.length === word.length) {
+                register.sendToInputPin(PIN_LOAD, false);
+                clock.ticktock();
+                receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(lastWord[i]));
+            }
+
+            register.sendToInputPin(PIN_LOAD, true);
+            clock.ticktock();
+            receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(word[i]));
+            lastWord = word;
+        }
     })
 })

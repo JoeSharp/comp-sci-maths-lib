@@ -4,6 +4,8 @@ export interface IClocked {
 }
 
 export class Clock implements IClocked {
+    count: number;
+    state: boolean;
     chips: IClocked[];
 
     constructor() {
@@ -11,10 +13,13 @@ export class Clock implements IClocked {
     }
 
     tick() {
+        this.state = true;
         this.chips.forEach(c => c.tick());
     }
 
     tock() {
+        this.state = false;
+        this.count++;
         this.chips.forEach(c => c.tock());
     }
 

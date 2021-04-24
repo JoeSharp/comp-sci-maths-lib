@@ -69,7 +69,7 @@ class Chip {
         return this.inputPins[name];
     }
 
-    connectToOutputPin(name: string, ...receivers: BinaryBus) {
+    connectToOutputPin(name: string, ...receivers: BinaryPin[]) {
         this.getOutputPin(name)(receivers);
     }
 
