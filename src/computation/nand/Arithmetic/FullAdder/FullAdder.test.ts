@@ -2,6 +2,7 @@ import { PIN_CARRY, PIN_SUM } from "../HalfAdder/HalfAdder";
 import { getTestName, PIN_A, PIN_B } from "../../types";
 import FullAdder from "./FullAdder";
 import { PIN_C } from "../../Multiplexing/Dmux4Way/Dmux4Way";
+import BinaryPin from "../../BinaryPin";
 
 // |   a   |   b   |   c   |  sum  | carry |
 // |   0   |   0   |   0   |   0   |   0   |
@@ -34,19 +35,19 @@ const TEST_CASES: TestCase[] = [
 
 describe("Full Adder", () => {
   const adder = new FullAdder();
-  const sumReceiver = jest.fn();
-  const carryReceiver = jest.fn();
-  adder.connectToPin(PIN_SUM, sumReceiver);
-  adder.connectToPin(PIN_CARRY, carryReceiver);
+  const sumReceiver = new BinaryPin();
+  const carryReceiver = new BinaryPin();
+  adder.getPin(PIN_SUM).connect(sumReceiver);
+  adder.getPin(PIN_CARRY).connect(carryReceiver);
 
   TEST_CASES.forEach(({ a, b, c, sum, carry }) => {
     test(getTestName({ a, b, c, sum, carry }), () => {
-      adder.sendToPin(PIN_A, a);
-      adder.sendToPin(PIN_B, b);
-      adder.sendToPin(PIN_C, c);
+      adder.getPin(PIN_A).send(a);
+      adder.getPin(PIN_B).send(b);
+      adder.getPin(PIN_C).send(c);
 
-      expect(sumReceiver).toHaveBeenLastCalledWith(sum);
-      expect(carryReceiver).toHaveBeenLastCalledWith(carry);
+      expect(sumReceiver.lastOutput).toBe(sum);
+      expect(carryReceiver.lastOutput).toBe(carry);
     });
   });
 });

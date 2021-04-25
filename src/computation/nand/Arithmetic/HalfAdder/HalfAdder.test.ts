@@ -3,7 +3,7 @@
 // |   0   |   1   |   1   |   0   |
 // |   1   |   0   |   1   |   0   |
 // |   1   |   1   |   0   |   1   |
-
+import BinaryPin from "../../BinaryPin";
 import { getTestName, PIN_A, PIN_B } from "../../types";
 import HalfAdder, { PIN_CARRY, PIN_SUM } from "./HalfAdder";
 
@@ -23,18 +23,18 @@ const TEST_CASES: TestCase[] = [
 
 describe("Half Adder", () => {
   const halfAdder = new HalfAdder();
-  const sumReceiver = jest.fn();
-  const carryReceiver = jest.fn();
-  halfAdder.connectToPin(PIN_SUM, sumReceiver);
-  halfAdder.connectToPin(PIN_CARRY, carryReceiver);
+  const sumReceiver = new BinaryPin();
+  const carryReceiver = new BinaryPin();
+  halfAdder.getPin(PIN_SUM).connect(sumReceiver);
+  halfAdder.getPin(PIN_CARRY).connect(carryReceiver);
 
   TEST_CASES.forEach(({ a, b, sum, carry }) => {
     test(getTestName({ a, b, sum, carry }), () => {
-      halfAdder.sendToPin(PIN_A, a);
-      halfAdder.sendToPin(PIN_B, b);
+      halfAdder.getPin(PIN_A).send(a);
+      halfAdder.getPin(PIN_B).send(b);
 
-      expect(sumReceiver).toHaveBeenLastCalledWith(sum);
-      expect(carryReceiver).toHaveBeenLastCalledWith(carry);
+      expect(sumReceiver.lastOutput).toBe(sum);
+      expect(carryReceiver.lastOutput).toBe(carry);
     });
   });
 });

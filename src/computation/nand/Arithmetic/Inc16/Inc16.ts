@@ -21,16 +21,9 @@ class Inc16 extends Chip {
   constructor() {
     super("Inc16");
     this.adder = new Add16();
-    this.adder.sendToBus(PIN_B, [
-      true,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ]);
+    this.adder
+      .getBus(PIN_B)
+      .send([true, false, false, false, false, false, false, false]);
 
     // External wiring
     this.createBus(PIN_INPUT, this.adder.getBus(PIN_A));

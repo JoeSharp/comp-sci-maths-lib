@@ -1,5 +1,5 @@
 import { PIN_F } from "../../CPU/ALU/ALU";
-import BinaryBus from "../../BinaryBus";
+import BinaryBus, { createPinArray } from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import { PIN_C, PIN_D } from "../../Multiplexing/Dmux4Way/Dmux4Way";
@@ -59,7 +59,7 @@ class RAM8 extends Chip {
       .fill(null)
       .map(() => new Register(clock));
 
-    this.addressFork = new BinaryBus();
+    this.addressFork = new BinaryBus(createPinArray(3));
     this.inputFork = new BinaryBus();
 
     this.registers.forEach((r) => this.inputFork.connect(r.getBus(PIN_INPUT)));

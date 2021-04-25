@@ -1,3 +1,4 @@
+import BinaryBus from "../../BinaryBus";
 import { Clock } from "../../Clocked";
 import {
   generateRandomWord,
@@ -16,12 +17,10 @@ interface TestData {
 
 describe("RAM64", () => {
   test("Simple", () => {
-    const receivers = Array(WORD_LENGTH)
-      .fill(null)
-      .map(() => jest.fn());
+    const receivers = new BinaryBus();
     const clock = new Clock();
     const ram = new RAM64(clock);
-    ram.connectToBus(PIN_OUTPUT, receivers);
+    ram.getBus(PIN_OUTPUT).connect(receivers);
     const testData = [
       {
         address: [false, false, true, false, true, false],
@@ -37,34 +36,34 @@ describe("RAM64", () => {
       },
     ];
 
-    ram.sendToPin(PIN_LOAD, true);
-    ram.sendToBus(PIN_INPUT, testData[0].content);
-    ram.sendToBus(PIN_ADDRESS, testData[0].address);
+    ram.getPin(PIN_LOAD).send(true);
+    ram.getBus(PIN_INPUT).send(testData[0].content);
+    ram.getBus(PIN_ADDRESS).send(testData[0].address);
     clock.ticktock();
-    receivers.forEach((r, i) =>
-      expect(r).toHaveBeenLastCalledWith(testData[0].content[i])
+    receivers.inputBus.forEach((r, i) =>
+      expect(r.lastOutput).toBe(testData[0].content[i])
     );
 
-    ram.sendToBus(PIN_INPUT, testData[1].content);
-    ram.sendToBus(PIN_ADDRESS, testData[1].address);
+    ram.getBus(PIN_INPUT).send(testData[1].content);
+    ram.getBus(PIN_ADDRESS).send(testData[1].address);
     clock.ticktock();
-    receivers.forEach((r, i) =>
-      expect(r).toHaveBeenLastCalledWith(testData[1].content[i])
+    receivers.inputBus.forEach((r, i) =>
+      expect(r.lastOutput).toBe(testData[1].content[i])
     );
 
-    ram.sendToBus(PIN_INPUT, testData[2].content);
-    ram.sendToBus(PIN_ADDRESS, testData[2].address);
+    ram.getBus(PIN_INPUT).send(testData[2].content);
+    ram.getBus(PIN_ADDRESS).send(testData[2].address);
     clock.ticktock();
-    receivers.forEach((r, i) =>
-      expect(r).toHaveBeenLastCalledWith(testData[2].content[i])
+    receivers.inputBus.forEach((r, i) =>
+      expect(r.lastOutput).toBe(testData[2].content[i])
     );
 
     // Back to word1
-    ram.sendToPin(PIN_LOAD, false);
-    ram.sendToBus(PIN_ADDRESS, testData[0].address);
+    ram.getPin(PIN_LOAD).send(false);
+    ram.getBus(PIN_ADDRESS).send(testData[0].address);
     clock.ticktock();
-    receivers.forEach((r, i) =>
-      expect(r).toHaveBeenLastCalledWith(testData[0].content[i])
+    receivers.inputBus.forEach((r, i) =>
+      expect(r.lastOutput).toBe(testData[0].content[i])
     );
   });
 });

@@ -8,6 +8,7 @@ import HalfAdder from "../HalfAdder";
 import { PIN_CARRY, PIN_SUM } from "../HalfAdder/HalfAdder";
 import { PIN_A, PIN_B, PIN_OUTPUT } from "../../types";
 import { PIN_C } from "../../Multiplexing/Dmux4Way/Dmux4Way";
+import BinaryBus from "../../BinaryBus";
 
 //  CHIP Add16 {
 //     IN a[16], b[16];
@@ -93,22 +94,16 @@ class Add16 extends Chip {
     this.halfAdd0.getPin(PIN_CARRY).connect(this.adder1.getPin(PIN_C));
     fullAdders.forEach((fullAdder, i) => {
       if (i < fullAdders.length - 1) {
-        fullAdder.connectToPin(PIN_CARRY, fullAdders[i + 1].getPin(PIN_C));
+        fullAdder.getPin(PIN_CARRY).connect(fullAdders[i + 1].getPin(PIN_C));
       }
     });
 
     // External Wiring
-    this.createBus(
-      PIN_A,
-      adders.map((a) => a.getPin(PIN_A))
-    );
-    this.createBus(
-      PIN_B,
-      adders.map((a) => a.getPin(PIN_B))
-    );
+    this.createBus(PIN_A, new BinaryBus(adders.map((a) => a.getPin(PIN_A))));
+    this.createBus(PIN_B, new BinaryBus(adders.map((a) => a.getPin(PIN_B))));
     this.createBus(
       PIN_OUTPUT,
-      adders.map((a) => a.getPin(PIN_SUM))
+      new BinaryBus(adders.map((a) => a.getPin(PIN_SUM)))
     );
   }
 }

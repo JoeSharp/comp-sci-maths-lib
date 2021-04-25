@@ -9,14 +9,8 @@ import {
   binaryToBoolArray,
   booleanToBinArray,
 } from "../../../../dataRepresentation/numberBases/simpleBinary";
-import {
-  BinaryBus,
-  getTestName,
-  PIN_A,
-  PIN_B,
-  PIN_OUTPUT,
-  WORD_LENGTH,
-} from "../../types";
+import BinaryBus from "../../BinaryBus";
+import { getTestName, PIN_A, PIN_B, PIN_OUTPUT } from "../../types";
 import Add16 from "./Add16";
 
 interface TestCase {
@@ -65,10 +59,8 @@ const TEST_CASES: TestCase[] = [
 
 describe("Add 16", () => {
   const add16 = new Add16();
-  const receivers: BinaryBus = Array(WORD_LENGTH)
-    .fill(null)
-    .map(() => jest.fn());
-  add16.connectToBus(PIN_OUTPUT, receivers);
+  const receivers: BinaryBus = new BinaryBus();
+  add16.getBus(PIN_OUTPUT).connect(receivers);
 
   TEST_CASES.forEach(({ a, b, expected }) => {
     const testName = getTestName({
@@ -77,10 +69,10 @@ describe("Add 16", () => {
       expected: booleanToBinArray(expected),
     });
     test(testName, () => {
-      add16.sendToBus(PIN_A, a);
-      add16.sendToBus(PIN_B, b);
-      receivers.forEach((r, i) =>
-        expect(r).toHaveBeenLastCalledWith(expected[i])
+      add16.getBus(PIN_A).send(a);
+      add16.getBus(PIN_B).send(b);
+      receivers.inputBus.forEach((r, i) =>
+        expect(r.lastOutput).toBe(expected[i])
       );
     });
   });
