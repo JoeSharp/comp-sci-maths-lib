@@ -79,7 +79,9 @@ describe("MUX 16", () => {
       mux16.getBus(PIN_B).send(b);
       mux16.getPin(PIN_SELECTOR).send(sel);
 
-      expected.forEach((e, i) => expect(receivers.inputBus[i]).toBe(e));
+      expected.forEach((e, i) =>
+        expect(receivers.inputBus[i].lastOutput).toBe(e)
+      );
     });
   });
 });

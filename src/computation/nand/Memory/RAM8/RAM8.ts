@@ -1,5 +1,5 @@
 import { PIN_F } from "../../CPU/ALU/ALU";
-import BusFork from "../../BinaryBus";
+import BinaryBus from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import { PIN_C, PIN_D } from "../../Multiplexing/Dmux4Way/Dmux4Way";
@@ -47,8 +47,8 @@ class RAM8 extends Chip {
   demux: Dmux8Way;
   mux: Mux8Way16;
   registers: Register[];
-  addressFork: BusFork;
-  inputFork: BusFork;
+  addressFork: BinaryBus;
+  inputFork: BinaryBus;
 
   constructor(clock: Clock) {
     super("RAM8");
@@ -59,8 +59,8 @@ class RAM8 extends Chip {
       .fill(null)
       .map(() => new Register(clock));
 
-    this.addressFork = new BusFork();
-    this.inputFork = new BusFork();
+    this.addressFork = new BinaryBus();
+    this.inputFork = new BinaryBus();
 
     this.registers.forEach((r) => this.inputFork.connect(r.getBus(PIN_INPUT)));
 
@@ -70,14 +70,14 @@ class RAM8 extends Chip {
 
     [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H].forEach(
       (pin, i) => {
-        this.demux.connectToPin(pin, this.registers[i].getPin(PIN_LOAD));
-        this.registers[i].connectToBus(PIN_OUTPUT, this.mux.getBus(pin));
+        this.demux.getPin(pin).connect(this.registers[i].getPin(PIN_LOAD));
+        this.registers[i].getBus(PIN_OUTPUT).connect(this.mux.getBus(pin));
       }
     );
 
     this.createPin(PIN_LOAD, this.demux.getPin(PIN_INPUT));
-    this.createBus(PIN_ADDRESS, this.addressFork.getInput());
-    this.createBus(PIN_INPUT, this.inputFork.getInput());
+    this.createBus(PIN_ADDRESS, this.addressFork);
+    this.createBus(PIN_INPUT, this.inputFork);
     this.createBus(PIN_OUTPUT, this.mux.getBus(PIN_OUTPUT));
   }
 }

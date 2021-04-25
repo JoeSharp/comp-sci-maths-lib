@@ -10,6 +10,8 @@ import Chip from "../../Chip";
 import { PIN_C, PIN_D } from "../Dmux4Way/Dmux4Way";
 import Mux16 from "../Mux16";
 import { PIN_A, PIN_B, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
+import BinaryBus from "../../BinaryBus";
+import BinaryPin from "../../BinaryPin";
 
 //  CHIP Mux4Way16 {
 //     IN a[16], b[16], c[16], d[16], sel[2];
@@ -32,24 +34,25 @@ class Mux4Way16 extends Chip {
     this.outMux = new Mux16();
 
     // Internal Wiring
-    this.aOrB.connectToBus(PIN_OUTPUT, this.outMux.getBus(PIN_A));
-    this.cOrD.connectToBus(PIN_OUTPUT, this.outMux.getBus(PIN_B));
+    this.aOrB.getBus(PIN_OUTPUT).connect(this.outMux.getBus(PIN_A));
+    this.cOrD.getBus(PIN_OUTPUT).connect(this.outMux.getBus(PIN_B));
 
     // External Wiring
     this.createBus(PIN_A, this.aOrB.getBus(PIN_A));
     this.createBus(PIN_B, this.aOrB.getBus(PIN_B));
     this.createBus(PIN_C, this.cOrD.getBus(PIN_A));
     this.createBus(PIN_D, this.cOrD.getBus(PIN_B));
-    this.createBus(PIN_SELECTOR, [
-      (v) => {
-        this.aOrB.sendToPin(PIN_SELECTOR, v);
-        this.cOrD.sendToPin(PIN_SELECTOR, v);
-      },
-      (v) => {
-        this.outMux.sendToPin(PIN_SELECTOR, v);
-        this.outMux.sendToPin(PIN_SELECTOR, v);
-      },
-    ]);
+    this.createBus(
+      PIN_SELECTOR,
+      new BinaryBus([
+        new BinaryPin([
+          this.aOrB.getPin(PIN_SELECTOR),
+          this.cOrD.getPin(PIN_SELECTOR),
+        ]),
+        this.outMux.getPin(PIN_SELECTOR),
+      ])
+    );
+
     this.createBus(PIN_OUTPUT, this.outMux.getBus(PIN_OUTPUT));
   }
 }

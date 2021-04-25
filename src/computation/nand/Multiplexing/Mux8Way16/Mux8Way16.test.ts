@@ -7,9 +7,9 @@ import {
   PIN_B,
   PIN_OUTPUT,
   PIN_SELECTOR,
-  WORD_LENGTH,
 } from "../../types";
 import Mux8Way16 from "./Mux8Way16";
+import BinaryBus from "../../BinaryBus";
 
 interface TestCase {
   a: string;
@@ -239,26 +239,24 @@ const TEST_CASES: TestCase[] = [
 
 describe("Mux 8 way 16", () => {
   const mux = new Mux8Way16();
-  const receivers = Array(WORD_LENGTH)
-    .fill(null)
-    .map(() => jest.fn());
-  mux.connectToBus(PIN_OUTPUT, receivers);
+  const receivers = new BinaryBus();
+  mux.getBus(PIN_OUTPUT).connect(receivers);
 
   TEST_CASES.forEach(({ a, b, c, d, e, f, g, h, sel, expected }) => {
     test(getTestName({ a, b, c, d, e, f, g, h, sel, expected }), () => {
-      mux.sendToBus(PIN_A, binaryToBoolArray(a));
-      mux.sendToBus(PIN_B, binaryToBoolArray(b));
-      mux.sendToBus(PIN_C, binaryToBoolArray(c));
-      mux.sendToBus(PIN_D, binaryToBoolArray(d));
-      mux.sendToBus(PIN_E, binaryToBoolArray(e));
-      mux.sendToBus(PIN_F, binaryToBoolArray(f));
-      mux.sendToBus(PIN_G, binaryToBoolArray(g));
-      mux.sendToBus(PIN_H, binaryToBoolArray(h));
-      mux.sendToBus(PIN_SELECTOR, binaryToBoolArray(sel));
+      mux.getBus(PIN_A).send(binaryToBoolArray(a));
+      mux.getBus(PIN_B).send(binaryToBoolArray(b));
+      mux.getBus(PIN_C).send(binaryToBoolArray(c));
+      mux.getBus(PIN_D).send(binaryToBoolArray(d));
+      mux.getBus(PIN_E).send(binaryToBoolArray(e));
+      mux.getBus(PIN_F).send(binaryToBoolArray(f));
+      mux.getBus(PIN_G).send(binaryToBoolArray(g));
+      mux.getBus(PIN_H).send(binaryToBoolArray(h));
+      mux.getBus(PIN_SELECTOR).send(binaryToBoolArray(sel));
 
       const expectedArr = binaryToBoolArray(expected);
-      receivers.forEach((r, i) =>
-        expect(r).toHaveBeenLastCalledWith(expectedArr[i])
+      receivers.inputBus.forEach((r, i) =>
+        expect(r.lastOutput).toBe(expectedArr[i])
       );
     });
   });

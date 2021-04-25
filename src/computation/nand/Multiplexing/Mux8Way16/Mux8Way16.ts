@@ -4,6 +4,7 @@ import { PIN_E, PIN_F, PIN_G, PIN_H } from "../Dmux8Way/Dmux8Way";
 import Mux16 from "../Mux16";
 import Mux4Way16 from "../Mux4Way16";
 import { PIN_A, PIN_B, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
+import BinaryBus, { createPinArray } from "../../BinaryBus";
 
 /**
  * 8-way 16-bit multiplexor:
@@ -39,8 +40,8 @@ class Mux8Way16 extends Chip {
     this.outMux = new Mux16();
 
     // Internal Wiring
-    this.abcd.connectToBus(PIN_OUTPUT, this.outMux.getBus(PIN_A));
-    this.efgh.connectToBus(PIN_OUTPUT, this.outMux.getBus(PIN_B));
+    this.abcd.getBus(PIN_OUTPUT).connect(this.outMux.getBus(PIN_A));
+    this.efgh.getBus(PIN_OUTPUT).connect(this.outMux.getBus(PIN_B));
 
     this.createBus(PIN_A, this.abcd.getBus(PIN_A));
     this.createBus(PIN_B, this.abcd.getBus(PIN_B));
@@ -52,19 +53,13 @@ class Mux8Way16 extends Chip {
     this.createBus(PIN_G, this.efgh.getBus(PIN_C));
     this.createBus(PIN_H, this.efgh.getBus(PIN_D));
 
-    this.createBus(PIN_SELECTOR, [
-      (v) => {
-        this.abcd.sendToBus(PIN_SELECTOR, [v], 0);
-        this.efgh.sendToBus(PIN_SELECTOR, [v], 0);
-      },
-      (v) => {
-        this.abcd.sendToBus(PIN_SELECTOR, [v], 1);
-        this.efgh.sendToBus(PIN_SELECTOR, [v], 1);
-      },
-      (v) => {
-        this.outMux.sendToPin(PIN_SELECTOR, v);
-      },
-    ]);
+    this.createBus(
+      PIN_SELECTOR,
+      new BinaryBus(createPinArray(3))
+        .connect(this.abcd.getBus(PIN_SELECTOR), 0, 1)
+        .connect(this.efgh.getBus(PIN_SELECTOR), 0, 1)
+        .connectPin(this.outMux.getPin(PIN_SELECTOR), 2)
+    );
 
     this.createBus(PIN_OUTPUT, this.outMux.getBus(PIN_OUTPUT));
   }
