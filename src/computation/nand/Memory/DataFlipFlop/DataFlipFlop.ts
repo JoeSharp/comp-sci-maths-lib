@@ -6,6 +6,7 @@ import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 class DataFlipFlop extends Chip implements IClocked {
   value: boolean;
+  tickValue: boolean;
   input: BinaryPin;
   output: BinaryPin;
 
@@ -21,11 +22,11 @@ class DataFlipFlop extends Chip implements IClocked {
   }
 
   tick() {
-    ((): undefined => undefined)(); // No-op
+    this.tickValue = this.input.lastOutput;
   }
 
   tock() {
-    this.output.send(this.input.lastOutput);
+    this.output.send(this.tickValue);
   }
 }
 

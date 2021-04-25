@@ -87,12 +87,11 @@ const RADIX_BY_CODE: RadixByCode = {
 };
 
 export const formatString = (value: string, spacing: number[]): string => {
-  const spacingFiddleFactor = Math.floor((value.length - 1) / 2);
   if (spacing.length === 3) {
-    return `${spacePad("", spacing[0] - spacingFiddleFactor)}${spacePad(
-      value,
-      spacing[1]
-    )}${spacePad("", spacing[2] - spacingFiddleFactor)}`;
+    return `${spacePad("", spacing[0])}${spacePad(value, spacing[1])}${spacePad(
+      "",
+      spacing[2]
+    )}`;
   }
 
   // Not sure, just dump out the value

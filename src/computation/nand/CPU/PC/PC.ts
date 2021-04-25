@@ -7,7 +7,7 @@
  */
 
 import Inc16 from "../../Arithmetic/Inc16";
-import BusFork from "../../BinaryBus";
+import BinaryBus from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import Register from "../../Memory/Register";
@@ -20,6 +20,7 @@ import {
   PIN_OUTPUT,
   PIN_SELECTOR,
   WORD_LENGTH,
+  ZERO_WORD,
 } from "../../types";
 
 export const PIN_INCREMENT = "inc";
@@ -52,7 +53,7 @@ class PC extends Chip {
   resetMux: Mux16;
 
   register: Register;
-  lastPCFork: BusFork;
+  lastPCFork: BinaryBus;
 
   constructor(clock: Clock) {
     super("PC");
@@ -62,23 +63,20 @@ class PC extends Chip {
     this.loadMux = new Mux16();
     this.resetMux = new Mux16();
     this.register = new Register(clock);
-    this.lastPCFork = new BusFork();
+    this.lastPCFork = new BinaryBus();
 
     // Internal Wiring
-    this.incrementer.connectToBus(PIN_OUTPUT, this.incrementMux.getBus(PIN_B));
+    this.incrementer
+      .getBus(PIN_OUTPUT)
+      .connect(this.incrementMux.getBus(PIN_B));
     this.lastPCFork.connect(this.incrementer.getBus(PIN_INPUT));
     this.lastPCFork.connect(this.incrementMux.getBus(PIN_A));
-    this.incrementMux.connectToBus(PIN_OUTPUT, this.loadMux.getBus(PIN_A));
-    this.loadMux.connectToBus(PIN_OUTPUT, this.resetMux.getBus(PIN_A));
-    this.resetMux.connectToBus(PIN_OUTPUT, this.register.getBus(PIN_INPUT));
-    this.register.sendToPin(PIN_LOAD, true);
-    this.register.connectToBus(PIN_OUTPUT, this.lastPCFork.getInput());
-    this.resetMux.sendToBus(
-      PIN_B,
-      Array(WORD_LENGTH)
-        .fill(null)
-        .map(() => false)
-    );
+    this.incrementMux.getBus(PIN_OUTPUT).connect(this.loadMux.getBus(PIN_A));
+    this.loadMux.getBus(PIN_OUTPUT).connect(this.resetMux.getBus(PIN_A));
+    this.resetMux.getBus(PIN_OUTPUT).connect(this.register.getBus(PIN_INPUT));
+    this.register.getPin(PIN_LOAD).send(true);
+    this.register.getBus(PIN_OUTPUT).connect(this.lastPCFork);
+    this.resetMux.getBus(PIN_B).send(ZERO_WORD);
 
     // External Wiring
     this.createPin(PIN_LOAD, this.loadMux.getPin(PIN_SELECTOR));

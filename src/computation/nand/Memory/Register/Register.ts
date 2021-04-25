@@ -35,7 +35,9 @@ import Bit from "../Bit";
 // }
 
 class Register extends Chip {
+  inputBus: BinaryBus;
   bits: Bit[];
+  outputBus: BinaryBus;
 
   constructor(clock: Clock) {
     super("Register");
@@ -43,6 +45,9 @@ class Register extends Chip {
     this.bits = Array(WORD_LENGTH)
       .fill(null)
       .map(() => new Bit(clock));
+
+    this.inputBus = new BinaryBus();
+    this.outputBus = new BinaryBus();
 
     // External Wiring
     this.createBus(
