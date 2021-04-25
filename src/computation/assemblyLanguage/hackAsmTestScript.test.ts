@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { Optional } from "../../types";
+import { isOutputRam } from "../TestScripts/types";
 
 import {
   parseSetRam,
@@ -67,8 +68,6 @@ describe("Hack ASM Test Scripts", () => {
     expect(parseRepeatEnd(" {} ")).toBeFalsy();
   });
 
-
-
   const setRamTestCases: SetRamTestCase[] = [
     {
       input: "set RAM[0] 4,   // Set test arguments",
@@ -127,18 +126,24 @@ describe("Hack ASM Test Scripts", () => {
     expect(testScript.compareTo).toBe("Mult.cmp");
 
     // Check output format
-    expect(testScript.outputList.length).toBe(3);
-    expect(testScript.outputList[0].address).toBe(0);
-    expect(testScript.outputList[0].format).toBe("D");
-    expect(testScript.outputList[0].spacing).toEqual([2, 6, 2]);
+    if (isOutputRam(testScript.outputList[0])) {
+      expect(testScript.outputList.length).toBe(3);
+      expect(testScript.outputList[0].address).toBe(0);
+      expect(testScript.outputList[0].format).toBe("D");
+      expect(testScript.outputList[0].spacing).toEqual([2, 6, 2]);
+    }
 
-    expect(testScript.outputList[1].address).toBe(1);
-    expect(testScript.outputList[1].format).toBe("D");
-    expect(testScript.outputList[2].spacing).toEqual([2, 6, 2]);
+    if (isOutputRam(testScript.outputList[1])) {
+      expect(testScript.outputList[1].address).toBe(1);
+      expect(testScript.outputList[1].format).toBe("D");
+      expect(testScript.outputList[2].spacing).toEqual([2, 6, 2]);
+    }
 
-    expect(testScript.outputList[2].address).toBe(2);
-    expect(testScript.outputList[2].format).toBe("D");
-    expect(testScript.outputList[2].spacing).toEqual([2, 6, 2]);
+    if (isOutputRam(testScript.outputList[2])) {
+      expect(testScript.outputList[2].address).toBe(2);
+      expect(testScript.outputList[2].format).toBe("D");
+      expect(testScript.outputList[2].spacing).toEqual([2, 6, 2]);
+    }
 
     expect(testScript.testInstructions.length).toBeGreaterThan(7);
 

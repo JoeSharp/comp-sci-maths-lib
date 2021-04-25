@@ -1,14 +1,18 @@
-import { NamedRegExps, parseOutputFormat, parseOutputInstruction, parseRequiredFile } from "./parseTestScripts";
-import { TestOutputFragment } from "./types";
+import {
+  NamedRegExps,
+  parseOutputFormat,
+  parseOutputInstruction,
+  parseRequiredFile,
+} from "./parseTestScripts";
+import { isOutputRam, TestOutputFragment } from "./types";
 
 interface RequiredFileTestCase {
-    input: string;
-    name: keyof NamedRegExps;
-    expected: string;
-  }
-  
+  input: string;
+  name: keyof NamedRegExps;
+  expected: string;
+}
 
-describe('Computation Test Scripts', () => {
+describe("Computation Test Scripts", () => {
   test("Output Format", () => {
     const results: TestOutputFragment[] = [];
     parseOutputFormat(
@@ -17,17 +21,23 @@ describe('Computation Test Scripts', () => {
     );
 
     expect(results.length).toBe(3);
-    expect(results[0].address).toBe(0);
-    expect(results[0].format).toBe("D");
-    expect(results[0].spacing).toEqual([2, 6, 2]);
+    if (isOutputRam(results[0])) {
+      expect(results[0].address).toBe(0);
+      expect(results[0].format).toBe("D");
+      expect(results[0].spacing).toEqual([2, 6, 2]);
+    }
 
-    expect(results[1].address).toBe(1);
-    expect(results[1].format).toBe("D");
-    expect(results[2].spacing).toEqual([2, 6, 2]);
+    if (isOutputRam(results[1])) {
+      expect(results[1].address).toBe(1);
+      expect(results[1].format).toBe("D");
+      expect(results[2].spacing).toEqual([2, 6, 2]);
+    }
 
-    expect(results[2].address).toBe(2);
-    expect(results[2].format).toBe("D");
-    expect(results[2].spacing).toEqual([2, 6, 2]);
+    if (isOutputRam(results[2])) {
+      expect(results[2].address).toBe(2);
+      expect(results[2].format).toBe("D");
+      expect(results[2].spacing).toEqual([2, 6, 2]);
+    }
   });
 
   test("Output Instruction", () => {
@@ -59,4 +69,4 @@ describe('Computation Test Scripts', () => {
     test(`Required File - ${input}`, () =>
       expect(parseRequiredFile(input, name)).toBe(expected));
   });
-})
+});

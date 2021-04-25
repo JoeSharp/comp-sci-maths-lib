@@ -28,7 +28,7 @@ class NandTestRunner extends TestRunner<
 
   loadProgram(program: string): void {
     // LOAD HDL INTO GENERIC CHIP
-    //throw new Error("Method not implemented.");
+    // throw new Error("Method not implemented.");
   }
   runInstruction(instruction: NandTestInstruction): void {
     switch (instruction.type) {
@@ -47,11 +47,11 @@ class NandTestRunner extends TestRunner<
   }
 
   handleSetPin({ pin, value }: NandTestSetPin) {
-    this.objectUnderTest.sendToPin(pin, value);
+    this.objectUnderTest.getPin(pin).send(value);
   }
 
   handleSetBus({ bus, values }: NandTestSetBus) {
-    this.objectUnderTest.sendToBus(bus, values);
+    this.objectUnderTest.getBus(bus).send(values);
   }
 
   handleOutputInstruction() {
@@ -62,7 +62,7 @@ class NandTestRunner extends TestRunner<
         } else {
           const { format, spacing, variable } = output;
           return formatNumber(
-            999, //this.objectUnderTest.getPin(variable),
+            999, // this.objectUnderTest.getPin(variable),
             format,
             spacing
           );

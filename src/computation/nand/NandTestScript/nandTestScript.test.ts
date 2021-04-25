@@ -67,7 +67,7 @@ describe("NAND Test Script", () => {
       }
     });
 
-    //expect(testScript.testInstructions.length).toBe(16);
+    // expect(testScript.testInstructions.length).toBe(16);
   });
 });
 

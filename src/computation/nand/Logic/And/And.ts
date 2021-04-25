@@ -9,6 +9,14 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
  * out = 1 if (a == 1 and b == 1)
  *       0 otherwise
  */
+//  CHIP And {
+//   IN a, b;
+//   OUT out;
+
+//   PARTS:
+//   Nand(a=a, b=b, out=notAandB);
+//   Not(in=notAandB, out=out);
+// }
 
 class And extends Chip {
   nand: Nand;

@@ -37,6 +37,5 @@ export interface CodeLine {
 export type FileLoader = (filename: string) => string;
 export type ScriptParser<T> = (filename: string) => T;
 
-export const NO_OP = () => {
-  undefined;
-};
+/* tslint:disable:no-empty */
+export const NO_OP = () => {};
