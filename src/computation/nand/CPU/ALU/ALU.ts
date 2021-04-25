@@ -23,6 +23,7 @@ import {
   PIN_SELECTOR,
   WORD_LENGTH,
 } from "../../types";
+import And16 from "../../Logic/And16";
 
 // Implementation: the ALU logic manipulates the x and y inputs
 // and operates on the resulting values, as follows:
@@ -102,7 +103,7 @@ class ALU extends Chip {
   yProcessed: Mux16;
 
   xPlusy: Add16;
-  xAndy: Add16;
+  xAndy: And16;
   fOut: Mux16;
 
   notFOut: Not16;
@@ -125,7 +126,7 @@ class ALU extends Chip {
     this.yProcessed = new Mux16();
 
     this.xPlusy = new Add16();
-    this.xAndy = new Add16();
+    this.xAndy = new And16();
     this.fOut = new Mux16();
     this.notFOut = new Not16();
     this.out = new Mux16();
@@ -161,11 +162,12 @@ class ALU extends Chip {
     this.fOut.getBus(PIN_OUTPUT).connect(this.out.getBus(PIN_A));
     this.notFOut.getBus(PIN_OUTPUT).connect(this.out.getBus(PIN_B));
 
-    this.out.getBus(PIN_OUTPUT).connect(this.zrLsb.getBus(PIN_INPUT), 0); // preOut1
-    this.out.getBus(PIN_OUTPUT).connect(this.zrMsb.getBus(PIN_INPUT), 8); // preOut2
+    this.out.getBus(PIN_OUTPUT).connect(this.zrLsb.getBus(PIN_INPUT), 0, 7); // preOut1
+    this.out.getBus(PIN_OUTPUT).connect(this.zrMsb.getBus(PIN_INPUT), 8, 15); // preOut2
 
     this.zrLsb.getPin(PIN_OUTPUT).connect(this.nzr.getPin(PIN_A));
     this.zrMsb.getPin(PIN_OUTPUT).connect(this.nzr.getPin(PIN_B));
+    this.nzr.getPin(PIN_OUTPUT).connect(this.zr.getPin(PIN_INPUT));
 
     // External Wiring
     this.createBus(PIN_X, this.xZero.getBus(PIN_A));
@@ -179,7 +181,7 @@ class ALU extends Chip {
 
     this.createBus(PIN_OUTPUT, this.out.getBus(PIN_OUTPUT));
     this.createPin(PIN_NG, this.out.getBus(PIN_OUTPUT).getPin(15)); // FIX!!!
-    this.createPin(PIN_ZR, this.nzr.getPin(PIN_OUTPUT));
+    this.createPin(PIN_ZR, this.zr.getPin(PIN_OUTPUT));
   }
 }
 

@@ -67,6 +67,10 @@ class BinaryBus {
     });
     return this;
   }
+
+  getValue(): boolean[] {
+    return this.inputBus.map((r) => r.lastOutput);
+  }
 }
 
 export default BinaryBus;

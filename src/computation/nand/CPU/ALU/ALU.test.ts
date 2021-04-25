@@ -526,10 +526,10 @@ describe("ALU", () => {
       alu.getPin(PIN_F).send(f);
       alu.getPin(PIN_NO).send(no);
 
-      const actualOutput = booleanToBinArray(
-        outReceivers.inputBus.map((r) => r.lastOutput)
-      );
+      const actualOutput = booleanToBinArray(outReceivers.getValue());
       expect(actualOutput).toBe(out);
+      expect(zrReceiver.lastOutput).toBe(zr);
+      expect(ngReceiver.lastOutput).toBe(ng);
     });
   });
 });
