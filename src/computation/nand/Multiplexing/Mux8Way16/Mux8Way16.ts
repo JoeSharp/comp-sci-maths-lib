@@ -2,7 +2,7 @@ import Chip from "../../Chip";
 import { PIN_C, PIN_D } from "../Dmux4Way/Dmux4Way";
 import { PIN_E, PIN_F, PIN_G, PIN_H } from "../Dmux8Way/Dmux8Way";
 import Mux16 from "../Mux16";
-import Mux4Way16 from '../Mux4Way16';
+import Mux4Way16 from "../Mux4Way16";
 import { PIN_A, PIN_B, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
 
 /**
@@ -27,47 +27,47 @@ import { PIN_A, PIN_B, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
 // }
 
 class Mux8Way16 extends Chip {
-    abcd: Mux4Way16;
-    efgh: Mux4Way16;
-    outMux: Mux16;
+  abcd: Mux4Way16;
+  efgh: Mux4Way16;
+  outMux: Mux16;
 
-    constructor() {
-        super('Mux8Way16');
+  constructor() {
+    super("Mux8Way16");
 
-        this.abcd = new Mux4Way16();
-        this.efgh = new Mux4Way16();
-        this.outMux = new Mux16();
+    this.abcd = new Mux4Way16();
+    this.efgh = new Mux4Way16();
+    this.outMux = new Mux16();
 
-        // Internal Wiring
-        this.abcd.connectToOutputBus(PIN_OUTPUT, this.outMux.getInputBus(PIN_A));
-        this.efgh.connectToOutputBus(PIN_OUTPUT, this.outMux.getInputBus(PIN_B));
+    // Internal Wiring
+    this.abcd.connectToBus(PIN_OUTPUT, this.outMux.getBus(PIN_A));
+    this.efgh.connectToBus(PIN_OUTPUT, this.outMux.getBus(PIN_B));
 
-        this.createInputBus(PIN_A, this.abcd.getInputBus(PIN_A));
-        this.createInputBus(PIN_B, this.abcd.getInputBus(PIN_B));
-        this.createInputBus(PIN_C, this.abcd.getInputBus(PIN_C));
-        this.createInputBus(PIN_D, this.abcd.getInputBus(PIN_D));
+    this.createBus(PIN_A, this.abcd.getBus(PIN_A));
+    this.createBus(PIN_B, this.abcd.getBus(PIN_B));
+    this.createBus(PIN_C, this.abcd.getBus(PIN_C));
+    this.createBus(PIN_D, this.abcd.getBus(PIN_D));
 
-        this.createInputBus(PIN_E, this.efgh.getInputBus(PIN_A));
-        this.createInputBus(PIN_F, this.efgh.getInputBus(PIN_B));
-        this.createInputBus(PIN_G, this.efgh.getInputBus(PIN_C));
-        this.createInputBus(PIN_H, this.efgh.getInputBus(PIN_D));
+    this.createBus(PIN_E, this.efgh.getBus(PIN_A));
+    this.createBus(PIN_F, this.efgh.getBus(PIN_B));
+    this.createBus(PIN_G, this.efgh.getBus(PIN_C));
+    this.createBus(PIN_H, this.efgh.getBus(PIN_D));
 
-        this.createInputBus(PIN_SELECTOR, [
-            v => {
-                this.abcd.sendToInputBus(PIN_SELECTOR, [v], 0);
-                this.efgh.sendToInputBus(PIN_SELECTOR, [v], 0);
-            },
-            v => {
-                this.abcd.sendToInputBus(PIN_SELECTOR, [v], 1);
-                this.efgh.sendToInputBus(PIN_SELECTOR, [v], 1);
-            },
-            v => {
-                this.outMux.sendToInputPin(PIN_SELECTOR, v);
-            }
-        ])
+    this.createBus(PIN_SELECTOR, [
+      (v) => {
+        this.abcd.sendToBus(PIN_SELECTOR, [v], 0);
+        this.efgh.sendToBus(PIN_SELECTOR, [v], 0);
+      },
+      (v) => {
+        this.abcd.sendToBus(PIN_SELECTOR, [v], 1);
+        this.efgh.sendToBus(PIN_SELECTOR, [v], 1);
+      },
+      (v) => {
+        this.outMux.sendToPin(PIN_SELECTOR, v);
+      },
+    ]);
 
-        this.createOutputBus(PIN_OUTPUT, this.outMux.getOutputBus(PIN_OUTPUT));
-    }
+    this.createBus(PIN_OUTPUT, this.outMux.getBus(PIN_OUTPUT));
+  }
 }
 
 export default Mux8Way16;

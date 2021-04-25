@@ -5,6 +5,7 @@
 import Chip from "../../Chip";
 import Or from "../Or";
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
+import BinaryBus from "../../BinaryBus";
 
 //  CHIP Or8Way {
 //     IN in[8];
@@ -20,38 +21,51 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 //     Or(a=or6, b=in[7], out=out);
 // }
 class Or8Way extends Chip {
-    or1: Or;
-    or2: Or;
-    or3: Or;
-    or4: Or;
-    or5: Or;
-    or6: Or;
-    orOut: Or;
+  or1: Or;
+  or2: Or;
+  or3: Or;
+  or4: Or;
+  or5: Or;
+  or6: Or;
+  orOut: Or;
 
-    constructor() {
-        super('Or8Way');
+  constructor() {
+    super("Or8Way");
 
-        this.or1 = new Or();
-        this.or2 = new Or();
-        this.or3 = new Or();
-        this.or4 = new Or();
-        this.or5 = new Or();
-        this.or6 = new Or();
-        this.orOut = new Or();
+    this.or1 = new Or();
+    this.or2 = new Or();
+    this.or3 = new Or();
+    this.or4 = new Or();
+    this.or5 = new Or();
+    this.or6 = new Or();
+    this.orOut = new Or();
 
-        // Internal Wiring
-        this.or1.connectToOutputPin(PIN_OUTPUT, this.or2.getInputPin(PIN_A));
-        this.or2.connectToOutputPin(PIN_OUTPUT, this.or3.getInputPin(PIN_A));
-        this.or3.connectToOutputPin(PIN_OUTPUT, this.or4.getInputPin(PIN_A));
-        this.or4.connectToOutputPin(PIN_OUTPUT, this.or5.getInputPin(PIN_A));
-        this.or5.connectToOutputPin(PIN_OUTPUT, this.or6.getInputPin(PIN_A));
-        this.or6.connectToOutputPin(PIN_OUTPUT, this.orOut.getInputPin(PIN_A));
+    // Internal Wiring
+    this.or1.getPin(PIN_OUTPUT).connect(this.or2.getPin(PIN_A));
+    this.or2.getPin(PIN_OUTPUT).connect(this.or3.getPin(PIN_A));
+    this.or3.getPin(PIN_OUTPUT).connect(this.or4.getPin(PIN_A));
+    this.or4.getPin(PIN_OUTPUT).connect(this.or5.getPin(PIN_A));
+    this.or5.getPin(PIN_OUTPUT).connect(this.or6.getPin(PIN_A));
+    this.or6.getPin(PIN_OUTPUT).connect(this.orOut.getPin(PIN_A));
 
-        // External Wiring
-        this.createInputBus(PIN_INPUT, [this.or1.getInputPin(PIN_A),
-        ...[this.or1, this.or2, this.or3, this.or4, this.or5, this.or6, this.orOut].map(o => o.getInputPin(PIN_B))])
-        this.createOutputPin(PIN_OUTPUT, this.orOut.getOutputPin(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createBus(
+      PIN_INPUT,
+      new BinaryBus([
+        this.or1.getPin(PIN_A),
+        ...[
+          this.or1,
+          this.or2,
+          this.or3,
+          this.or4,
+          this.or5,
+          this.or6,
+          this.orOut,
+        ].map((o) => o.getPin(PIN_B)),
+      ])
+    );
+    this.createPin(PIN_OUTPUT, this.orOut.getPin(PIN_OUTPUT));
+  }
 }
 
 export default Or8Way;

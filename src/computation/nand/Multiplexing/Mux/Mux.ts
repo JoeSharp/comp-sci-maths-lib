@@ -1,7 +1,7 @@
-import And from '../../Logic/And';
+import And from "../../Logic/And";
 import Chip from "../../Chip";
-import Not from '../../Logic/Not';
-import Or from '../../Logic/Or';
+import Not from "../../Logic/Not";
+import Or from "../../Logic/Or";
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
 
 /**
@@ -21,29 +21,37 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
 //     Or(a=aAndNotSel, b=bAndSel, out=out);
 // }
 class Mux extends Chip {
-    bAndSel: And;
-    notSel: Not;
-    aAndNotSel: And;
-    aAndNotSelOrBAndSel: Or;
+  bAndSel: And;
+  notSel: Not;
+  aAndNotSel: And;
+  aAndNotSelOrBAndSel: Or;
 
-    constructor() {
-        super('Mux')
-        this.bAndSel = new And();
-        this.notSel = new Not();
-        this.aAndNotSel = new And();
-        this.aAndNotSelOrBAndSel = new Or();
+  constructor() {
+    super("Mux");
+    this.bAndSel = new And();
+    this.notSel = new Not();
+    this.aAndNotSel = new And();
+    this.aAndNotSelOrBAndSel = new Or();
 
-        // Internal Wiring
-        this.notSel.connectToOutputPin(PIN_OUTPUT, this.aAndNotSel.getInputPin(PIN_B));
-        this.bAndSel.connectToOutputPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getInputPin(PIN_B));
-        this.aAndNotSel.connectToOutputPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getInputPin(PIN_A));
+    // Internal Wiring
+    this.notSel.getPin(PIN_OUTPUT).connect(this.aAndNotSel.getPin(PIN_B));
+    this.bAndSel
+      .getPin(PIN_OUTPUT)
+      .connect(this.aAndNotSelOrBAndSel.getPin(PIN_B));
+    this.aAndNotSel
+      .getPin(PIN_OUTPUT)
+      .connect(this.aAndNotSelOrBAndSel.getPin(PIN_A));
 
-        // External Wiring
-        this.createInputPin(PIN_A, this.aAndNotSel.getInputPin(PIN_A));
-        this.createInputPin(PIN_B, this.bAndSel.getInputPin(PIN_A));
-        this.createInputPin(PIN_SELECTOR, this.notSel.getInputPin(PIN_INPUT), this.bAndSel.getInputPin(PIN_B));
-        this.createOutputPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getOutputPin(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createPin(PIN_A, this.aAndNotSel.getPin(PIN_A));
+    this.createPin(PIN_B, this.bAndSel.getPin(PIN_A));
+    this.createPin(
+      PIN_SELECTOR,
+      this.notSel.getPin(PIN_INPUT),
+      this.bAndSel.getPin(PIN_B)
+    );
+    this.createPin(PIN_OUTPUT, this.aAndNotSelOrBAndSel.getPin(PIN_OUTPUT));
+  }
 }
 
 export default Mux;

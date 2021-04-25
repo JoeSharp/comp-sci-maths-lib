@@ -32,79 +32,85 @@ import { PIN_C } from "../../Multiplexing/Dmux4Way/Dmux4Way";
 //     FullAdder(a=a[15], b=b[15], c=carry14, sum=out[15], carry=overflow);
 // }
 class Add16 extends Chip {
-    halfAdd0: HalfAdder;
-    adder1: FullAdder;
-    adder2: FullAdder;
-    adder3: FullAdder;
-    adder4: FullAdder;
-    adder5: FullAdder;
-    adder6: FullAdder;
-    adder7: FullAdder;
-    adder8: FullAdder;
-    adder9: FullAdder;
-    adder10: FullAdder;
-    adder11: FullAdder;
-    adder12: FullAdder;
-    adder13: FullAdder;
-    adder14: FullAdder;
-    adder15: FullAdder;
+  halfAdd0: HalfAdder;
+  adder1: FullAdder;
+  adder2: FullAdder;
+  adder3: FullAdder;
+  adder4: FullAdder;
+  adder5: FullAdder;
+  adder6: FullAdder;
+  adder7: FullAdder;
+  adder8: FullAdder;
+  adder9: FullAdder;
+  adder10: FullAdder;
+  adder11: FullAdder;
+  adder12: FullAdder;
+  adder13: FullAdder;
+  adder14: FullAdder;
+  adder15: FullAdder;
 
-    constructor() {
-        super('Add16');
+  constructor() {
+    super("Add16");
 
-        this.halfAdd0 = new HalfAdder();
-        this.adder1 = new FullAdder();
-        this.adder2 = new FullAdder();
-        this.adder3 = new FullAdder();
-        this.adder4 = new FullAdder();
-        this.adder5 = new FullAdder();
-        this.adder6 = new FullAdder();
-        this.adder7 = new FullAdder();
-        this.adder8 = new FullAdder();
-        this.adder9 = new FullAdder();
-        this.adder10 = new FullAdder();
-        this.adder11 = new FullAdder();
-        this.adder12 = new FullAdder();
-        this.adder13 = new FullAdder();
-        this.adder14 = new FullAdder();
-        this.adder15 = new FullAdder();
+    this.halfAdd0 = new HalfAdder();
+    this.adder1 = new FullAdder();
+    this.adder2 = new FullAdder();
+    this.adder3 = new FullAdder();
+    this.adder4 = new FullAdder();
+    this.adder5 = new FullAdder();
+    this.adder6 = new FullAdder();
+    this.adder7 = new FullAdder();
+    this.adder8 = new FullAdder();
+    this.adder9 = new FullAdder();
+    this.adder10 = new FullAdder();
+    this.adder11 = new FullAdder();
+    this.adder12 = new FullAdder();
+    this.adder13 = new FullAdder();
+    this.adder14 = new FullAdder();
+    this.adder15 = new FullAdder();
 
-        const fullAdders = [
-            this.adder1,
-            this.adder2,
-            this.adder3,
-            this.adder4,
-            this.adder5,
-            this.adder6,
-            this.adder7,
-            this.adder8,
-            this.adder9,
-            this.adder10,
-            this.adder11,
-            this.adder12,
-            this.adder13,
-            this.adder14,
-            this.adder15
-        ]
+    const fullAdders = [
+      this.adder1,
+      this.adder2,
+      this.adder3,
+      this.adder4,
+      this.adder5,
+      this.adder6,
+      this.adder7,
+      this.adder8,
+      this.adder9,
+      this.adder10,
+      this.adder11,
+      this.adder12,
+      this.adder13,
+      this.adder14,
+      this.adder15,
+    ];
 
-        const adders = [
-            this.halfAdd0,
-            ...fullAdders
-        ]
+    const adders = [this.halfAdd0, ...fullAdders];
 
-        // Internal wiring
-        this.halfAdd0.connectToOutputPin(PIN_CARRY, this.adder1.getInputPin(PIN_C));
-        fullAdders.forEach((fullAdder, i) => {
-            if (i < (fullAdders.length - 1)) {
-                fullAdder.connectToOutputPin(PIN_CARRY, fullAdders[i + 1].getInputPin(PIN_C));
-            }
-        })
+    // Internal wiring
+    this.halfAdd0.getPin(PIN_CARRY).connect(this.adder1.getPin(PIN_C));
+    fullAdders.forEach((fullAdder, i) => {
+      if (i < fullAdders.length - 1) {
+        fullAdder.connectToPin(PIN_CARRY, fullAdders[i + 1].getPin(PIN_C));
+      }
+    });
 
-        // External Wiring
-        this.createInputBus(PIN_A, adders.map(a => a.getInputPin(PIN_A)));
-        this.createInputBus(PIN_B, adders.map(a => a.getInputPin(PIN_B)));
-        this.createOutputBus(PIN_OUTPUT, adders.map(a => a.getOutputPin(PIN_SUM)));
-    }
+    // External Wiring
+    this.createBus(
+      PIN_A,
+      adders.map((a) => a.getPin(PIN_A))
+    );
+    this.createBus(
+      PIN_B,
+      adders.map((a) => a.getPin(PIN_B))
+    );
+    this.createBus(
+      PIN_OUTPUT,
+      adders.map((a) => a.getPin(PIN_SUM))
+    );
+  }
 }
 
 export default Add16;

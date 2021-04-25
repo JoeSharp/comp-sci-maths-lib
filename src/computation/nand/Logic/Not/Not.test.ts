@@ -6,15 +6,15 @@ describe("NOT", () => {
   test("Simple", () => {
     const receiver = new BinaryPin();
     const not = new Not();
-    not.connectToOutputPin(PIN_OUTPUT, receiver);
+    not.getPin(PIN_OUTPUT).connect(receiver);
 
-    not.sendToInputPin(PIN_INPUT, false);
+    not.getPin(PIN_INPUT).send(false);
     expect(receiver.lastOutput).toBe(true);
 
-    not.sendToInputPin(PIN_INPUT, true);
+    not.getPin(PIN_INPUT).send(true);
     expect(receiver.lastOutput).toBe(false);
 
-    not.sendToInputPin(PIN_INPUT, false);
+    not.getPin(PIN_INPUT).send(false);
     expect(receiver.lastOutput).toBe(true);
   });
 });

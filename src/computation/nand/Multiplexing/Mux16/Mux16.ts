@@ -1,6 +1,14 @@
-import Chip from '../../Chip';
-import Mux from '../Mux';
-import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from '../../types'
+import Chip from "../../Chip";
+import Mux from "../Mux";
+import {
+  PIN_A,
+  PIN_B,
+  PIN_INPUT,
+  PIN_OUTPUT,
+  PIN_SELECTOR,
+  WORD_LENGTH,
+} from "../../types";
+import BinaryBus from "../../BinaryBus";
 
 /**
  * 16-bit multiplexor:
@@ -34,18 +42,32 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from '
 // }
 
 class Mux16 extends Chip {
-    muxes: Mux[];
+  muxes: Mux[];
 
-    constructor() {
-        super('Mux16');
-        this.muxes = Array(WORD_LENGTH).fill(null).map((_, i) => new Mux());
+  constructor() {
+    super("Mux16");
+    this.muxes = Array(WORD_LENGTH)
+      .fill(null)
+      .map((_, i) => new Mux());
 
-        // External Wiring
-        this.createInputPin(PIN_SELECTOR, ...this.muxes.map(m => m.getInputPin(PIN_SELECTOR)));
-        this.createInputBus(PIN_A, this.muxes.map(m => m.getInputPin(PIN_A)));
-        this.createInputBus(PIN_B, this.muxes.map(m => m.getInputPin(PIN_B)));
-        this.createOutputBus(PIN_OUTPUT, this.muxes.map(m => m.getOutputPin(PIN_OUTPUT)));
-    }
+    // External Wiring
+    this.createPin(
+      PIN_SELECTOR,
+      ...this.muxes.map((m) => m.getPin(PIN_SELECTOR))
+    );
+    this.createBus(
+      PIN_A,
+      new BinaryBus(this.muxes.map((m) => m.getPin(PIN_A)))
+    );
+    this.createBus(
+      PIN_B,
+      new BinaryBus(this.muxes.map((m) => m.getPin(PIN_B)))
+    );
+    this.createBus(
+      PIN_OUTPUT,
+      new BinaryBus(this.muxes.map((m) => m.getPin(PIN_OUTPUT)))
+    );
+  }
 }
 
 export default Mux16;

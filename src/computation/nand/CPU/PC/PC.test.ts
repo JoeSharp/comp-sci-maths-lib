@@ -2,25 +2,25 @@ import { binaryToNumber } from "../../../../dataRepresentation/numberBases/simpl
 import BusSink from "../../BusSink";
 import { Clock } from "../../Clocked";
 import { generateRandomWord, PIN_OUTPUT } from "../../types";
-import PC, { PIN_INCREMENT } from "./PC"
+import PC, { PIN_INCREMENT } from "./PC";
 
-describe('Program Counter', () => {
-    test('Simple', () => {
-        const clock = new Clock();
-        const pc = new PC(clock);
-        const jumpAddress = generateRandomWord();
+describe("Program Counter", () => {
+  test("Simple", () => {
+    const clock = new Clock();
+    const pc = new PC(clock);
+    const jumpAddress = generateRandomWord();
 
-        const sink = new BusSink();
-        pc.connectToOutputBus(PIN_OUTPUT, sink.getBus());
-        pc.sendToInputPin(PIN_INCREMENT, true);
+    const sink = new BusSink();
+    pc.connectToBus(PIN_OUTPUT, sink.getBus());
+    pc.sendToPin(PIN_INCREMENT, true);
 
-        const pcValue = () => binaryToNumber(sink.getValues());
-        expect(pcValue()).toBe(0);
+    const pcValue = () => binaryToNumber(sink.getValues());
+    expect(pcValue()).toBe(0);
 
-        clock.ticktock();
-        expect(pcValue()).toBe(1);
+    clock.ticktock();
+    expect(pcValue()).toBe(1);
 
-        clock.ticktock();
-        expect(pcValue()).toBe(2);
-    })
-})
+    clock.ticktock();
+    expect(pcValue()).toBe(2);
+  });
+});

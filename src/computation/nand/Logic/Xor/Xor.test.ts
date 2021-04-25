@@ -28,12 +28,12 @@ const XOR_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("XOR", () => {
   const receiver = new BinaryPin();
   const xor = new Xor();
-  xor.connectToOutputPin(PIN_OUTPUT, receiver);
+  xor.getPin(PIN_OUTPUT).connect(receiver);
 
   XOR_TEST_CASES.forEach(({ a, b, expected }) => {
     test(`${a} OR ${b} = ${expected}`, () => {
-      xor.sendToInputPin(PIN_A, a);
-      xor.sendToInputPin(PIN_B, b);
+      xor.getPin(PIN_A).send(a);
+      xor.getPin(PIN_B).send(b);
       expect(receiver.lastOutput).toBe(expected);
     });
   });

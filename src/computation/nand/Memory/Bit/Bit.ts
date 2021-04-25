@@ -6,9 +6,16 @@
 
 import DataFlipFlop from "../DataFlipFlop";
 import Mux from "../../Multiplexing/Mux";
-import { Clock } from '../../Clocked';
+import { Clock } from "../../Clocked";
 import Chip from "../../Chip";
-import { PIN_A, PIN_B, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
+import {
+  PIN_A,
+  PIN_B,
+  PIN_INPUT,
+  PIN_LOAD,
+  PIN_OUTPUT,
+  PIN_SELECTOR,
+} from "../../types";
 
 // CHIP Bit {
 //     IN in, load;
@@ -20,23 +27,23 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, PIN_SELECTOR } from "../
 //     DFF(in=w1, out=t1, out=out);
 // }
 class Bit extends Chip {
-    mux: Mux;
-    dff: DataFlipFlop;
+  mux: Mux;
+  dff: DataFlipFlop;
 
-    constructor(clock: Clock) {
-        super('Bit');
-        this.mux = new Mux();
-        this.dff = new DataFlipFlop(clock);
+  constructor(clock: Clock) {
+    super("Bit");
+    this.mux = new Mux();
+    this.dff = new DataFlipFlop(clock);
 
-        // Internal Wiring
-        this.dff.connectToOutputPin(PIN_OUTPUT, this.mux.getInputPin(PIN_A)); // t1
-        this.mux.connectToOutputPin(PIN_OUTPUT, this.dff.getInputPin(PIN_INPUT)); // w1
+    // Internal Wiring
+    this.dff.getPin(PIN_OUTPUT).connect(this.mux.getPin(PIN_A)); // t1
+    this.mux.getPin(PIN_OUTPUT).connect(this.dff.getPin(PIN_INPUT)); // w1
 
-        // External Wiring
-        this.createInputPin(PIN_INPUT, this.mux.getInputPin(PIN_B));
-        this.createInputPin(PIN_LOAD, this.mux.getInputPin(PIN_SELECTOR));
-        this.createOutputPin(PIN_OUTPUT, this.dff.getOutputPin(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createPin(PIN_INPUT, this.mux.getPin(PIN_B));
+    this.createPin(PIN_LOAD, this.mux.getPin(PIN_SELECTOR));
+    this.createPin(PIN_OUTPUT, this.dff.getPin(PIN_OUTPUT));
+  }
 }
 
 export default Bit;

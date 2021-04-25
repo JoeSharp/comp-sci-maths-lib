@@ -16,17 +16,26 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 // }
 
 class Inc16 extends Chip {
-    adder: Add16;
+  adder: Add16;
 
-    constructor() {
-        super('Inc16');
-        this.adder = new Add16();
-        this.adder.sendToInputBus(PIN_B, [true, false, false, false, false, false, false, false]);
+  constructor() {
+    super("Inc16");
+    this.adder = new Add16();
+    this.adder.sendToBus(PIN_B, [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ]);
 
-        // External wiring
-        this.createInputBus(PIN_INPUT, this.adder.getInputBus(PIN_A));
-        this.createOutputBus(PIN_OUTPUT, this.adder.getOutputBus(PIN_OUTPUT));
-    }
+    // External wiring
+    this.createBus(PIN_INPUT, this.adder.getBus(PIN_A));
+    this.createBus(PIN_OUTPUT, this.adder.getBus(PIN_OUTPUT));
+  }
 }
 
 export default Inc16;

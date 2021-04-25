@@ -1,6 +1,5 @@
 import { Optional } from "../../types";
 import { NO_OP } from "../TestScripts/types";
-import { WORD_LENGTH } from "./types";
 
 export class BinaryPin {
   lastOutput: Optional<boolean>;
@@ -24,7 +23,7 @@ export class BinaryPin {
     return this;
   }
 
-  connectOutput(...receivers: BinaryPin[]): BinaryPin {
+  connect(...receivers: BinaryPin[]): BinaryPin {
     receivers.forEach((r) => this.receivers.push(r));
     this.newOutputObserver();
     return this;
@@ -41,10 +40,3 @@ export class BinaryPin {
 }
 
 export default BinaryPin;
-
-export const createBus = (width: number = WORD_LENGTH): BinaryBus =>
-  Array(width)
-    .fill(null)
-    .map(() => new BinaryPin());
-
-export type BinaryBus = BinaryPin[];

@@ -16,25 +16,25 @@ import Xor from "../../Logic/Xor";
 //     Xor(a=a, b=b, out=sum);
 //     And(a=a, b=b, out=carry);
 // }
-export const PIN_SUM = 'sum';
-export const PIN_CARRY = 'carry';
+export const PIN_SUM = "sum";
+export const PIN_CARRY = "carry";
 
 class HalfAdder extends Chip {
-    sum: Xor;
-    carry: And;
+  sum: Xor;
+  carry: And;
 
-    constructor() {
-        super('HalfAdder');
+  constructor() {
+    super("HalfAdder");
 
-        this.sum = new Xor();
-        this.carry = new And();
+    this.sum = new Xor();
+    this.carry = new And();
 
-        // External Wiring
-        this.createInputPin(PIN_A, this.sum.getInputPin(PIN_A), this.carry.getInputPin(PIN_A));
-        this.createInputPin(PIN_B, this.sum.getInputPin(PIN_B), this.carry.getInputPin(PIN_B));
-        this.createOutputPin(PIN_SUM, this.sum.getOutputPin(PIN_OUTPUT));
-        this.createOutputPin(PIN_CARRY, this.carry.getOutputPin(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createPin(PIN_A, this.sum.getPin(PIN_A), this.carry.getPin(PIN_A));
+    this.createPin(PIN_B, this.sum.getPin(PIN_B), this.carry.getPin(PIN_B));
+    this.createPin(PIN_SUM, this.sum.getPin(PIN_OUTPUT));
+    this.createPin(PIN_CARRY, this.carry.getPin(PIN_OUTPUT));
+  }
 }
 
 export default HalfAdder;

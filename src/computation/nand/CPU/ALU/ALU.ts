@@ -15,7 +15,14 @@ import Not from "../../Logic/Not";
 import Not16 from "../../Logic/Not16";
 import Or from "../../Logic/Or";
 import Or8Way from "../../Logic/Or8Way";
-import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../../types";
+import {
+  PIN_A,
+  PIN_B,
+  PIN_INPUT,
+  PIN_OUTPUT,
+  PIN_SELECTOR,
+  WORD_LENGTH,
+} from "../../types";
 
 // Implementation: the ALU logic manipulates the x and y inputs
 // and operates on the resulting values, as follows:
@@ -73,107 +80,107 @@ CHIP ALU {
 }
 */
 
-export const PIN_X = 'x';
-export const PIN_Y = 'y';
-export const PIN_ZX = 'zx';
-export const PIN_NX = 'nx';
-export const PIN_ZY = 'zy';
-export const PIN_NY = 'ny';
-export const PIN_F = 'f';
-export const PIN_NO = 'no';
-export const PIN_ZR = 'zr';
-export const PIN_NG = 'ng';
+export const PIN_X = "x";
+export const PIN_Y = "y";
+export const PIN_ZX = "zx";
+export const PIN_NX = "nx";
+export const PIN_ZY = "zy";
+export const PIN_NY = "ny";
+export const PIN_F = "f";
+export const PIN_NO = "no";
+export const PIN_ZR = "zr";
+export const PIN_NG = "ng";
 
 class ALU extends Chip {
-    // Use the flags for the x input to generate xProcessed
-    xZero: Mux16;
-    notXZero: Not16;
-    xProcessed: Mux16;
+  // Use the flags for the x input to generate xProcessed
+  xZero: Mux16;
+  notXZero: Not16;
+  xProcessed: Mux16;
 
-    yZero: Mux16;
-    notYZero: Not16;
-    yProcessed: Mux16;
+  yZero: Mux16;
+  notYZero: Not16;
+  yProcessed: Mux16;
 
-    xPlusy: Add16;
-    xAndy: Add16;
-    fOut: Mux16;
+  xPlusy: Add16;
+  xAndy: Add16;
+  fOut: Mux16;
 
-    notFOut: Not16;
-    out: Mux16;
+  notFOut: Not16;
+  out: Mux16;
 
-    zrLsb: Or8Way;
-    zrMsb: Or8Way;
-    nzr: Or;
-    zr: Not;
+  zrLsb: Or8Way;
+  zrMsb: Or8Way;
+  nzr: Or;
+  zr: Not;
 
-    constructor() {
-        super('ALU');
+  constructor() {
+    super("ALU");
 
-        this.xZero = new Mux16();
-        this.notXZero = new Not16();
-        this.xProcessed = new Mux16();
+    this.xZero = new Mux16();
+    this.notXZero = new Not16();
+    this.xProcessed = new Mux16();
 
-        this.yZero = new Mux16();
-        this.notYZero = new Not16();
-        this.yProcessed = new Mux16();
+    this.yZero = new Mux16();
+    this.notYZero = new Not16();
+    this.yProcessed = new Mux16();
 
-        this.xPlusy = new Add16();
-        this.xAndy = new Add16();
-        this.fOut = new Mux16();
-        this.notFOut = new Not16();
-        this.out = new Mux16();
+    this.xPlusy = new Add16();
+    this.xAndy = new Add16();
+    this.fOut = new Mux16();
+    this.notFOut = new Not16();
+    this.out = new Mux16();
 
-        this.zrLsb = new Or8Way();
-        this.zrMsb = new Or8Way();
-        this.nzr = new Or();
-        this.zr = new Not();
+    this.zrLsb = new Or8Way();
+    this.zrMsb = new Or8Way();
+    this.nzr = new Or();
+    this.zr = new Not();
 
-        this.xZero.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(false));
-        this.xZero.connectToOutputBus(PIN_OUTPUT, this.notXZero.getInputBus(PIN_INPUT));
-        this.xZero.connectToOutputBus(PIN_OUTPUT, this.xProcessed.getInputBus(PIN_A));
-        this.notXZero.connectToOutputBus(PIN_OUTPUT, this.xProcessed.getInputBus(PIN_B));
+    this.xZero.sendToBus(PIN_B, Array(WORD_LENGTH).fill(false));
+    this.xZero.connectToBus(PIN_OUTPUT, this.notXZero.getBus(PIN_INPUT));
+    this.xZero.connectToBus(PIN_OUTPUT, this.xProcessed.getBus(PIN_A));
+    this.notXZero.connectToBus(PIN_OUTPUT, this.xProcessed.getBus(PIN_B));
 
-        this.yZero.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(false));
-        this.yZero.connectToOutputBus(PIN_OUTPUT, this.notYZero.getInputBus(PIN_INPUT));
-        this.yZero.connectToOutputBus(PIN_OUTPUT, this.yProcessed.getInputBus(PIN_A));
-        this.notYZero.connectToOutputBus(PIN_OUTPUT, this.yProcessed.getInputBus(PIN_B));
+    this.yZero.sendToBus(PIN_B, Array(WORD_LENGTH).fill(false));
+    this.yZero.connectToBus(PIN_OUTPUT, this.notYZero.getBus(PIN_INPUT));
+    this.yZero.connectToBus(PIN_OUTPUT, this.yProcessed.getBus(PIN_A));
+    this.notYZero.connectToBus(PIN_OUTPUT, this.yProcessed.getBus(PIN_B));
 
-        this.xProcessed.connectToOutputBus(PIN_OUTPUT, this.xPlusy.getInputBus(PIN_A));
-        this.yProcessed.connectToOutputBus(PIN_OUTPUT, this.xPlusy.getInputBus(PIN_B));
+    this.xProcessed.connectToBus(PIN_OUTPUT, this.xPlusy.getBus(PIN_A));
+    this.yProcessed.connectToBus(PIN_OUTPUT, this.xPlusy.getBus(PIN_B));
 
-        this.xProcessed.connectToOutputBus(PIN_OUTPUT, this.xAndy.getInputBus(PIN_A));
-        this.yProcessed.connectToOutputBus(PIN_OUTPUT, this.xAndy.getInputBus(PIN_B));
+    this.xProcessed.connectToBus(PIN_OUTPUT, this.xAndy.getBus(PIN_A));
+    this.yProcessed.connectToBus(PIN_OUTPUT, this.xAndy.getBus(PIN_B));
 
-        this.xAndy.connectToOutputBus(PIN_OUTPUT, this.fOut.getInputBus(PIN_A));
-        this.xPlusy.connectToOutputBus(PIN_OUTPUT, this.fOut.getInputBus(PIN_B));
+    this.xAndy.connectToBus(PIN_OUTPUT, this.fOut.getBus(PIN_A));
+    this.xPlusy.connectToBus(PIN_OUTPUT, this.fOut.getBus(PIN_B));
 
-        this.fOut.connectToOutputBus(PIN_OUTPUT, this.notFOut.getInputBus(PIN_INPUT));
-        this.fOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_A));
-        this.notFOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_B));
+    this.fOut.connectToBus(PIN_OUTPUT, this.notFOut.getBus(PIN_INPUT));
+    this.fOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_A));
+    this.notFOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_B));
 
-        this.fOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_A));
-        this.notFOut.connectToOutputBus(PIN_OUTPUT, this.out.getInputBus(PIN_B));
+    this.fOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_A));
+    this.notFOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_B));
 
-        this.out.connectToOutputBus(PIN_OUTPUT, this.zrLsb.getInputBus(PIN_INPUT), 0); // preOut1
-        this.out.connectToOutputBus(PIN_OUTPUT, this.zrMsb.getInputBus(PIN_INPUT), 8); // preOut2
+    this.out.connectToBus(PIN_OUTPUT, this.zrLsb.getBus(PIN_INPUT), 0); // preOut1
+    this.out.connectToBus(PIN_OUTPUT, this.zrMsb.getBus(PIN_INPUT), 8); // preOut2
 
-        this.zrLsb.connectToOutputPin(PIN_OUTPUT, this.nzr.getInputPin(PIN_A));
-        this.zrMsb.connectToOutputPin(PIN_OUTPUT, this.nzr.getInputPin(PIN_B));
+    this.zrLsb.connectToPin(PIN_OUTPUT, this.nzr.getPin(PIN_A));
+    this.zrMsb.connectToPin(PIN_OUTPUT, this.nzr.getPin(PIN_B));
 
-        // External Wiring
-        this.createInputBus(PIN_X, this.xZero.getInputBus(PIN_A));
-        this.createInputBus(PIN_Y, this.yZero.getInputBus(PIN_A));
-        this.createInputPin(PIN_ZX, this.xZero.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_ZY, this.yZero.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_NX, this.xProcessed.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_NY, this.yProcessed.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_F, this.fOut.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_NO, this.out.getInputPin(PIN_SELECTOR));
+    // External Wiring
+    this.createBus(PIN_X, this.xZero.getBus(PIN_A));
+    this.createBus(PIN_Y, this.yZero.getBus(PIN_A));
+    this.createPin(PIN_ZX, this.xZero.getPin(PIN_SELECTOR));
+    this.createPin(PIN_ZY, this.yZero.getPin(PIN_SELECTOR));
+    this.createPin(PIN_NX, this.xProcessed.getPin(PIN_SELECTOR));
+    this.createPin(PIN_NY, this.yProcessed.getPin(PIN_SELECTOR));
+    this.createPin(PIN_F, this.fOut.getPin(PIN_SELECTOR));
+    this.createPin(PIN_NO, this.out.getPin(PIN_SELECTOR));
 
-        this.createOutputBus(PIN_OUTPUT, this.out.getOutputBus(PIN_OUTPUT));
-        this.createOutputPin(PIN_NG, this.out.getOutputBus(PIN_OUTPUT, 15)[0]);
-        this.createOutputPin(PIN_ZR, this.nzr.getOutputPin(PIN_OUTPUT));
-    }
+    this.createBus(PIN_OUTPUT, this.out.getBus(PIN_OUTPUT));
+    this.createPin(PIN_NG, this.out.getBus(PIN_OUTPUT, 15)[0]);
+    this.createPin(PIN_ZR, this.nzr.getPin(PIN_OUTPUT));
+  }
 }
 
 export default ALU;

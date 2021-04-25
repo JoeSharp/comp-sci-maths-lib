@@ -1,3 +1,4 @@
+import BinaryPin from "../../BinaryPin";
 import { PIN_A, PIN_B, PIN_INPUT, PIN_SELECTOR } from "../../types";
 import Dmux from "./Dmux";
 
@@ -8,47 +9,52 @@ import Dmux from "./Dmux";
  */
 
 interface DmuxTestCase {
-    input: boolean;
-    sel: boolean;
-    expectedA: boolean;
-    expectedB: boolean;
+  input: boolean;
+  sel: boolean;
+  expectedA: boolean;
+  expectedB: boolean;
 }
 
-const DMUX_TEST_CASES: DmuxTestCase[] = [{
+const DMUX_TEST_CASES: DmuxTestCase[] = [
+  {
     input: false,
     sel: false,
     expectedA: false,
-    expectedB: false
-}, {
+    expectedB: false,
+  },
+  {
     input: false,
     sel: true,
     expectedA: false,
-    expectedB: false
-}, {
+    expectedB: false,
+  },
+  {
     input: true,
     sel: false,
     expectedA: true,
-    expectedB: false
-}, {
+    expectedB: false,
+  },
+  {
     input: true,
     sel: true,
     expectedA: false,
-    expectedB: true
-}]
+    expectedB: true,
+  },
+];
 
-describe('Dmux', () => {
-    DMUX_TEST_CASES.forEach(({ input, sel, expectedA, expectedB }) => {
-        const dmux = new Dmux();
-        const receiverA = jest.fn();
-        const receiverB = jest.fn();
-        dmux.connectToOutputPin(PIN_A, receiverA);
-        dmux.connectToOutputPin(PIN_B, receiverB);
+describe("Dmux", () => {
+  DMUX_TEST_CASES.forEach(({ input, sel, expectedA, expectedB }) => {
+    const dmux = new Dmux();
+    const receiverA = new BinaryPin();
+    const receiverB = new BinaryPin();
+    dmux.getPin(PIN_A).connect(receiverA);
+    dmux.getPin(PIN_B).connect(receiverB);
 
-        test(`Input: ${input}, Sel: ${sel}, A: ${expectedA}, B: ${expectedB}`, () => {
-            dmux.sendToInputPin(PIN_INPUT, input);
-            dmux.sendToInputPin(PIN_SELECTOR, sel);
-            expect(receiverA).toHaveBeenLastCalledWith(expectedA);
-            expect(receiverB).toHaveBeenLastCalledWith(expectedB);
-        })
-    })
+    test(`Input: ${input}, Sel: ${sel}, A: ${expectedA}, B: ${expectedB}`, () => {
+      dmux.getPin(PIN_INPUT).send(input);
+      dmux.getPin(PIN_SELECTOR).send(sel);
+      expect(receiverA.lastOutput).toBe(expectedA);
+      expect(receiverB.lastOutput).toBe(expectedB);
+    });
+  });
 });

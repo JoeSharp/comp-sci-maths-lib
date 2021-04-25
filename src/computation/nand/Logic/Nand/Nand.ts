@@ -19,9 +19,9 @@ class Nand extends Chip {
     );
     this.updateValue();
 
-    this.createInputPin(PIN_A, this.a);
-    this.createInputPin(PIN_B, this.b);
-    this.createOutputPin(PIN_OUTPUT, this.output);
+    this.createPin(PIN_A, this.a);
+    this.createPin(PIN_B, this.b);
+    this.createPin(PIN_OUTPUT, this.output);
   }
 
   updateValue(force: boolean = false) {

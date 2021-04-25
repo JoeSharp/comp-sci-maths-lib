@@ -1,3 +1,4 @@
+import BinaryBus from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT, WORD_LENGTH } from "../../types";
@@ -34,17 +35,26 @@ import Bit from "../Bit";
 // }
 
 class Register extends Chip {
-    bits: Bit[];
+  bits: Bit[];
 
-    constructor(clock: Clock) {
-        super('Register');
+  constructor(clock: Clock) {
+    super("Register");
 
-        this.bits = Array(WORD_LENGTH).fill(null).map(() => new Bit(clock));
+    this.bits = Array(WORD_LENGTH)
+      .fill(null)
+      .map(() => new Bit(clock));
 
-        this.createInputBus(PIN_INPUT, this.bits.map(b => b.getInputPin(PIN_INPUT)));
-        this.createInputPin(PIN_LOAD, ...this.bits.map(b => b.getInputPin(PIN_LOAD)));
-        this.createOutputBus(PIN_OUTPUT, this.bits.map(b => b.getOutputPin(PIN_OUTPUT)));
-    }
+    // External Wiring
+    this.createBus(
+      PIN_INPUT,
+      new BinaryBus(this.bits.map((b) => b.getPin(PIN_INPUT)))
+    );
+    this.createPin(PIN_LOAD, ...this.bits.map((b) => b.getPin(PIN_LOAD)));
+    this.createBus(
+      PIN_OUTPUT,
+      new BinaryBus(this.bits.map((b) => b.getPin(PIN_OUTPUT)))
+    );
+  }
 }
 
 export default Register;

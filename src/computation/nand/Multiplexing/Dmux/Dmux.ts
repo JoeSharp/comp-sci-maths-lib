@@ -19,30 +19,34 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT, PIN_SELECTOR } from "../../types";
 //     And(a=in, b=sel, out=b);
 // }
 class Dmux extends Chip {
-    notSel: Not;
-    inAndNotSel: And;
-    inAndSel: And;
+  notSel: Not;
+  inAndNotSel: And;
+  inAndSel: And;
 
-    constructor() {
-        super('Dmux');
+  constructor() {
+    super("Dmux");
 
-        this.notSel = new Not();
-        this.inAndNotSel = new And();
-        this.inAndSel = new And();
+    this.notSel = new Not();
+    this.inAndNotSel = new And();
+    this.inAndSel = new And();
 
-        // Internal Wiring
-        this.notSel.connectToOutputPin(PIN_OUTPUT, this.inAndNotSel.getInputPin(PIN_B));
+    // Internal Wiring
+    this.notSel.getPin(PIN_OUTPUT).connect(this.inAndNotSel.getPin(PIN_B));
 
-        // External Wiring
-        this.createInputPin(PIN_INPUT,
-            this.inAndNotSel.getInputPin(PIN_A),
-            this.inAndSel.getInputPin(PIN_A));
-        this.createInputPin(PIN_SELECTOR,
-            this.notSel.getInputPin(PIN_INPUT),
-            this.inAndSel.getInputPin(PIN_B));
-        this.createOutputPin(PIN_A, this.inAndNotSel.getOutputPin(PIN_OUTPUT));
-        this.createOutputPin(PIN_B, this.inAndSel.getOutputPin(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createPin(
+      PIN_INPUT,
+      this.inAndNotSel.getPin(PIN_A),
+      this.inAndSel.getPin(PIN_A)
+    );
+    this.createPin(
+      PIN_SELECTOR,
+      this.notSel.getPin(PIN_INPUT),
+      this.inAndSel.getPin(PIN_B)
+    );
+    this.createPin(PIN_A, this.inAndNotSel.getPin(PIN_OUTPUT));
+    this.createPin(PIN_B, this.inAndSel.getPin(PIN_OUTPUT));
+  }
 }
 
 export default Dmux;

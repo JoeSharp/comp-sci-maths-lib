@@ -1,29 +1,37 @@
+import BinaryBus from "../../BinaryBus";
 import { Clock } from "../../Clocked";
-import { generateRandomWord, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, WORD_LENGTH } from "../../types";
+import {
+  generateRandomWord,
+  PIN_INPUT,
+  PIN_LOAD,
+  PIN_OUTPUT,
+} from "../../types";
 import Register from "./Register";
 
-describe('Register', () => {
-    test('Simple', () => {
-        const clock = new Clock();
-        const register = new Register(clock);
-        const receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
-        register.connectToOutputBus(PIN_OUTPUT, receivers);
+describe("Register", () => {
+  test("Simple", () => {
+    const clock = new Clock();
+    const register = new Register(clock);
+    const receivers = new BinaryBus();
+    register.getBus(PIN_OUTPUT).connect(receivers);
 
-        let lastWord: boolean[] = [];
-        for (let x = 0; x < 10; x++) {
-            const word = generateRandomWord();
-            register.sendToInputBus(PIN_INPUT, word);
+    let lastWord: boolean[] = [];
+    for (let x = 0; x < 10; x++) {
+      const word = generateRandomWord();
+      register.getBus(PIN_INPUT).send(word);
 
-            if (lastWord.length === word.length) {
-                register.sendToInputPin(PIN_LOAD, false);
-                clock.ticktock();
-                receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(lastWord[i]));
-            }
+      if (lastWord.length === word.length) {
+        register.getPin(PIN_LOAD).send(false);
+        clock.ticktock();
+        receivers.inputBus.forEach((r, i) =>
+          expect(r.lastOutput).toBe(lastWord[i])
+        );
+      }
 
-            register.sendToInputPin(PIN_LOAD, true);
-            clock.ticktock();
-            receivers.forEach((r, i) => expect(r).toHaveBeenLastCalledWith(word[i]));
-            lastWord = word;
-        }
-    })
-})
+      register.getPin(PIN_LOAD).send(true);
+      clock.ticktock();
+      receivers.inputBus.forEach((r, i) => expect(r.lastOutput).toBe(word[i]));
+      lastWord = word;
+    }
+  });
+});

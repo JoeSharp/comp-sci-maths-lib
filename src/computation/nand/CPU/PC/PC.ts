@@ -7,15 +7,23 @@
  */
 
 import Inc16 from "../../Arithmetic/Inc16";
-import BusFork from "../../BusFork";
+import BusFork from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import Register from "../../Memory/Register";
 import Mux16 from "../../Multiplexing/Mux16";
-import { PIN_A, PIN_B, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../../types";
+import {
+  PIN_A,
+  PIN_B,
+  PIN_INPUT,
+  PIN_LOAD,
+  PIN_OUTPUT,
+  PIN_SELECTOR,
+  WORD_LENGTH,
+} from "../../types";
 
-export const PIN_INCREMENT = 'inc';
-export const PIN_RESET = 'reset';
+export const PIN_INCREMENT = "inc";
+export const PIN_RESET = "reset";
 
 //  CHIP PC {
 //     IN in[16],load,inc,reset;
@@ -37,43 +45,48 @@ export const PIN_RESET = 'reset';
 // }
 
 class PC extends Chip {
-    incrementer: Inc16;
-    incrementMux: Mux16;
+  incrementer: Inc16;
+  incrementMux: Mux16;
 
-    loadMux: Mux16;
-    resetMux: Mux16;
+  loadMux: Mux16;
+  resetMux: Mux16;
 
-    register: Register;
-    lastPCFork: BusFork;
+  register: Register;
+  lastPCFork: BusFork;
 
-    constructor(clock: Clock) {
-        super('PC');
+  constructor(clock: Clock) {
+    super("PC");
 
-        this.incrementer = new Inc16();
-        this.incrementMux = new Mux16();
-        this.loadMux = new Mux16();
-        this.resetMux = new Mux16();
-        this.register = new Register(clock);
-        this.lastPCFork = new BusFork();
+    this.incrementer = new Inc16();
+    this.incrementMux = new Mux16();
+    this.loadMux = new Mux16();
+    this.resetMux = new Mux16();
+    this.register = new Register(clock);
+    this.lastPCFork = new BusFork();
 
-        // Internal Wiring
-        this.incrementer.connectToOutputBus(PIN_OUTPUT, this.incrementMux.getInputBus(PIN_B));
-        this.lastPCFork.withOutput(this.incrementer.getInputBus(PIN_INPUT));
-        this.lastPCFork.withOutput(this.incrementMux.getInputBus(PIN_A));
-        this.incrementMux.connectToOutputBus(PIN_OUTPUT, this.loadMux.getInputBus(PIN_A));
-        this.loadMux.connectToOutputBus(PIN_OUTPUT, this.resetMux.getInputBus(PIN_A));
-        this.resetMux.connectToOutputBus(PIN_OUTPUT, this.register.getInputBus(PIN_INPUT));
-        this.register.sendToInputPin(PIN_LOAD, true);
-        this.register.connectToOutputBus(PIN_OUTPUT, this.lastPCFork.getInput());
-        this.resetMux.sendToInputBus(PIN_B, Array(WORD_LENGTH).fill(null).map(() => false));
+    // Internal Wiring
+    this.incrementer.connectToBus(PIN_OUTPUT, this.incrementMux.getBus(PIN_B));
+    this.lastPCFork.connect(this.incrementer.getBus(PIN_INPUT));
+    this.lastPCFork.connect(this.incrementMux.getBus(PIN_A));
+    this.incrementMux.connectToBus(PIN_OUTPUT, this.loadMux.getBus(PIN_A));
+    this.loadMux.connectToBus(PIN_OUTPUT, this.resetMux.getBus(PIN_A));
+    this.resetMux.connectToBus(PIN_OUTPUT, this.register.getBus(PIN_INPUT));
+    this.register.sendToPin(PIN_LOAD, true);
+    this.register.connectToBus(PIN_OUTPUT, this.lastPCFork.getInput());
+    this.resetMux.sendToBus(
+      PIN_B,
+      Array(WORD_LENGTH)
+        .fill(null)
+        .map(() => false)
+    );
 
-        // External Wiring
-        this.createInputPin(PIN_LOAD, this.loadMux.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_INCREMENT, this.incrementMux.getInputPin(PIN_SELECTOR));
-        this.createInputPin(PIN_RESET, this.resetMux.getInputPin(PIN_SELECTOR));
-        this.createInputBus(PIN_INPUT, this.loadMux.getInputBus(PIN_B));
-        this.createOutputBus(PIN_OUTPUT, this.register.getOutputBus(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createPin(PIN_LOAD, this.loadMux.getPin(PIN_SELECTOR));
+    this.createPin(PIN_INCREMENT, this.incrementMux.getPin(PIN_SELECTOR));
+    this.createPin(PIN_RESET, this.resetMux.getPin(PIN_SELECTOR));
+    this.createBus(PIN_INPUT, this.loadMux.getBus(PIN_B));
+    this.createBus(PIN_OUTPUT, this.register.getBus(PIN_OUTPUT));
+  }
 }
 
 export default PC;

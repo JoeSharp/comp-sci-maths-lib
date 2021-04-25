@@ -1,6 +1,7 @@
-import { PIN_INPUT, PIN_OUTPUT, WORD_LENGTH } from '../../types';
+import { PIN_INPUT, PIN_OUTPUT, WORD_LENGTH } from "../../types";
 import Not from "../Not";
 import Chip from "../../Chip";
+import BinaryBus from "../../BinaryBus";
 /**
  * 16-bit Not:
  * for i=0..15: out[i] = not in[i]
@@ -30,16 +31,24 @@ import Chip from "../../Chip";
 }
  */
 class Not16 extends Chip {
-    nots: Not[];
+  nots: Not[];
 
-    constructor() {
-        super('Not16');
-        this.nots = Array(WORD_LENGTH).fill(null).map((_, i) => new Not());
+  constructor() {
+    super("Not16");
+    this.nots = Array(WORD_LENGTH)
+      .fill(null)
+      .map((_, i) => new Not());
 
-        // External Wiring
-        this.createInputBus(PIN_INPUT, this.nots.map(n => n.getInputPin(PIN_INPUT)));
-        this.createOutputBus(PIN_OUTPUT, this.nots.map(n => n.getOutputPin(PIN_OUTPUT)));
-    }
+    // External Wiring
+    this.createBus(
+      PIN_INPUT,
+      new BinaryBus(this.nots.map((n) => n.getPin(PIN_INPUT)))
+    );
+    this.createBus(
+      PIN_OUTPUT,
+      new BinaryBus(this.nots.map((n) => n.getPin(PIN_OUTPUT)))
+    );
+  }
 }
 
 export default Not16;

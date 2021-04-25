@@ -1,29 +1,34 @@
-import { Clock } from '../../Clocked';
-import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from '../../types';
-import Bit from './Bit';
+import BinaryPin from "../../BinaryPin";
+import { Clock } from "../../Clocked";
+import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from "../../types";
+import Bit from "./Bit";
 
-describe('D-Type Flip Flop', () => {
-    test('1-bit Register', () => {
-        const receiver = jest.fn();
-        const clock = new Clock();
-        const register = new Bit(clock);
-        register.connectToOutputPin(PIN_OUTPUT, receiver);
+describe("D-Type Flip Flop", () => {
+  test("1-bit Register", () => {
+    let callCount = 0;
+    const receiver = new BinaryPin().withNewValueObserver(() => callCount++);
+    const clock = new Clock();
+    const register = new Bit(clock);
+    register.getPin(PIN_OUTPUT).connect(receiver);
 
-        register.sendToInputPin(PIN_INPUT, false);
-        register.sendToInputPin(PIN_INPUT, true);
-        register.sendToInputPin(PIN_INPUT, false);
-        register.sendToInputPin(PIN_LOAD, true);
-        expect(receiver).toHaveBeenCalledTimes(0);
-        clock.ticktock();
-        expect(receiver).toHaveBeenCalledTimes(1);
-        expect(receiver).toHaveBeenCalledWith(false); // first call
-        register.sendToInputPin(PIN_INPUT, true);
-        clock.ticktock();
-        expect(receiver).toHaveBeenCalledWith(true); // second time
-        register.sendToInputPin(PIN_LOAD, false);
-        register.sendToInputPin(PIN_INPUT, false);
-        expect(receiver).toHaveBeenCalledTimes(2); // from before
-        clock.ticktock();
-        expect(receiver).toHaveBeenCalledWith(false); // third call
-    });
-})
+    register.getPin(PIN_INPUT).send(false);
+    register.getPin(PIN_INPUT).send(true);
+    register.getPin(PIN_INPUT).send(false);
+    register.getPin(PIN_LOAD).send(true);
+    expect(callCount).toBe(0);
+    clock.ticktock();
+    expect(callCount).toBe(1);
+    expect(receiver.lastOutput).toBe(false); // first call
+    register.getPin(PIN_INPUT).send(true);
+    clock.ticktock();
+    expect(receiver.lastOutput).toBe(true); // second time
+    register.getPin(PIN_LOAD).send(false);
+    register.getPin(PIN_INPUT).send(false);
+    expect(callCount).toBe(2); // from before
+    clock.ticktock();
+    expect(receiver.lastOutput).toBe(true); // third call
+    register.getPin(PIN_LOAD).send(true);
+    clock.ticktock();
+    expect(receiver.lastOutput).toBe(false); // fourth call
+  });
+});

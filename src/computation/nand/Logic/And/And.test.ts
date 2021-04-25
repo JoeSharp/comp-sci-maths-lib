@@ -32,12 +32,12 @@ const AND_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("AND", () => {
   const result = new BinaryPin();
   const myAnd = new And();
-  myAnd.connectToOutputPin(PIN_OUTPUT, result);
+  myAnd.getPin(PIN_OUTPUT).connect(result);
 
   AND_TEST_CASES.forEach(({ a, b, expected }) => {
     test(`${a} AND ${b} = ${expected}`, () => {
-      myAnd.sendToInputPin(PIN_A, a);
-      myAnd.sendToInputPin(PIN_B, b);
+      myAnd.getPin(PIN_A).send(a);
+      myAnd.getPin(PIN_B).send(b);
       expect(result.lastOutput).toBe(expected);
     });
   });

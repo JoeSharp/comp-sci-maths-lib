@@ -22,32 +22,40 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 // }
 
 class Xor extends Chip {
-    notA: Not;
-    notB: Not;
-    aAndNotB: And;
-    notaAndB: And;
-    outOr: Or;
+  notA: Not;
+  notB: Not;
+  aAndNotB: And;
+  notaAndB: And;
+  outOr: Or;
 
-    constructor() {
-        super('Xor');
+  constructor() {
+    super("Xor");
 
-        this.notA = new Not();
-        this.notB = new Not();
-        this.aAndNotB = new And();
-        this.notaAndB = new And();
-        this.outOr = new Or();
+    this.notA = new Not();
+    this.notB = new Not();
+    this.aAndNotB = new And();
+    this.notaAndB = new And();
+    this.outOr = new Or();
 
-        // Internal Wiring
-        this.notA.connectToOutputPin(PIN_OUTPUT, this.notaAndB.getInputPin(PIN_A));
-        this.notB.connectToOutputPin(PIN_OUTPUT, this.aAndNotB.getInputPin(PIN_B));
-        this.aAndNotB.connectToOutputPin(PIN_OUTPUT, this.outOr.getInputPin(PIN_A));
-        this.notaAndB.connectToOutputPin(PIN_OUTPUT, this.outOr.getInputPin(PIN_B));
+    // Internal Wiring
+    this.notA.getPin(PIN_OUTPUT).connect(this.notaAndB.getPin(PIN_A));
+    this.notB.getPin(PIN_OUTPUT).connect(this.aAndNotB.getPin(PIN_B));
+    this.aAndNotB.getPin(PIN_OUTPUT).connect(this.outOr.getPin(PIN_A));
+    this.notaAndB.getPin(PIN_OUTPUT).connect(this.outOr.getPin(PIN_B));
 
-        // External Wiring
-        this.createInputPin(PIN_A, this.notA.getInputPin(PIN_INPUT), this.aAndNotB.getInputPin(PIN_A));
-        this.createInputPin(PIN_B, this.notB.getInputPin(PIN_INPUT), this.notaAndB.getInputPin(PIN_B));
-        this.createOutputPin(PIN_OUTPUT, this.outOr.getOutputPin(PIN_OUTPUT));
-    }
+    // External Wiring
+    this.createPin(
+      PIN_A,
+      this.notA.getPin(PIN_INPUT),
+      this.aAndNotB.getPin(PIN_A)
+    );
+    this.createPin(
+      PIN_B,
+      this.notB.getPin(PIN_INPUT),
+      this.notaAndB.getPin(PIN_B)
+    );
+    this.createPin(PIN_OUTPUT, this.outOr.getPin(PIN_OUTPUT));
+  }
 }
 
 export default Xor;

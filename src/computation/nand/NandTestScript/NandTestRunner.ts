@@ -47,11 +47,11 @@ class NandTestRunner extends TestRunner<
   }
 
   handleSetPin({ pin, value }: NandTestSetPin) {
-    this.objectUnderTest.sendToInputPin(pin, value);
+    this.objectUnderTest.sendToPin(pin, value);
   }
 
   handleSetBus({ bus, values }: NandTestSetBus) {
-    this.objectUnderTest.sendToInputBus(bus, values);
+    this.objectUnderTest.sendToBus(bus, values);
   }
 
   handleOutputInstruction() {
@@ -62,7 +62,7 @@ class NandTestRunner extends TestRunner<
         } else {
           const { format, spacing, variable } = output;
           return formatNumber(
-            999, //this.objectUnderTest.getInputPin(variable),
+            999, //this.objectUnderTest.getPin(variable),
             format,
             spacing
           );

@@ -29,12 +29,12 @@ const NAND_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("NAND", () => {
   const receiver: BinaryPin = new BinaryPin();
   const nand = new Nand();
-  nand.connectToOutputPin(PIN_OUTPUT, receiver);
+  nand.getPin(PIN_OUTPUT).connect(receiver);
 
   NAND_TEST_CASES.forEach(({ a, b, expected }) => {
     test(`${a} NAND ${b} = ${expected}`, () => {
-      nand.sendToInputPin(PIN_A, a);
-      nand.sendToInputPin(PIN_B, b);
+      nand.getPin(PIN_A).send(a);
+      nand.getPin(PIN_B).send(b);
       expect(receiver.lastOutput).toBe(expected);
     });
   });

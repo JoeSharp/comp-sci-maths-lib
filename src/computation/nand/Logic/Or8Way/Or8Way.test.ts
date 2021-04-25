@@ -44,11 +44,11 @@ const TEST_CASES: TestCase[] = [
 describe("Or 8 Way", () => {
   const or = new Or8Way();
   const receiever = new BinaryPin();
-  or.connectToOutputPin(PIN_OUTPUT, receiever);
+  or.getPin(PIN_OUTPUT).connect(receiever);
 
   TEST_CASES.forEach(({ input, expected }) => {
     test(booleanToBinArray(input), () => {
-      or.sendToInputBus(PIN_INPUT, input);
+      or.getBus(PIN_INPUT).send(input);
       expect(receiever.lastOutput).toBe(expected);
     });
   });

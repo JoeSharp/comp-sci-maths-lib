@@ -20,30 +20,30 @@ import { PIN_C } from "../../Multiplexing/Dmux4Way/Dmux4Way";
 // }
 
 class FullAdder extends Chip {
-    addAB: HalfAdder;
-    addABC: HalfAdder;
-    carryOr: Or;
+  addAB: HalfAdder;
+  addABC: HalfAdder;
+  carryOr: Or;
 
-    constructor() {
-        super('FullAdder');
+  constructor() {
+    super("FullAdder");
 
-        this.addAB = new HalfAdder();
-        this.addABC = new HalfAdder();
-        this.carryOr = new Or();
+    this.addAB = new HalfAdder();
+    this.addABC = new HalfAdder();
+    this.carryOr = new Or();
 
-        // Internal Wiring
-        this.addAB.connectToOutputPin(PIN_SUM, this.addABC.getInputPin(PIN_A));
-        this.addAB.connectToOutputPin(PIN_CARRY, this.carryOr.getInputPin(PIN_A));
-        this.addABC.connectToOutputPin(PIN_CARRY, this.carryOr.getInputPin(PIN_B));
+    // Internal Wiring
+    this.addAB.connectToPin(PIN_SUM, this.addABC.getPin(PIN_A));
+    this.addAB.connectToPin(PIN_CARRY, this.carryOr.getPin(PIN_A));
+    this.addABC.connectToPin(PIN_CARRY, this.carryOr.getPin(PIN_B));
 
-        // External Wiring
-        this.createInputPin(PIN_A, this.addAB.getInputPin(PIN_A));
-        this.createInputPin(PIN_B, this.addAB.getInputPin(PIN_B));
-        this.createInputPin(PIN_C, this.addABC.getInputPin(PIN_B));
+    // External Wiring
+    this.createPin(PIN_A, this.addAB.getPin(PIN_A));
+    this.createPin(PIN_B, this.addAB.getPin(PIN_B));
+    this.createPin(PIN_C, this.addABC.getPin(PIN_B));
 
-        this.createOutputPin(PIN_SUM, this.addABC.getOutputPin(PIN_SUM));
-        this.createOutputPin(PIN_CARRY, this.carryOr.getOutputPin(PIN_OUTPUT));
-    }
+    this.createPin(PIN_SUM, this.addABC.getPin(PIN_SUM));
+    this.createPin(PIN_CARRY, this.carryOr.getPin(PIN_OUTPUT));
+  }
 }
 
 export default FullAdder;

@@ -1,7 +1,7 @@
 import Chip from "../../Chip";
 
-import Nand from '../Nand';
-import Not from '../Not';
+import Nand from "../Nand";
+import Not from "../Not";
 import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 /**
@@ -11,23 +11,23 @@ import { PIN_A, PIN_B, PIN_INPUT, PIN_OUTPUT } from "../../types";
  */
 
 class And extends Chip {
-    nand: Nand;
-    not: Not;
+  nand: Nand;
+  not: Not;
 
-    constructor() {
-        super('And');
+  constructor() {
+    super("And");
 
-        this.nand = new Nand();
-        this.not = new Not();
+    this.nand = new Nand();
+    this.not = new Not();
 
-        // Internal Wiring
-        this.nand.connectToOutputPin(PIN_OUTPUT, this.not.getInputPin(PIN_INPUT))
+    // Internal Wiring
+    this.nand.getPin(PIN_OUTPUT).connect(this.not.getPin(PIN_INPUT));
 
-        // External wiring
-        this.createInputPin(PIN_A, this.nand.getInputPin(PIN_A));
-        this.createInputPin(PIN_B, this.nand.getInputPin(PIN_B));
-        this.createOutputPin(PIN_OUTPUT, this.not.getOutputPin(PIN_OUTPUT));
-    }
+    // External wiring
+    this.createPin(PIN_A, this.nand.getPin(PIN_A));
+    this.createPin(PIN_B, this.nand.getPin(PIN_B));
+    this.createPin(PIN_OUTPUT, this.not.getPin(PIN_OUTPUT));
+  }
 }
 
 export default And;

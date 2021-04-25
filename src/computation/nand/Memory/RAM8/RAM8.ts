@@ -1,12 +1,21 @@
 import { PIN_F } from "../../CPU/ALU/ALU";
-import BusFork from "../../BusFork";
+import BusFork from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import { PIN_C, PIN_D } from "../../Multiplexing/Dmux4Way/Dmux4Way";
 import Dmux8Way from "../../Multiplexing/Dmux8Way";
 import { PIN_E, PIN_G, PIN_H } from "../../Multiplexing/Dmux8Way/Dmux8Way";
 import Mux8Way16 from "../../Multiplexing/Mux8Way16";
-import { PIN_A, PIN_ADDRESS, PIN_B, PIN_INPUT, PIN_LOAD, PIN_OUTPUT, PIN_SELECTOR, WORD_LENGTH } from "../../types";
+import {
+  PIN_A,
+  PIN_ADDRESS,
+  PIN_B,
+  PIN_INPUT,
+  PIN_LOAD,
+  PIN_OUTPUT,
+  PIN_SELECTOR,
+  WORD_LENGTH,
+} from "../../types";
 import Register from "../Register";
 
 /**
@@ -35,38 +44,42 @@ import Register from "../Register";
 // }
 
 class RAM8 extends Chip {
-    demux: Dmux8Way;
-    mux: Mux8Way16;
-    registers: Register[];
-    addressFork: BusFork;
-    inputFork: BusFork;
+  demux: Dmux8Way;
+  mux: Mux8Way16;
+  registers: Register[];
+  addressFork: BusFork;
+  inputFork: BusFork;
 
-    constructor(clock: Clock) {
-        super('RAM8');
+  constructor(clock: Clock) {
+    super("RAM8");
 
-        this.demux = new Dmux8Way();
-        this.mux = new Mux8Way16();
-        this.registers = Array(WORD_LENGTH).fill(null).map(() => new Register(clock));
+    this.demux = new Dmux8Way();
+    this.mux = new Mux8Way16();
+    this.registers = Array(WORD_LENGTH)
+      .fill(null)
+      .map(() => new Register(clock));
 
-        this.addressFork = new BusFork();
-        this.inputFork = new BusFork();
+    this.addressFork = new BusFork();
+    this.inputFork = new BusFork();
 
-        this.registers.forEach(r => this.inputFork.withOutput(r.getInputBus(PIN_INPUT)));
+    this.registers.forEach((r) => this.inputFork.connect(r.getBus(PIN_INPUT)));
 
-        this.addressFork
-            .withOutput(this.demux.getInputBus(PIN_SELECTOR))
-            .withOutput(this.mux.getInputBus(PIN_SELECTOR));
+    this.addressFork
+      .connect(this.demux.getBus(PIN_SELECTOR))
+      .connect(this.mux.getBus(PIN_SELECTOR));
 
-        [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H].forEach((pin, i) => {
-            this.demux.connectToOutputPin(pin, this.registers[i].getInputPin(PIN_LOAD));
-            this.registers[i].connectToOutputBus(PIN_OUTPUT, this.mux.getInputBus(pin));
-        })
+    [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H].forEach(
+      (pin, i) => {
+        this.demux.connectToPin(pin, this.registers[i].getPin(PIN_LOAD));
+        this.registers[i].connectToBus(PIN_OUTPUT, this.mux.getBus(pin));
+      }
+    );
 
-        this.createInputPin(PIN_LOAD, this.demux.getInputPin(PIN_INPUT));
-        this.createInputBus(PIN_ADDRESS, this.addressFork.getInput());
-        this.createInputBus(PIN_INPUT, this.inputFork.getInput());
-        this.createOutputBus(PIN_OUTPUT, this.mux.getOutputBus(PIN_OUTPUT));
-    }
+    this.createPin(PIN_LOAD, this.demux.getPin(PIN_INPUT));
+    this.createBus(PIN_ADDRESS, this.addressFork.getInput());
+    this.createBus(PIN_INPUT, this.inputFork.getInput());
+    this.createBus(PIN_OUTPUT, this.mux.getBus(PIN_OUTPUT));
+  }
 }
 
 export default RAM8;

@@ -28,12 +28,12 @@ const OR_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("OR", () => {
   const receiver = new BinaryPin();
   const or = new Or();
-  or.connectToOutputPin(PIN_OUTPUT, receiver);
+  or.getPin(PIN_OUTPUT).connect(receiver);
 
   OR_TEST_CASES.forEach(({ a, b, expected }) => {
     test(`${a} OR ${b} = ${expected}`, () => {
-      or.sendToInputPin(PIN_A, a);
-      or.sendToInputPin(PIN_B, b);
+      or.getPin(PIN_A).send(a);
+      or.getPin(PIN_B).send(b);
       expect(receiver.lastOutput).toBe(expected);
     });
   });

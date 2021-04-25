@@ -1,33 +1,34 @@
-import { Clock } from '../../Clocked';
-import { PIN_INPUT, PIN_OUTPUT } from '../../types';
-import DataFlipFlop from './DataFlipFlop';
+import BinaryPin from "../../BinaryPin";
+import { Clock } from "../../Clocked";
+import { PIN_INPUT, PIN_OUTPUT } from "../../types";
+import DataFlipFlop from "./DataFlipFlop";
 
-describe('D-Type Flip Flop', () => {
-    test('Simple', () => {
-        const receiver = jest.fn();
-        const clock = new Clock();
-        const dff = new DataFlipFlop(clock);
+describe("D-Type Flip Flop", () => {
+  test("Simple", () => {
+    let callCount = 0;
+    const receiver = new BinaryPin().withNewValueObserver(() => callCount++);
+    const clock = new Clock();
+    const dff = new DataFlipFlop(clock);
 
-        dff.connectToOutputPin(PIN_OUTPUT, receiver);
+    dff.getPin(PIN_OUTPUT).connect(receiver);
+    expect(callCount).toBe(0);
 
-        // Send some values, but no clock
-        dff.sendToInputPin(PIN_INPUT, false);
-        dff.sendToInputPin(PIN_INPUT, true);
-        dff.sendToInputPin(PIN_INPUT, false);
+    // Send some values, but no clock
+    dff.getPin(PIN_INPUT).send(false);
+    dff.getPin(PIN_INPUT).send(true);
+    dff.getPin(PIN_INPUT).send(false);
 
-        expect(receiver).toBeCalledTimes(0);
+    clock.ticktock();
+    expect(receiver.lastOutput).toBe(false);
 
-        clock.ticktock();
-        expect(receiver).toHaveBeenLastCalledWith(false);
+    dff.getPin(PIN_INPUT).send(true);
+    dff.getPin(PIN_INPUT).send(false);
+    dff.getPin(PIN_INPUT).send(true);
+    dff.tick();
+    dff.tock();
+    expect(receiver.lastOutput).toBe(true);
 
-        dff.sendToInputPin(PIN_INPUT, true);
-        dff.sendToInputPin(PIN_INPUT, false);
-        dff.sendToInputPin(PIN_INPUT, true);
-        dff.tick();
-        dff.tock();
-        expect(receiver).toHaveBeenLastCalledWith(true);
-
-        // Two clocks should have resulted in two outputs
-        expect(receiver).toBeCalledTimes(2);
-    });
-})
+    // Two clocks should have resulted in two outputs
+    expect(callCount).toBe(2);
+  });
+});

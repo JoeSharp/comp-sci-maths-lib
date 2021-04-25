@@ -4,7 +4,7 @@ import {
   booleanToBinArray,
 } from "../../../../dataRepresentation/numberBases/simpleBinary";
 import { PIN_OUTPUT, PIN_A, PIN_B } from "../../types";
-import { createBus } from "../../BinaryPin";
+import BinaryBus from "../../BinaryBus";
 
 interface TestCase {
   a: boolean[];
@@ -47,17 +47,19 @@ const TEST_CASES: TestCase[] = [
 
 describe("AND 16", () => {
   const and16 = new And16();
-  const receivers = createBus();
-  and16.connectToOutputBus(PIN_OUTPUT, receivers);
+  const receivers = new BinaryBus();
+  and16.getBus(PIN_OUTPUT).connect(receivers);
 
   TEST_CASES.forEach(({ a, b, expected }) => {
     test(`${booleanToBinArray(a)} AND ${booleanToBinArray(
       b
     )} = ${booleanToBinArray(expected)}`, () => {
-      and16.sendToInputBus(PIN_A, a);
-      and16.sendToInputBus(PIN_B, b);
+      and16.getBus(PIN_A).send(a);
+      and16.getBus(PIN_B).send(b);
 
-      expected.forEach((e, i) => expect(receivers[i].lastOutput).toBe(e));
+      expected.forEach((e, i) =>
+        expect(receivers.inputBus[i].lastOutput).toBe(e)
+      );
     });
   });
 });

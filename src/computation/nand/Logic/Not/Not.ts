@@ -24,12 +24,8 @@ class Not extends Chip {
     this.nand = new Nand();
 
     // External Wiring
-    this.createInputPin(
-      PIN_INPUT,
-      this.nand.getInputPin(PIN_A),
-      this.nand.getInputPin(PIN_B)
-    );
-    this.createOutputPin(PIN_OUTPUT, this.nand.getOutputPin(PIN_OUTPUT));
+    this.createPin(PIN_INPUT, this.nand.getPin(PIN_A), this.nand.getPin(PIN_B));
+    this.createPin(PIN_OUTPUT, this.nand.getPin(PIN_OUTPUT));
   }
 }
 
