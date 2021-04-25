@@ -1,10 +1,7 @@
-import {
-  binaryToBoolArray,
-  binaryToNumber,
-} from "../../../../dataRepresentation/numberBases/simpleBinary";
+import { booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
 import BinaryBus from "../../BinaryBus";
 import { Clock } from "../../Clocked";
-import { PIN_INPUT, PIN_OUTPUT, WORD_LENGTH } from "../../types";
+import { PIN_OUTPUT } from "../../types";
 import Counter from "./Counter";
 
 describe("Counter", () => {
@@ -12,36 +9,47 @@ describe("Counter", () => {
     const clock = new Clock();
     const counter = new Counter(clock);
 
-    // const receivers = Array(WORD_LENGTH).fill(null).map(() => jest.fn());
-    // counter.connectToBus(PIN_OUTPUT, receivers);
-
-    // clock.ticktock();
-    // [true, false, false, false].forEach((v, i) => expect(receivers[i]).toHaveBeenLastCalledWith(v));
-    // clock.ticktock();
-    // [false, true, false, false].forEach((v, i) => expect(receivers[i]).toHaveBeenLastCalledWith(v));
-
-    const sink = new BinaryBus();
-    counter.getBus(PIN_OUTPUT).connect(sink);
+    const outputMonitor = new BinaryBus();
+    counter.getBus(PIN_OUTPUT).connect(outputMonitor);
 
     // counter.sendToBus(PIN_INPUT, sink.getValues());
-    const countValue = () =>
-      binaryToNumber(sink.inputBus.map((i) => i.lastOutput));
-    expect(countValue()).toBe(0);
+    const getRegisterValue = () =>
+      booleanToBinArray(counter.register.getBus(PIN_OUTPUT).getValue());
+    const getIncrementerValue = () =>
+      booleanToBinArray(counter.incrementer.getBus(PIN_OUTPUT).getValue());
+    const getOutputValue = () => booleanToBinArray(outputMonitor.getValue());
+
+    const printState = () => {
+      console.log(
+        "State",
+        JSON.stringify(
+          {
+            incrementer: getIncrementerValue(),
+            register: getRegisterValue(),
+            output: getOutputValue(),
+          },
+          null,
+          2
+        )
+      );
+    };
+
+    // expect(getOutputValue()).toBe("0000000000000000");
 
     clock.ticktock();
-    console.log(`Value: ${countValue()}`);
+    printState();
     clock.ticktock();
-    console.log(`Value: ${countValue()}`);
+    printState();
     clock.ticktock();
-    console.log(`Value: ${countValue()}`);
+    printState();
     clock.ticktock();
-    console.log(`Value: ${countValue()}`);
+    printState();
     clock.ticktock();
-    console.log(`Value: ${countValue()}`);
-    expect(countValue()).toBe(1);
+    printState();
+    expect(getOutputValue()).toBe("0000000000000001");
     // counter.sendToBus(PIN_INPUT, sink.getValues());
 
     clock.ticktock();
-    expect(countValue()).toBe(2);
+    expect(getOutputValue()).toBe("0000000000000010");
   });
 });

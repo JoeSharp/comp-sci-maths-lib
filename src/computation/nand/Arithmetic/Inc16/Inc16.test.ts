@@ -41,7 +41,8 @@ describe("Inc 16", () => {
       expected: booleanToBinArray(expected),
     });
     test(testName, () => {
-      inc16.getBus(PIN_INPUT).send(input);
+      // inc16.getBus(PIN_INPUT).send(input);
+      input.forEach((v, i) => inc16.getBus(PIN_INPUT).getPin(i).send(v));
       receivers.inputBus.forEach(({ lastOutput }, i) =>
         expect(lastOutput).toBe(expected[i])
       );

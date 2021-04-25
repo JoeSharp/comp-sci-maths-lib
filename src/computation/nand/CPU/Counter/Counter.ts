@@ -23,21 +23,20 @@ class Counter extends Chip {
     this.register = new Register(clock);
 
     // Internal Wiring
-    this.incrementer
-      .getBus(PIN_OUTPUT)
-      .connect(this.register.getBus(PIN_INPUT));
+    // this.incrementer
+    //   .getBus(PIN_OUTPUT)
+    //   .connect(this.register.getBus(PIN_INPUT));
     this.register
       .getBus(PIN_OUTPUT)
       .connect(this.incrementer.getBus(PIN_INPUT));
 
     // External Wiring
-    // this.createBus(PIN_INPUT, this.incrementer.getBus(PIN_INPUT));
     this.createBus(PIN_OUTPUT, this.register.getBus(PIN_OUTPUT));
 
     // Initial State
-    this.register.getBus(PIN_INPUT).send(ZERO_WORD);
+    // this.register.getBus(PIN_INPUT).send(ZERO_WORD);
     this.register.getPin(PIN_LOAD).send(true);
-    // this.incrementer.sendToBus(PIN_INPUT, ZERO_WORD);
+    // this.incrementer.getBus(PIN_INPUT).send(ZERO_WORD);
   }
 }
 

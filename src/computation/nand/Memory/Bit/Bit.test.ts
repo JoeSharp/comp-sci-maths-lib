@@ -11,6 +11,7 @@ describe("D-Type Flip Flop", () => {
     const register = new Bit(clock);
     register.getPin(PIN_OUTPUT).connect(receiver);
 
+    // expect(receiver.lastOutput).toBeUndefined(); // first call
     register.getPin(PIN_INPUT).send(false);
     register.getPin(PIN_INPUT).send(true);
     register.getPin(PIN_INPUT).send(false);
