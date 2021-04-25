@@ -12,10 +12,11 @@ export const getTestName = (parameters: object) =>
   Object.entries(parameters)
     .map(([k, v]) => `${k}=${v}`)
     .join(", ");
-export const generateRandomWord = () =>
-  Array(WORD_LENGTH)
+export const generateRandomBinary = (width: number) =>
+  Array(width)
     .fill(null)
     .map(() => Math.random() > 0.5);
+export const generateRandomWord = () => generateRandomBinary(WORD_LENGTH);
 
 export const PIN_A = "a";
 export const PIN_B = "b";
