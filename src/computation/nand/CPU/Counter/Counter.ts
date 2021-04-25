@@ -7,17 +7,12 @@
  */
 
 import Inc16 from "../../Arithmetic/Inc16";
+import BinaryBus from "../../BinaryBus";
 import BusFork from "../../BinaryBus";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import Register from "../../Memory/Register";
-import {
-  BinaryBus,
-  PIN_INPUT,
-  PIN_LOAD,
-  PIN_OUTPUT,
-  ZERO_WORD,
-} from "../../types";
+import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from "../../types";
 
 class Counter extends Chip {
   incrementer: Inc16;
@@ -29,11 +24,13 @@ class Counter extends Chip {
 
     this.incrementer = new Inc16();
     this.register = new Register(clock);
-    this.busFork = new BusFork().connect(this.incrementer.getBus(PIN_INPUT));
+    this.busFork = new BinaryBus().connect(this.incrementer.getBus(PIN_INPUT));
 
     // Internal Wiring
-    this.incrementer.connectToBus(PIN_OUTPUT, this.register.getBus(PIN_INPUT));
-    this.register.connectToBus(PIN_OUTPUT, this.busFork.getInput());
+    this.incrementer
+      .getBus(PIN_OUTPUT)
+      .connect(this.register.getBus(PIN_INPUT));
+    this.register.getBus(PIN_OUTPUT).connect(this.busFork);
 
     // External Wiring
     // this.createBus(PIN_INPUT, this.incrementer.getBus(PIN_INPUT));
@@ -41,7 +38,7 @@ class Counter extends Chip {
 
     // Initial State
     // this.register.sendToBus(PIN_INPUT, ZERO_WORD);
-    this.register.sendToPin(PIN_LOAD, true);
+    this.register.getPin(PIN_LOAD).send(true);
     // this.incrementer.sendToBus(PIN_INPUT, ZERO_WORD);
   }
 }

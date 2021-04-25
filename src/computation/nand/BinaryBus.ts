@@ -27,6 +27,16 @@ class BinaryBus {
     });
   }
 
+  getPin(index: number = 0) {
+    if (index > this.inputBus.length) {
+      throw new Error(
+        `Attempting to get bus pin ${index} with only ${this.inputBus.length} available`
+      );
+    }
+
+    return this.inputBus[index];
+  }
+
   connectPin(pin: BinaryPin, index: number = 0): BinaryBus {
     if (index > this.inputBus.length) {
       throw new Error(

@@ -1,4 +1,6 @@
 import { binaryToBoolArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import BinaryBus from "../../BinaryBus";
+import BinaryPin from "../../BinaryPin";
 import { getTestName, PIN_OUTPUT, WORD_LENGTH } from "../../types";
 import ALU, {
   PIN_F,
@@ -500,32 +502,30 @@ const TEST_CASES: TestCase[] = [
 
 describe("ALU", () => {
   const alu = new ALU();
-  const outReceivers = Array(WORD_LENGTH)
-    .fill(null)
-    .map(() => jest.fn());
-  const zrReceiver = jest.fn();
-  const ngReceiver = jest.fn();
-  alu.connectToBus(PIN_OUTPUT, outReceivers);
-  alu.connectToPin(PIN_NG, ngReceiver);
-  alu.connectToPin(PIN_ZR, zrReceiver);
+  const outReceivers = new BinaryBus();
+  const zrReceiver = new BinaryPin();
+  const ngReceiver = new BinaryPin();
+  alu.getBus(PIN_OUTPUT).connect(outReceivers);
+  alu.getPin(PIN_NG).connect(ngReceiver);
+  alu.getPin(PIN_ZR).connect(zrReceiver);
 
   TEST_CASES.forEach((testCase) => {
     const { x, y, zx, nx, zy, ny, f, no, out, zr, ng } = testCase;
     const testName = getTestName(testCase);
 
     test(testName, () => {
-      alu.sendToBus(PIN_X, binaryToBoolArray(x));
-      alu.sendToPin(PIN_NX, nx);
-      alu.sendToPin(PIN_ZX, zx);
-      alu.sendToBus(PIN_Y, binaryToBoolArray(y));
-      alu.sendToPin(PIN_NY, ny);
-      alu.sendToPin(PIN_ZY, zy);
-      alu.sendToPin(PIN_F, f);
-      alu.sendToPin(PIN_NO, no);
+      alu.getBus(PIN_X).send(binaryToBoolArray(x));
+      alu.getPin(PIN_NX).send(nx);
+      alu.getPin(PIN_ZX).send(zx);
+      alu.getBus(PIN_Y).send(binaryToBoolArray(y));
+      alu.getPin(PIN_NY).send(ny);
+      alu.getPin(PIN_ZY).send(zy);
+      alu.getPin(PIN_F).send(f);
+      alu.getPin(PIN_NO).send(no);
 
       const expectedOutput = binaryToBoolArray(out);
       expectedOutput.forEach((v, i) =>
-        expect(outReceivers[i]).toHaveBeenCalledWith(v)
+        expect(outReceivers.inputBus[i].lastOutput).toBe(v)
       );
     });
   });

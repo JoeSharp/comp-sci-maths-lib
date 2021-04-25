@@ -40,24 +40,10 @@ class Chip {
     this.buses[name] = bus;
   }
 
-  getBus(
-    name: string,
-    startIndex: number = 0,
-    endIndex: number = -1
-  ): BinaryBus {
+  getBus(name: string): BinaryBus {
     if (!(name in this.buses))
       throw new Error(`Output Bus ${name} doesn't exist on ${this.name}`);
-    const bus = this.buses[name];
-
-    if (endIndex !== -1) {
-      return bus.slice(startIndex, endIndex);
-    }
-
-    if (startIndex > 0) {
-      return bus.slice(startIndex);
-    }
-
-    return bus;
+    return this.buses[name];
   }
 
   getPin(name: string): BinaryPin {

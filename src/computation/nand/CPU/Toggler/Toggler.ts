@@ -15,13 +15,13 @@ class Toggler extends Chip {
     this.bit = new Bit(clock);
 
     // Internal Wiring
-    this.not.connectToPin(PIN_OUTPUT, this.bit.getPin(PIN_INPUT));
-    this.bit.connectToPin(PIN_OUTPUT, this.not.getPin(PIN_INPUT));
+    this.not.getPin(PIN_OUTPUT).connect(this.bit.getPin(PIN_INPUT));
+    this.bit.getPin(PIN_OUTPUT).connect(this.not.getPin(PIN_INPUT));
 
     // External Wiring
     this.createPin(PIN_OUTPUT, this.bit.getPin(PIN_OUTPUT));
 
-    this.bit.sendToPin(PIN_LOAD, true);
+    this.bit.getPin(PIN_LOAD).send(true);
   }
 }
 

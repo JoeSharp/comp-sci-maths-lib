@@ -135,37 +135,37 @@ class ALU extends Chip {
     this.nzr = new Or();
     this.zr = new Not();
 
-    this.xZero.sendToBus(PIN_B, Array(WORD_LENGTH).fill(false));
-    this.xZero.connectToBus(PIN_OUTPUT, this.notXZero.getBus(PIN_INPUT));
-    this.xZero.connectToBus(PIN_OUTPUT, this.xProcessed.getBus(PIN_A));
-    this.notXZero.connectToBus(PIN_OUTPUT, this.xProcessed.getBus(PIN_B));
+    this.xZero.getBus(PIN_B).send(Array(WORD_LENGTH).fill(false));
+    this.xZero.getBus(PIN_OUTPUT).connect(this.notXZero.getBus(PIN_INPUT));
+    this.xZero.getBus(PIN_OUTPUT).connect(this.xProcessed.getBus(PIN_A));
+    this.notXZero.getBus(PIN_OUTPUT).connect(this.xProcessed.getBus(PIN_B));
 
-    this.yZero.sendToBus(PIN_B, Array(WORD_LENGTH).fill(false));
-    this.yZero.connectToBus(PIN_OUTPUT, this.notYZero.getBus(PIN_INPUT));
-    this.yZero.connectToBus(PIN_OUTPUT, this.yProcessed.getBus(PIN_A));
-    this.notYZero.connectToBus(PIN_OUTPUT, this.yProcessed.getBus(PIN_B));
+    this.yZero.getBus(PIN_B).send(Array(WORD_LENGTH).fill(false));
+    this.yZero.getBus(PIN_OUTPUT).connect(this.notYZero.getBus(PIN_INPUT));
+    this.yZero.getBus(PIN_OUTPUT).connect(this.yProcessed.getBus(PIN_A));
+    this.notYZero.getBus(PIN_OUTPUT).connect(this.yProcessed.getBus(PIN_B));
 
-    this.xProcessed.connectToBus(PIN_OUTPUT, this.xPlusy.getBus(PIN_A));
-    this.yProcessed.connectToBus(PIN_OUTPUT, this.xPlusy.getBus(PIN_B));
+    this.xProcessed.getBus(PIN_OUTPUT).connect(this.xPlusy.getBus(PIN_A));
+    this.yProcessed.getBus(PIN_OUTPUT).connect(this.xPlusy.getBus(PIN_B));
 
-    this.xProcessed.connectToBus(PIN_OUTPUT, this.xAndy.getBus(PIN_A));
-    this.yProcessed.connectToBus(PIN_OUTPUT, this.xAndy.getBus(PIN_B));
+    this.xProcessed.getBus(PIN_OUTPUT).connect(this.xAndy.getBus(PIN_A));
+    this.yProcessed.getBus(PIN_OUTPUT).connect(this.xAndy.getBus(PIN_B));
 
-    this.xAndy.connectToBus(PIN_OUTPUT, this.fOut.getBus(PIN_A));
-    this.xPlusy.connectToBus(PIN_OUTPUT, this.fOut.getBus(PIN_B));
+    this.xAndy.getBus(PIN_OUTPUT).connect(this.fOut.getBus(PIN_A));
+    this.xPlusy.getBus(PIN_OUTPUT).connect(this.fOut.getBus(PIN_B));
 
-    this.fOut.connectToBus(PIN_OUTPUT, this.notFOut.getBus(PIN_INPUT));
-    this.fOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_A));
-    this.notFOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_B));
+    this.fOut.getBus(PIN_OUTPUT).connect(this.notFOut.getBus(PIN_INPUT));
+    this.fOut.getBus(PIN_OUTPUT).connect(this.out.getBus(PIN_A));
+    this.notFOut.getBus(PIN_OUTPUT).connect(this.out.getBus(PIN_B));
 
-    this.fOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_A));
-    this.notFOut.connectToBus(PIN_OUTPUT, this.out.getBus(PIN_B));
+    this.fOut.getBus(PIN_OUTPUT).connect(this.out.getBus(PIN_A));
+    this.notFOut.getBus(PIN_OUTPUT).connect(this.out.getBus(PIN_B));
 
-    this.out.connectToBus(PIN_OUTPUT, this.zrLsb.getBus(PIN_INPUT), 0); // preOut1
-    this.out.connectToBus(PIN_OUTPUT, this.zrMsb.getBus(PIN_INPUT), 8); // preOut2
+    this.out.getBus(PIN_OUTPUT).connect(this.zrLsb.getBus(PIN_INPUT), 0); // preOut1
+    this.out.getBus(PIN_OUTPUT).connect(this.zrMsb.getBus(PIN_INPUT), 8); // preOut2
 
-    this.zrLsb.connectToPin(PIN_OUTPUT, this.nzr.getPin(PIN_A));
-    this.zrMsb.connectToPin(PIN_OUTPUT, this.nzr.getPin(PIN_B));
+    this.zrLsb.getPin(PIN_OUTPUT).connect(this.nzr.getPin(PIN_A));
+    this.zrMsb.getPin(PIN_OUTPUT).connect(this.nzr.getPin(PIN_B));
 
     // External Wiring
     this.createBus(PIN_X, this.xZero.getBus(PIN_A));
@@ -178,7 +178,7 @@ class ALU extends Chip {
     this.createPin(PIN_NO, this.out.getPin(PIN_SELECTOR));
 
     this.createBus(PIN_OUTPUT, this.out.getBus(PIN_OUTPUT));
-    this.createPin(PIN_NG, this.out.getBus(PIN_OUTPUT, 15)[0]);
+    this.createPin(PIN_NG, this.out.getBus(PIN_OUTPUT).getPin(15));
     this.createPin(PIN_ZR, this.nzr.getPin(PIN_OUTPUT));
   }
 }
