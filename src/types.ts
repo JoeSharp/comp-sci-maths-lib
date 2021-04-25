@@ -2,6 +2,7 @@ export type MatchFunction<T> = (a: T) => boolean;
 
 export type Optional<T> = T | undefined;
 
+export type Producer<T> = () => T;
 export type Consumer<T> = (v: T) => void;
 
 export type ToString<T> = (a: T) => string;
