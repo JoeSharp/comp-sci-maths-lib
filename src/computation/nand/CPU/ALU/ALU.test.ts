@@ -1,4 +1,7 @@
-import { binaryToBoolArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
+import {
+  binaryToBoolArray,
+  booleanToBinArray,
+} from "../../../../dataRepresentation/numberBases/simpleBinary";
 import BinaryBus from "../../BinaryBus";
 import BinaryPin from "../../BinaryPin";
 import { getTestName, PIN_OUTPUT, WORD_LENGTH } from "../../types";
@@ -523,10 +526,10 @@ describe("ALU", () => {
       alu.getPin(PIN_F).send(f);
       alu.getPin(PIN_NO).send(no);
 
-      const expectedOutput = binaryToBoolArray(out);
-      expectedOutput.forEach((v, i) =>
-        expect(outReceivers.inputBus[i].lastOutput).toBe(v)
+      const actualOutput = booleanToBinArray(
+        outReceivers.inputBus.map((r) => r.lastOutput)
       );
+      expect(actualOutput).toBe(out);
     });
   });
 });

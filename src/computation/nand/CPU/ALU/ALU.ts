@@ -178,7 +178,7 @@ class ALU extends Chip {
     this.createPin(PIN_NO, this.out.getPin(PIN_SELECTOR));
 
     this.createBus(PIN_OUTPUT, this.out.getBus(PIN_OUTPUT));
-    this.createPin(PIN_NG, this.out.getBus(PIN_OUTPUT).getPin(15));
+    this.createPin(PIN_NG, this.out.getBus(PIN_OUTPUT).getPin(15)); // FIX!!!
     this.createPin(PIN_ZR, this.nzr.getPin(PIN_OUTPUT));
   }
 }

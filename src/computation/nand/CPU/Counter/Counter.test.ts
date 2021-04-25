@@ -30,6 +30,14 @@ describe("Counter", () => {
 
     clock.ticktock();
     console.log(`Value: ${countValue()}`);
+    clock.ticktock();
+    console.log(`Value: ${countValue()}`);
+    clock.ticktock();
+    console.log(`Value: ${countValue()}`);
+    clock.ticktock();
+    console.log(`Value: ${countValue()}`);
+    clock.ticktock();
+    console.log(`Value: ${countValue()}`);
     expect(countValue()).toBe(1);
     // counter.sendToBus(PIN_INPUT, sink.getValues());
 
