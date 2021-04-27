@@ -9,7 +9,7 @@
 import Inc16 from "../../Arithmetic/Inc16";
 import BinaryBus from "../../BinaryBus";
 import Chip from "../../Chip";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import Register from "../../Memory/Register";
 import Mux16 from "../../Multiplexing/Mux16";
 import {

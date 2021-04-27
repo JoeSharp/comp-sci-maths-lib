@@ -1,7 +1,7 @@
 import { PIN_F } from "../../CPU/ALU/ALU";
 import BinaryBus, { createPinArray } from "../../BinaryBus";
 import Chip from "../../Chip";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import { PIN_C, PIN_D } from "../../Multiplexing/Dmux4Way/Dmux4Way";
 import Dmux8Way from "../../Multiplexing/Dmux8Way";
 import { PIN_E, PIN_G, PIN_H } from "../../Multiplexing/Dmux8Way/Dmux8Way";

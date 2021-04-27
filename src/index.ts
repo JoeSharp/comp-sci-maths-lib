@@ -40,6 +40,12 @@ import { dijstraks, getPathTo, walkPath } from "./algorithms/routing/dijkstras";
 import binarySearch from "./algorithms/search/binarySearch/monitoredSearch";
 import linearSearch from "./algorithms/search/linearSearch/monitoredSearch";
 import { HackCpu, HackCpuTestRunner } from "./computation/assemblyLanguage";
+import chipDirectory from "./computation/nand/chipDirectory";
+import Chip from "./computation/nand/Chip";
+import Clock from "./computation/nand/Clock";
+import BinaryBus from "./computation/nand/BinaryBus";
+import BinaryPin from "./computation/nand/BinaryPin";
+import NandTestRunner from "./computation/nand/NandTestScript/NandTestRunner";
 
 export {
   // Data Structures
@@ -92,4 +98,11 @@ export {
   // Computation
   HackCpu,
   HackCpuTestRunner,
+  // Nand
+  NandTestRunner,
+  BinaryBus,
+  BinaryPin,
+  Chip,
+  Clock,
+  chipDirectory,
 };

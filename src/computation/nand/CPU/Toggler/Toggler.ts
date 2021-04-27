@@ -1,5 +1,5 @@
 import Chip from "../../Chip";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import Not from "../../Logic/Not";
 import Bit from "../../Memory/Bit";
 import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from "../../types";

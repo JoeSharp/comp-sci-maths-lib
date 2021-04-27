@@ -1,6 +1,6 @@
 import BinaryBus from "../../BinaryBus";
 import Chip from "../../Chip";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT, WORD_LENGTH } from "../../types";
 import Bit from "../Bit";
 

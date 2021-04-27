@@ -1,5 +1,5 @@
 import Chip from "./Chip";
-import { Clock } from "./Clocked";
+import Clock from "./Clock";
 
 export interface TwoInOneOutTestCase {
   a: boolean;

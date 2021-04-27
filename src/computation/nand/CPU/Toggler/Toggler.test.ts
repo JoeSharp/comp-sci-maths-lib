@@ -1,5 +1,5 @@
 import BinaryPin from "../../BinaryPin";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import { PIN_OUTPUT } from "../../types";
 import Toggler from "./Toggler";
 

@@ -2,7 +2,7 @@ import Add16 from "./Arithmetic/Add16";
 import FullAdder from "./Arithmetic/FullAdder";
 import HalfAdder from "./Arithmetic/HalfAdder";
 import Inc16 from "./Arithmetic/Inc16";
-import { Clock } from "./Clocked";
+import Clock from "./Clock";
 import ALU from "./CPU/ALU";
 import PC from "./CPU/PC";
 import And from "./Logic/And";

@@ -1,6 +1,6 @@
 import { booleanToBinArray } from "../../../../dataRepresentation/numberBases/simpleBinary";
 import BinaryBus from "../../BinaryBus";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import { PIN_OUTPUT } from "../../types";
 import Counter from "./Counter";
 

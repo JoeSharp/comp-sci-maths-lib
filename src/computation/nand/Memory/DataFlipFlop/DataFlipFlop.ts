@@ -1,6 +1,6 @@
 import BinaryPin from "../../BinaryPin";
 import Chip from "../../Chip";
-import { Clock, IClocked } from "../../Clocked";
+import Clock, { IClocked } from "../../Clock";
 
 import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 

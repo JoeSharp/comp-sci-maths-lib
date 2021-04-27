@@ -6,7 +6,7 @@
 
 import DataFlipFlop from "../DataFlipFlop";
 import Mux from "../../Multiplexing/Mux";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import Chip from "../../Chip";
 import {
   PIN_A,

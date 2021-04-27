@@ -1,5 +1,5 @@
 import BinaryBus from "../../BinaryBus";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import {
   generateRandomWord,
   PIN_INPUT,

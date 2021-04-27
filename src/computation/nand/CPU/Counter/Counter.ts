@@ -8,7 +8,7 @@
 
 import Inc16 from "../../Arithmetic/Inc16";
 import Chip from "../../Chip";
-import { Clock } from "../../Clocked";
+import Clock from "../../Clock";
 import Register from "../../Memory/Register";
 import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from "../../types";
 
