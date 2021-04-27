@@ -1,3 +1,4 @@
+import { boolToBin } from "../../dataRepresentation/numberBases/simpleBinary";
 import { Optional } from "../../types";
 import { TestOutputFragment } from "./types";
 
@@ -103,3 +104,9 @@ export const formatNumber = (
   format: string,
   spacing: number[]
 ): string => formatString(value.toString(RADIX_BY_CODE[format]), spacing);
+
+export const formatBoolean = (
+  value: boolean,
+  format: string,
+  spacing: number[]
+): string => formatString(boolToBin(value), spacing);

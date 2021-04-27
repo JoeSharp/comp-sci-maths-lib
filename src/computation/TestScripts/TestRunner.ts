@@ -37,7 +37,7 @@ export default abstract class TestRunner<
     const log = this.testScript.outputList
       .map(({ heading, spacing }) => formatString(heading, spacing))
       .join("|");
-    this.addToLog(`|${log}|`);
+    this.addToLog(`|${log}|`, false);
   }
 
   loadScript(data: string) {
@@ -51,19 +51,21 @@ export default abstract class TestRunner<
 
   abstract loadProgram(program: string): void;
 
-  addToLog(log: string) {
+  addToLog(log: string, check: boolean = true) {
     if (this.testOutput.length >= this.compareTo.length) {
       throw new Error(
         `Too many log lines output from test, expecting ${this.compareTo.length}`
       );
     }
 
-    // Check against compareTo
-    const nextCompareLine = this.compareTo[this.testOutput.length];
-    if (nextCompareLine !== log) {
-      throw new Error(
-        `Comparing Failure on Line ${this.testOutput.length}\n\tExpected: ${nextCompareLine}\n\tReceived: ${log}`
-      );
+    if (check) {
+      // Check against compareTo
+      const nextCompareLine = this.compareTo[this.testOutput.length];
+      if (nextCompareLine !== log) {
+        throw new Error(
+          `Comparing Failure on Line ${this.testOutput.length}\n\tExpected: ${nextCompareLine}\n\tReceived: ${log}`
+        );
+      }
     }
 
     // Assume all is good

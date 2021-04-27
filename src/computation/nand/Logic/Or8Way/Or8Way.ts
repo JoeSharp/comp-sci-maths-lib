@@ -30,7 +30,7 @@ class Or8Way extends Chip {
   orOut: Or;
 
   constructor() {
-    super("Or8Way");
+    super("Or8Way", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.or1 = new Or();
     this.or2 = new Or();

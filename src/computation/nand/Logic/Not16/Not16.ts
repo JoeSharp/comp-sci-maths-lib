@@ -34,7 +34,7 @@ class Not16 extends Chip {
   nots: Not[];
 
   constructor() {
-    super("Not16");
+    super("Not16", [PIN_INPUT], [PIN_OUTPUT]);
     this.nots = Array(WORD_LENGTH)
       .fill(null)
       .map((_, i) => new Not());

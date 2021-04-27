@@ -40,7 +40,11 @@ class Dmux8Way extends Chip {
   dmuxEFGH: Dmux4Way;
 
   constructor() {
-    super("Dmux8Way");
+    super(
+      "Dmux8Way",
+      [PIN_INPUT, PIN_SELECTOR],
+      [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H]
+    );
     this.notSel2 = new Not();
     this.inAndNotSel2 = new And();
     this.dmuxABCD = new Dmux4Way();

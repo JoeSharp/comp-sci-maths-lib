@@ -27,7 +27,7 @@ class Mux extends Chip {
   aAndNotSelOrBAndSel: Or;
 
   constructor() {
-    super("Mux");
+    super("Mux", [PIN_A, PIN_B, PIN_SELECTOR], [PIN_OUTPUT]);
     this.bAndSel = new And();
     this.notSel = new Not();
     this.aAndNotSel = new And();

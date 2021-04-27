@@ -9,7 +9,7 @@ import {
   NandTestSetBus,
   NandTestSetPin,
 } from "./types";
-import { formatNumber } from "../../TestScripts/parseTestScripts";
+import { formatBoolean } from "../../TestScripts/parseTestScripts";
 
 class NandTestRunner extends TestRunner<
   Chip,
@@ -61,8 +61,8 @@ class NandTestRunner extends TestRunner<
           throw new Error("Unsupported method, outputting RAM from Chip");
         } else {
           const { format, spacing, variable } = output;
-          return formatNumber(
-            999, // this.objectUnderTest.getPin(variable),
+          return formatBoolean(
+            this.objectUnderTest.getPin(variable).lastOutput,
             format,
             spacing
           );

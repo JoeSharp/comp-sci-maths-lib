@@ -33,7 +33,7 @@ class And16 extends Chip {
   ands: And[];
 
   constructor() {
-    super("And16");
+    super("And16", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.ands = Array(WORD_LENGTH)
       .fill(null)

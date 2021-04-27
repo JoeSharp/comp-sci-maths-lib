@@ -33,7 +33,11 @@ class Mux8Way16 extends Chip {
   outMux: Mux16;
 
   constructor() {
-    super("Mux8Way16");
+    super(
+      "Mux8Way16",
+      [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H, PIN_SELECTOR],
+      [PIN_OUTPUT]
+    );
 
     this.abcd = new Mux4Way16();
     this.efgh = new Mux4Way16();

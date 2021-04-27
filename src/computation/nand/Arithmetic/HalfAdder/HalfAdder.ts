@@ -24,7 +24,7 @@ class HalfAdder extends Chip {
   carry: And;
 
   constructor() {
-    super("HalfAdder");
+    super("HalfAdder", [PIN_A, PIN_B], [PIN_SUM, PIN_CARRY]);
 
     this.sum = new Xor();
     this.carry = new And();

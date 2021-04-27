@@ -24,7 +24,7 @@ class Dmux extends Chip {
   inAndSel: And;
 
   constructor() {
-    super("Dmux");
+    super("Dmux", [PIN_INPUT, PIN_SELECTOR], [PIN_A, PIN_B]);
 
     this.notSel = new Not();
     this.inAndNotSel = new And();

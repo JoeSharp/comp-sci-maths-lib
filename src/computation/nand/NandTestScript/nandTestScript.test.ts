@@ -7,11 +7,48 @@ import {
   NandTestSetBus,
   NandTestSetPin,
 } from "./types";
+import NandTestRunner from "./NandTestRunner";
+import { FileLoader } from "../../TestScripts/types";
+import { Producer } from "../../../types";
+import Chip from "../Chip";
+import And from "../Logic/And";
+import Or from "../Logic/Or";
+import Xor from "../Logic/Xor";
+import Not from "../Logic/Not";
+
+interface ChipTest {
+  testFile: string;
+  directory: string;
+  chipProducer: Producer<Chip>;
+}
+
+const TEST_CASES: ChipTest[] = [
+  {
+    testFile: "And.tst",
+    directory: "01",
+    chipProducer: () => new And(),
+  },
+  {
+    testFile: "Or.tst",
+    directory: "01",
+    chipProducer: () => new Or(),
+  },
+  {
+    testFile: "Xor.tst",
+    directory: "01",
+    chipProducer: () => new Xor(),
+  },
+  {
+    testFile: "Not.tst",
+    directory: "01",
+    chipProducer: () => new Not(),
+  },
+];
 
 describe("NAND Test Script", () => {
   test("AND.tst", () => {
     const data = readFileSync(
-      "src/computation/nand/Logic/And/And.tst",
+      "src/computation/nand/NandTestScript/testData/01/And.tst",
       "utf-8"
     );
     const testScript: NandTestScript = parseNandTestScript(data);
@@ -68,6 +105,21 @@ describe("NAND Test Script", () => {
     });
 
     // expect(testScript.testInstructions.length).toBe(16);
+  });
+
+  TEST_CASES.forEach(({ testFile, directory, chipProducer }) => {
+    test(`Test Script - ${testFile}`, () => {
+      const fileLoader: FileLoader = (filename: string) =>
+        readFileSync(
+          `src/computation/nand/NandTestScript/testData/${directory}/${filename}`,
+          "utf-8"
+        );
+      const testScriptRaw = fileLoader(testFile);
+      const chip = chipProducer();
+      const runner = new NandTestRunner(chip, fileLoader);
+      runner.loadScript(testScriptRaw);
+      runner.runToEnd();
+    });
   });
 });
 

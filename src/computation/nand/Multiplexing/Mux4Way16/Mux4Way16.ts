@@ -28,7 +28,11 @@ class Mux4Way16 extends Chip {
   outMux: Mux16;
 
   constructor() {
-    super("Mux4Way16");
+    super(
+      "Mux4Way16",
+      [PIN_A, PIN_B, PIN_C, PIN_D, PIN_SELECTOR],
+      [PIN_OUTPUT]
+    );
     this.aOrB = new Mux16();
     this.cOrD = new Mux16();
     this.outMux = new Mux16();

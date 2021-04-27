@@ -23,7 +23,7 @@ class And extends Chip {
   not: Not;
 
   constructor() {
-    super("And");
+    super("And", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.nand = new Nand();
     this.not = new Not();

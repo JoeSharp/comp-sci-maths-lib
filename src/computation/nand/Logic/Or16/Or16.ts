@@ -33,7 +33,7 @@ class Or16 extends Chip {
   ors: Or[];
 
   constructor() {
-    super("Or16");
+    super("Or16", [PIN_A, PIN_B], [PIN_OUTPUT]);
     this.ors = Array(WORD_LENGTH)
       .fill(null)
       .map((_, i) => new Or());

@@ -3,6 +3,8 @@ import BinaryBus from "./BinaryBus";
 
 class Chip {
   name: string;
+  inputs: string[];
+  outputs: string[];
   pins: {
     [name: string]: BinaryPin;
   };
@@ -10,8 +12,10 @@ class Chip {
     [name: string]: BinaryBus;
   };
 
-  constructor(name: string) {
+  constructor(name: string, inputs: string[], outputs: string[]) {
     this.name = name;
+    this.inputs = inputs;
+    this.outputs = outputs;
     this.pins = {};
     this.buses = {};
   }

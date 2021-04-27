@@ -40,7 +40,7 @@ class Register extends Chip {
   outputBus: BinaryBus;
 
   constructor(clock: Clock) {
-    super("Register");
+    super("Register", [PIN_INPUT, PIN_LOAD], [PIN_OUTPUT]);
 
     this.bits = Array(WORD_LENGTH)
       .fill(null)

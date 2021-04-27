@@ -31,7 +31,7 @@ class Bit extends Chip {
   dff: DataFlipFlop;
 
   constructor(clock: Clock) {
-    super("Bit");
+    super("Bit", [PIN_INPUT, PIN_LOAD], [PIN_OUTPUT]);
     this.mux = new Mux();
     this.dff = new DataFlipFlop(clock);
 

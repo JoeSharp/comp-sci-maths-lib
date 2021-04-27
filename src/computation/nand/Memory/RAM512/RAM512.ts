@@ -55,7 +55,7 @@ class RAM512 extends Chip {
   inputFork: BinaryBus;
 
   constructor(clock: Clock) {
-    super("RAM512");
+    super("RAM512", [PIN_INPUT, PIN_LOAD, PIN_ADDRESS], [PIN_OUTPUT]);
 
     this.demux = new Dmux8Way();
     this.mux = new Mux8Way16();

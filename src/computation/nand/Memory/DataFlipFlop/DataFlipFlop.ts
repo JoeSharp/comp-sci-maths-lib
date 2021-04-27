@@ -11,7 +11,7 @@ class DataFlipFlop extends Chip implements IClocked {
   output: BinaryPin;
 
   constructor(clock: Clock) {
-    super("DFF");
+    super("DFF", [PIN_INPUT], [PIN_OUTPUT]);
     this.value = false;
     this.input = new BinaryPin();
     this.output = new BinaryPin();

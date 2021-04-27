@@ -18,7 +18,7 @@ export const numberToBinary = (value: number, minWidth: number) => {
   return bin;
 };
 
-export const boolToBin = (v: boolean) => {
+export const boolToBin = (v: boolean): string => {
   if (v === undefined) return "-";
   if (v === true) return "1";
   if (v === false) return "0";

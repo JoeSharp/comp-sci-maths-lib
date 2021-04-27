@@ -9,7 +9,7 @@ class Toggler extends Chip {
   bit: Bit;
 
   constructor(clock: Clock) {
-    super("Toggler");
+    super("Toggler", [], [PIN_OUTPUT]);
 
     this.not = new Not();
     this.bit = new Bit(clock);

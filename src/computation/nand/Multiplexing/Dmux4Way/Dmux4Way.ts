@@ -38,7 +38,7 @@ class Dmux4Way extends Chip {
   dmuxCD: Dmux;
 
   constructor() {
-    super("Dmux4Way");
+    super("Dmux4Way", [PIN_INPUT, PIN_SELECTOR], [PIN_A, PIN_B, PIN_C, PIN_D]);
     // in=1, sel=01
     // Demux AB, CD, sel = sel[0]
     this.notSel1 = new Not(); // false

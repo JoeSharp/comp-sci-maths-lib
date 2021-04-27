@@ -25,7 +25,7 @@ class FullAdder extends Chip {
   carryOr: Or;
 
   constructor() {
-    super("FullAdder");
+    super("FullAdder", [PIN_A, PIN_B, PIN_C], [PIN_SUM, PIN_CARRY]);
 
     this.addAB = new HalfAdder();
     this.addABC = new HalfAdder();

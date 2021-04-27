@@ -10,14 +10,14 @@ import Inc16 from "../../Arithmetic/Inc16";
 import Chip from "../../Chip";
 import { Clock } from "../../Clocked";
 import Register from "../../Memory/Register";
-import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT, ZERO_WORD } from "../../types";
+import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from "../../types";
 
 class Counter extends Chip {
   incrementer: Inc16;
   register: Register;
 
   constructor(clock: Clock) {
-    super("Counter");
+    super("Counter", [], [PIN_OUTPUT]);
 
     this.incrementer = new Inc16();
     this.register = new Register(clock);

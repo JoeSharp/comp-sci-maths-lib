@@ -51,7 +51,7 @@ class Add16 extends Chip {
   adder15: FullAdder;
 
   constructor() {
-    super("Add16");
+    super("Add16", [PIN_A, PIN_B], [PIN_OUTPUT, PIN_CARRY]);
 
     this.halfAdd0 = new HalfAdder();
     this.adder1 = new FullAdder();

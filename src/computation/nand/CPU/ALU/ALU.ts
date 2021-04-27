@@ -115,7 +115,11 @@ class ALU extends Chip {
   zr: Not;
 
   constructor() {
-    super("ALU");
+    super(
+      "ALU",
+      [PIN_X, PIN_Y, PIN_ZX, PIN_NX, PIN_ZY, PIN_NY, PIN_F, PIN_NO],
+      [PIN_OUTPUT, PIN_ZR, PIN_NG]
+    );
 
     this.xZero = new Mux16();
     this.notXZero = new Not16();

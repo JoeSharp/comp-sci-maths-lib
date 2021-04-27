@@ -56,7 +56,7 @@ class PC extends Chip {
   lastPCFork: BinaryBus;
 
   constructor(clock: Clock) {
-    super("PC");
+    super("PC", [PIN_INPUT, PIN_LOAD, PIN_RESET, PIN_INCREMENT], [PIN_OUTPUT]);
 
     this.incrementer = new Inc16();
     this.incrementMux = new Mux16();

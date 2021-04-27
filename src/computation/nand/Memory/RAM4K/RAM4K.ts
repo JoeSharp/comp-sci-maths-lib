@@ -54,7 +54,7 @@ class RAM4K extends Chip {
   inputFork: BinaryBus;
 
   constructor(clock: Clock) {
-    super("RAM4K");
+    super("RAM4K", [PIN_INPUT, PIN_LOAD, PIN_ADDRESS], [PIN_OUTPUT]);
     this.demux = new Dmux8Way();
     this.mux = new Mux8Way16();
     this.ram = Array(WORD_LENGTH)

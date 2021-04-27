@@ -26,7 +26,7 @@ class Or extends Chip {
   nandNotANotB: Nand;
 
   constructor() {
-    super("Or");
+    super("Or", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.nandNotA = new Not();
     this.nandNotB = new Not();

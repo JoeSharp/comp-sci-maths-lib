@@ -29,7 +29,7 @@ class Xor extends Chip {
   outOr: Or;
 
   constructor() {
-    super("Xor");
+    super("Xor", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.notA = new Not();
     this.notB = new Not();

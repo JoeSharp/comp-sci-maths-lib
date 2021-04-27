@@ -54,7 +54,7 @@ class RAM64 extends Chip {
   inputFork: BinaryBus;
 
   constructor(clock: Clock) {
-    super("RAM64");
+    super("RAM64", [PIN_INPUT, PIN_LOAD, PIN_ADDRESS], [PIN_OUTPUT]);
 
     this.demux = new Dmux8Way();
     this.mux = new Mux8Way16();

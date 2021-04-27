@@ -1,7 +1,14 @@
+import Chip from "./Chip";
+import { Clock } from "./Clocked";
+
 export interface TwoInOneOutTestCase {
   a: boolean;
   b: boolean;
   expected: boolean;
+}
+
+export interface ChipDirectory {
+  [name: string]: (clock: Clock) => Chip;
 }
 
 export const WORD_LENGTH = 16;
@@ -20,8 +27,8 @@ export const generateRandomWord = () => generateRandomBinary(WORD_LENGTH);
 
 export const PIN_A = "a";
 export const PIN_B = "b";
-export const PIN_INPUT = "input";
-export const PIN_OUTPUT = "output";
+export const PIN_INPUT = "in";
+export const PIN_OUTPUT = "out";
 export const PIN_SELECTOR = "sel";
 export const PIN_LOAD = "load";
 export const PIN_ADDRESS = "address";

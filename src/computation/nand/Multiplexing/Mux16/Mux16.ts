@@ -45,7 +45,7 @@ class Mux16 extends Chip {
   muxes: Mux[];
 
   constructor() {
-    super("Mux16");
+    super("Mux16", [PIN_A, PIN_B, PIN_SELECTOR], [PIN_OUTPUT]);
     this.muxes = Array(WORD_LENGTH)
       .fill(null)
       .map((_, i) => new Mux());

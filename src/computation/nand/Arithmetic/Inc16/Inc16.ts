@@ -19,7 +19,7 @@ class Inc16 extends Chip {
   adder: Add16;
 
   constructor() {
-    super("Inc16");
+    super("Inc16", [PIN_INPUT], [PIN_OUTPUT]);
     this.adder = new Add16();
     this.adder
       .getBus(PIN_B)
