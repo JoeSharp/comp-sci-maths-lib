@@ -9,6 +9,8 @@ export default class Clock implements IClocked {
   chips: IClocked[];
 
   constructor() {
+    this.count = 0;
+    this.state = false;
     this.chips = [];
   }
 

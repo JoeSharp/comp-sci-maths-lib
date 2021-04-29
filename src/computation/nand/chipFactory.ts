@@ -27,9 +27,9 @@ import Dmux8Way from "./Multiplexing/Dmux8Way";
 import Mux from "./Multiplexing/Mux";
 import Mux4Way16 from "./Multiplexing/Mux4Way16";
 import Mux8Way16 from "./Multiplexing/Mux8Way16";
-import { ChipDirectory } from "./types";
+import { ChipFactory } from "./types";
 
-const chipDirectory: ChipDirectory = {
+const chipFactory: ChipFactory = {
   // Arithmetic
   Add16: () => new Add16(),
   FullAdder: () => new FullAdder(),
@@ -66,4 +66,4 @@ const chipDirectory: ChipDirectory = {
   Mux16: () => new Mux(),
 };
 
-export default chipDirectory;
+export default chipFactory;

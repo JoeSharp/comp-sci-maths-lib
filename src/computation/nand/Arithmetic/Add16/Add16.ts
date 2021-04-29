@@ -105,6 +105,7 @@ class Add16 extends Chip {
       PIN_OUTPUT,
       new BinaryBus(adders.map((a) => a.getPin(PIN_SUM)))
     );
+    this.createPin(PIN_CARRY, this.adder15.getPin(PIN_CARRY));
   }
 }
 

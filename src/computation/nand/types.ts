@@ -7,8 +7,9 @@ export interface TwoInOneOutTestCase {
   expected: boolean;
 }
 
-export interface ChipDirectory {
-  [name: string]: (clock: Clock) => Chip;
+export type ChipProducer = (clock: Clock) => Chip;
+export interface ChipFactory {
+  [name: string]: ChipProducer;
 }
 
 export const WORD_LENGTH = 16;
