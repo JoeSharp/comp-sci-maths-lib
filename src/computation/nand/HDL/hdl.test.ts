@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { isComment } from '../TestScripts/parseTestScripts';
+import { isComment } from '../../TestScripts/parseTestScripts';
 import { parseCodeLine, parseIOLine, parseOpeningLine, parseHdlFile } from './hdl'
 
 describe('Hardware Description Lanuage (Hack HDL)', () => {
@@ -41,7 +41,7 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
     });
 
     test('Code File', () => {
-        const data = readFileSync('src/computation/hdl/testData/or.hdl', 'utf8');
+        const data = readFileSync('src/computation/nand/NandTestScript/testData/01/Or.hdl', 'utf8');
         const hdlFile = parseHdlFile(data);
         expect(hdlFile.name).toBe('Or');
         expect(hdlFile.inputSpec.pins).toEqual(['a', 'b']);

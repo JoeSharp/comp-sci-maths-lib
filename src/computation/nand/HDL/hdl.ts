@@ -1,4 +1,4 @@
-import { isComment } from "../TestScripts/parseTestScripts";
+import { isComment } from "../../TestScripts/parseTestScripts";
 import { DIRECTION, HdlChip, HdlCodeLine, HdlIOLine } from "./types";
 
 export const parseHdlFile = (input: string): HdlChip => {
