@@ -18,26 +18,36 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
     test("IO Lines - Input (pins)", () => {
         const ioLine = parseIOLine("IN a, b;");
         expect(ioLine.direction).toBe('IN');
-        expect(ioLine.pins).toEqual(['a', 'b']);
+        expect(ioLine.pins).toHaveLength(2);
+        const [pinA, pinB] = ioLine.pins;
+        expect(pinA.name).toBe('a');
+        expect(pinA.width).toBe(1);
+        expect(pinB.name).toBe('b');
+        expect(pinB.width).toBe(1);
     });
 
     test('IO Lines - Input (buses)', () => {
         const ioLine = parseIOLine('IN a[16], b[16], c, d;');
         expect(ioLine.direction).toBe('IN');
-        expect(ioLine.pins).toEqual(['c', 'd']);
-        expect(ioLine.buses).toHaveLength(2);
+        expect(ioLine.pins).toHaveLength(4);
 
-        const [pinA, pinB] = ioLine.buses;
+        const [pinA, pinB, pinC, pinD] = ioLine.pins;
         expect(pinA.name).toBe('a');
         expect(pinA.width).toBe(16);
         expect(pinB.name).toBe('b');
         expect(pinB.width).toBe(16);
+        expect(pinC.name).toBe('c');
+        expect(pinC.width).toBe(1);
+        expect(pinD.name).toBe('d');
+        expect(pinD.width).toBe(1);
     })
 
     test("IO Lines - Output", () => {
         const ioLine = parseIOLine("OUT out;");
         expect(ioLine.direction).toBe('OUT');
-        expect(ioLine.pins).toEqual(['out']);
+        expect(ioLine.pins).toHaveLength(1);
+        const [pinOut] = ioLine.pins;
+        expect(pinOut.name).toBe('out');
     });
 
     test("Code Line", () => {
@@ -108,8 +118,16 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
         const data = readFileSync('src/computation/nand/NandTestScript/testData/01/Or.hdl', 'utf8');
         const hdlFile = parseHdlFile(data);
         expect(hdlFile.name).toBe('Or');
-        expect(hdlFile.inputSpec.pins).toEqual(['a', 'b']);
-        expect(hdlFile.outputSpec.pins).toEqual(['out']);
+
+        expect(hdlFile.inputSpec.pins).toHaveLength(2);
+        const [pinA, pinB] = hdlFile.inputSpec.pins;
+        expect(pinA.name).toBe('a');
+        expect(pinB.name).toBe('b');
+
+        expect(hdlFile.outputSpec.pins).toHaveLength(1);
+        const [pinOut] = hdlFile.outputSpec.pins;
+        expect(pinOut.name).toBe('out');
+
         expect(hdlFile.codeLines.length).toBe(3);
 
         expect(hdlFile.codeLines[0].chipName).toBe('Not');

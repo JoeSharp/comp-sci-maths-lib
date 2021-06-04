@@ -1,5 +1,6 @@
 import BinaryPin from "./BinaryPin";
 import BinaryBus from "./BinaryBus";
+import { HdlPinOrBus } from "./HDL/types";
 
 class Chip {
   name: string;
@@ -12,10 +13,10 @@ class Chip {
     [name: string]: BinaryBus;
   };
 
-  constructor(name: string, inputs: string[], outputs: string[]) {
+  constructor(name: string, inputs: HdlPinOrBus[], outputs: HdlPinOrBus[]) {
     this.name = name;
-    this.inputs = inputs;
-    this.outputs = outputs;
+    this.inputs = inputs.map(i => i.name);
+    this.outputs = outputs.map(o => o.name);
     this.pins = {};
     this.buses = {};
   }

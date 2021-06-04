@@ -7,15 +7,14 @@ export interface HdlParameter {
 
 export type DIRECTION = "IN" | "OUT";
 
-export interface HdlBus {
+export interface HdlPinOrBus {
     name: string;
     width: number;
 }
 
 export interface HdlIOLine {
     direction: DIRECTION,
-    pins: string[];
-    buses: HdlBus[];
+    pins: HdlPinOrBus[];
 }
 
 export interface HdlCodeLine {

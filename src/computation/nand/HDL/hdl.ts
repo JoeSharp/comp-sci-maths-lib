@@ -1,5 +1,5 @@
 import { isComment } from "../../TestScripts/parseTestScripts";
-import { DIRECTION, HdlBus, HdlChip, HdlCodeLine, HdlIOLine } from "./types";
+import { DIRECTION, HdlChip, HdlCodeLine, HdlIOLine, HdlPinOrBus } from "./types";
 
 export const parseHdlFile = (input: string): HdlChip => {
   // Remove any comments, and empty lines, strip each line.
@@ -43,19 +43,25 @@ export const parseIOLine = (input: string): HdlIOLine => {
 
   const direction = ioLineMatch.groups.direction as DIRECTION;
   const allInputs = ioLineMatch.groups.pins.split(",").map((l) => l.trim());
-  const pins = allInputs.filter(x => !x.match(BUS_NAME_WIDTH_REGEX));
-  const buses: HdlBus[] = allInputs
-    .map(x => x.match(BUS_NAME_WIDTH_REGEX))
-    .filter(x => x !== null)
-    .map((m) => ({
-      name: m.groups.name,
-      width: parseInt(m.groups.width)
-    }));
+  const pins: HdlPinOrBus[] = allInputs
+    .map((m) => {
+      const busMatch = m.match(BUS_NAME_WIDTH_REGEX);
+      if (!!busMatch) {
+        return {
+          name: busMatch.groups.name,
+          width: parseInt(busMatch.groups.width)
+        }
+      }
+
+      return {
+        name: m,
+        width: 1
+      }
+    });
 
   return {
     direction,
     pins,
-    buses
   };
 };
 
@@ -92,7 +98,7 @@ export const parseCodeLine = (input: string): HdlCodeLine => {
           outputTo: parseInt(rangeMatch.groups.to)
         }
       }
-      
+
       return { inputName, outputName: outputSpec }
     });
 
