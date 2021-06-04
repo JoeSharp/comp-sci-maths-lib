@@ -1,13 +1,21 @@
 export interface HdlParameter {
     inputName: string;
     outputName: string;
+    outputFrom?: number;
+    outputTo?: number;
 }
 
 export type DIRECTION = "IN" | "OUT";
 
+export interface HdlBus {
+    name: string;
+    width: number;
+}
+
 export interface HdlIOLine {
     direction: DIRECTION,
     pins: string[];
+    buses: HdlBus[];
 }
 
 export interface HdlCodeLine {

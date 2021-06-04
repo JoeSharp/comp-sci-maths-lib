@@ -2,6 +2,7 @@ import And from "./And";
 
 import { PIN_A, PIN_B, PIN_OUTPUT, TwoInOneOutTestCase } from "../../types";
 import { BinaryPin } from "../../BinaryPin";
+import loadTestChip from "../../HDL/loadTestChip";
 
 const AND_TEST_CASES: TwoInOneOutTestCase[] = [
   {
@@ -27,15 +28,24 @@ const AND_TEST_CASES: TwoInOneOutTestCase[] = [
 ];
 
 describe("AND", () => {
-  const result = new BinaryPin();
+  const nandReceiver = new BinaryPin();
   const myAnd = new And();
-  myAnd.getPin(PIN_OUTPUT).connect(result);
+  myAnd.getPin(PIN_OUTPUT).connect(nandReceiver);
+
+  const hdlChip = loadTestChip('01/And.hdl');
+  const hdlChipReceiver = new BinaryPin();
+  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
 
   AND_TEST_CASES.forEach(({ a, b, expected }) => {
-    test(`${a} AND ${b} = ${expected}`, () => {
-      myAnd.getPin(PIN_A).send(a);
-      myAnd.getPin(PIN_B).send(b);
-      expect(result.lastOutput).toBe(expected);
-    });
+    [
+      { testName: 'nand', chip: myAnd, receiver: nandReceiver },
+      { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
+    ].forEach(({ testName, chip, receiver }) => {
+      test(`${a} AND ${b} = ${expected} ${testName}`, () => {
+        chip.getPin(PIN_A).send(a);
+        chip.getPin(PIN_B).send(b);
+        expect(receiver.lastOutput).toBe(expected);
+      });
+    })
   });
 });

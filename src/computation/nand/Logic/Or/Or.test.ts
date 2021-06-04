@@ -7,6 +7,7 @@ import BinaryPin from '../../BinaryPin';
 import { PIN_A, PIN_B, PIN_OUTPUT, TwoInOneOutTestCase } from "../../types";
 
 import Or from "./Or";
+import loadTestChip from '../../HDL/loadTestChip';
 
 const OR_TEST_CASES: TwoInOneOutTestCase[] = [
   {
@@ -31,20 +32,17 @@ const OR_TEST_CASES: TwoInOneOutTestCase[] = [
   },
 ];
 describe("OR", () => {
-  const orReceiver = new BinaryPin();
+  const nandReceiver = new BinaryPin();
   const or = new Or();
-  or.getPin(PIN_OUTPUT).connect(orReceiver);
+  or.getPin(PIN_OUTPUT).connect(nandReceiver);
 
-  const data = readFileSync('src/computation/nand/NandTestScript/testData/01/Or.hdl', 'utf8');
-  const hdlFile = parseHdlFile(data);
-  const clock = new Clock();
-  const hdlChip = new HDLChip(hdlFile, clock);
+  const hdlChip = loadTestChip('01/Or.hdl');
   const hdlChipReceiver = new BinaryPin();
   hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
 
   OR_TEST_CASES.forEach(({ a, b, expected }) => {
     [
-      { testName: 'nand', chip: or, receiver: orReceiver },
+      { testName: 'nand', chip: or, receiver: nandReceiver },
       { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
     ].forEach(({ testName, chip, receiver }) => {
       test(`${a} OR ${b} = ${expected} ${testName}`, () => {
@@ -53,7 +51,6 @@ describe("OR", () => {
         expect(receiver.lastOutput).toBe(expected);
       });
     })
-
   });
 });
 

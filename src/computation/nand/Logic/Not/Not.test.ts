@@ -1,20 +1,31 @@
 import Not from ".";
 import { BinaryPin } from "../../BinaryPin";
+import loadTestChip from "../../HDL/loadTestChip";
 import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 
 describe("NOT", () => {
-  test("Simple", () => {
-    const receiver = new BinaryPin();
-    const not = new Not();
-    not.getPin(PIN_OUTPUT).connect(receiver);
+  const nandReceiver = new BinaryPin();
+  const not = new Not();
+  not.getPin(PIN_OUTPUT).connect(nandReceiver);
 
-    not.getPin(PIN_INPUT).send(false);
-    expect(receiver.lastOutput).toBe(true);
+  const hdlChip = loadTestChip('01/Not.hdl');
+  const hdlChipReceiver = new BinaryPin();
+  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
 
-    not.getPin(PIN_INPUT).send(true);
-    expect(receiver.lastOutput).toBe(false);
+  [
+    { testName: 'nand', chip: not, receiver: nandReceiver },
+    { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
+  ].forEach(({ testName, chip, receiver }) => {
+    test(`NOT ${testName}`, () => {
 
-    not.getPin(PIN_INPUT).send(false);
-    expect(receiver.lastOutput).toBe(true);
+      chip.getPin(PIN_INPUT).send(false);
+      expect(receiver.lastOutput).toBe(true);
+  
+      chip.getPin(PIN_INPUT).send(true);
+      expect(receiver.lastOutput).toBe(false);
+  
+      chip.getPin(PIN_INPUT).send(false);
+      expect(receiver.lastOutput).toBe(true);
+    });
   });
 });

@@ -9,6 +9,7 @@ import {
   booleanToBinArray,
 } from "../../../../dataRepresentation/numberBases/simpleBinary";
 import { BinaryPin } from "../../BinaryPin";
+import loadTestChip from "../../HDL/loadTestChip";
 import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 import Or8Way from "./Or8Way";
 
@@ -43,13 +44,22 @@ const TEST_CASES: TestCase[] = [
 
 describe("Or 8 Way", () => {
   const or = new Or8Way();
-  const receiever = new BinaryPin();
-  or.getPin(PIN_OUTPUT).connect(receiever);
+  const nandReceiver = new BinaryPin();
+  or.getPin(PIN_OUTPUT).connect(nandReceiver);
+
+  // const hdlChip = loadTestChip('01/Or8Way.hdl');
+  // const hdlChipReceiver = new BinaryPin();
+  // hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
 
   TEST_CASES.forEach(({ input, expected }) => {
-    test(booleanToBinArray(input), () => {
-      or.getBus(PIN_INPUT).send(input);
-      expect(receiever.lastOutput).toBe(expected);
-    });
+    [
+      { testName: 'nand', chip: or, receiver: nandReceiver },
+      // { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
+    ].forEach(({ testName, chip, receiver }) => {
+      test(`${booleanToBinArray(input)} = ${expected} ${testName}`, () => {
+        chip.getBus(PIN_INPUT).send(input);
+        expect(receiver.lastOutput).toBe(expected);
+      });
+    })
   });
 });

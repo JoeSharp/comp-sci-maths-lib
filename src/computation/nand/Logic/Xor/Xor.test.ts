@@ -2,6 +2,7 @@ import { PIN_A, PIN_B, PIN_OUTPUT, TwoInOneOutTestCase } from "../../types";
 
 import Xor from ".";
 import { BinaryPin } from "../../BinaryPin";
+import loadTestChip from "../../HDL/loadTestChip";
 
 const XOR_TEST_CASES: TwoInOneOutTestCase[] = [
   {
@@ -26,15 +27,24 @@ const XOR_TEST_CASES: TwoInOneOutTestCase[] = [
   },
 ];
 describe("XOR", () => {
-  const receiver = new BinaryPin();
+  const nandReceiver = new BinaryPin();
   const xor = new Xor();
-  xor.getPin(PIN_OUTPUT).connect(receiver);
+  xor.getPin(PIN_OUTPUT).connect(nandReceiver);
+
+  const hdlChip = loadTestChip('01/Xor.hdl');
+  const hdlChipReceiver = new BinaryPin();
+  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
 
   XOR_TEST_CASES.forEach(({ a, b, expected }) => {
-    test(`${a} OR ${b} = ${expected}`, () => {
-      xor.getPin(PIN_A).send(a);
-      xor.getPin(PIN_B).send(b);
-      expect(receiver.lastOutput).toBe(expected);
-    });
+    [
+      { testName: 'nand', chip: xor, receiver: nandReceiver },
+      { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
+    ].forEach(({ testName, chip, receiver }) => {
+      test(`${a} XOR ${b} = ${expected} ${testName}`, () => {
+        chip.getPin(PIN_A).send(a);
+        chip.getPin(PIN_B).send(b);
+        expect(receiver.lastOutput).toBe(expected);
+      });
+    })
   });
 });
