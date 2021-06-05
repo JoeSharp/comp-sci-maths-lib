@@ -10,7 +10,7 @@ class Nand extends Chip {
   output: BinaryPin;
 
   constructor() {
-    super("Nand-Native", [PIN_A, PIN_B], [PIN_OUTPUT]);
+    super("Nand", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.a = new BinaryPin().withNewValueObserver(() => this.updateValue());
     this.b = new BinaryPin().withNewValueObserver(() => this.updateValue());

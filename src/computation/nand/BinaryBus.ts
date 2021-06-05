@@ -13,6 +13,10 @@ class BinaryBus {
     this.pins = pins;
   }
 
+  getWidth() {
+    return this.pins.length;
+  }
+
   send(values: boolean[], startIndex: number = 0) {
     values.forEach((v, i) => {
       const index = i + startIndex;

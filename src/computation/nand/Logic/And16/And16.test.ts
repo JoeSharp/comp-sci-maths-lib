@@ -5,7 +5,7 @@ import {
 } from "../../../../dataRepresentation/numberBases/simpleBinary";
 import { PIN_OUTPUT, PIN_A, PIN_B } from "../../types";
 import BinaryBus from "../../BinaryBus";
-import loadTestChip from "../../HDL/loadTestChip";
+// import loadTestChip from "../../HDL/loadTestChip";
 
 interface TestCase {
   a: boolean[];
@@ -51,14 +51,14 @@ describe("AND 16", () => {
   const nandReceivers = new BinaryBus();
   and16.getBus(PIN_OUTPUT).connect(nandReceivers);
 
-  const hdlChip = loadTestChip('01/And16.hdl');
-  const hdlChipReceiver = new BinaryBus();
-  hdlChip.getBus(PIN_OUTPUT).connect(hdlChipReceiver);
+  // const hdlChip = loadTestChip('01/And16.hdl');
+  // const hdlChipReceiver = new BinaryBus();
+  // hdlChip.getBus(PIN_OUTPUT).connect(hdlChipReceiver);
 
   TEST_CASES.forEach(({ a, b, expected }) => {
     [
       { testName: 'nand', chip: and16, receivers: nandReceivers },
-      { testName: 'hdl', chip: hdlChip, receivers: hdlChipReceiver }
+      // { testName: 'hdl', chip: hdlChip, receivers: hdlChipReceiver }
     ].forEach(({ testName, chip, receivers }) => {
       test(`${booleanToBinArray(a)} AND ${booleanToBinArray(
         b
