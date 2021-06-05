@@ -41,12 +41,12 @@ class Or8Way extends Chip {
     this.orOut = new Or();
 
     // Internal Wiring
-    this.or1.getPin(PIN_OUTPUT).connect(this.or2.getPin(PIN_A));
-    this.or2.getPin(PIN_OUTPUT).connect(this.or3.getPin(PIN_A));
-    this.or3.getPin(PIN_OUTPUT).connect(this.or4.getPin(PIN_A));
-    this.or4.getPin(PIN_OUTPUT).connect(this.or5.getPin(PIN_A));
-    this.or5.getPin(PIN_OUTPUT).connect(this.or6.getPin(PIN_A));
-    this.or6.getPin(PIN_OUTPUT).connect(this.orOut.getPin(PIN_A));
+    this.or1.getPin(PIN_OUTPUT).connectRecipient(this.or2.getPin(PIN_A));
+    this.or2.getPin(PIN_OUTPUT).connectRecipient(this.or3.getPin(PIN_A));
+    this.or3.getPin(PIN_OUTPUT).connectRecipient(this.or4.getPin(PIN_A));
+    this.or4.getPin(PIN_OUTPUT).connectRecipient(this.or5.getPin(PIN_A));
+    this.or5.getPin(PIN_OUTPUT).connectRecipient(this.or6.getPin(PIN_A));
+    this.or6.getPin(PIN_OUTPUT).connectRecipient(this.orOut.getPin(PIN_A));
 
     // External Wiring
     this.createBus(

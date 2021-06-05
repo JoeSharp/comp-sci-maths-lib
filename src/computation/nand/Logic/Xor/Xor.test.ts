@@ -29,11 +29,11 @@ const XOR_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("XOR", () => {
   const nandReceiver = new BinaryPin();
   const xor = new Xor();
-  xor.getPin(PIN_OUTPUT).connect(nandReceiver);
+  xor.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
   const hdlChip = loadTestChip('01/Xor.hdl');
   const hdlChipReceiver = new BinaryPin();
-  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
+  hdlChip.getPin(PIN_OUTPUT).connectRecipient(hdlChipReceiver);
 
   XOR_TEST_CASES.forEach(({ a, b, expected }) => {
     [

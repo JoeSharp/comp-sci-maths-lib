@@ -77,7 +77,7 @@ class RAM512 extends Chip {
 
     [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H].forEach(
       (pin, i) => {
-        this.demux.getPin(pin).connect(this.ram[i].getPin(PIN_LOAD));
+        this.demux.getPin(pin).connectRecipient(this.ram[i].getPin(PIN_LOAD));
         this.ram[i].getBus(PIN_OUTPUT).connect(this.mux.getBus(pin));
       }
     );

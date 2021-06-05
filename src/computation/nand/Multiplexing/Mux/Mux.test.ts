@@ -51,7 +51,7 @@ const MUX_TEST_CASES: MuxTestCase[] = [
 describe("Mux", () => {
   const receiver = new BinaryPin();
   const mux = new Mux();
-  mux.getPin(PIN_OUTPUT).connect(receiver);
+  mux.getPin(PIN_OUTPUT).connectRecipient(receiver);
 
   MUX_TEST_CASES.forEach(({ a, b, sel, expected }) => {
     test(`${a} Mux ${b} Sel ${sel} = ${expected}`, () => {

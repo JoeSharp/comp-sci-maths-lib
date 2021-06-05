@@ -99,10 +99,10 @@ describe("Dmux 4 Way", () => {
   const cReceiver = new BinaryPin();
   const dReceiver = new BinaryPin();
   const demux = new Dmux4Way();
-  demux.getPin(PIN_A).connect(aReceiver);
-  demux.getPin(PIN_B).connect(bReceiver);
-  demux.getPin(PIN_C).connect(cReceiver);
-  demux.getPin(PIN_D).connect(dReceiver);
+  demux.getPin(PIN_A).connectRecipient(aReceiver);
+  demux.getPin(PIN_B).connectRecipient(bReceiver);
+  demux.getPin(PIN_C).connectRecipient(cReceiver);
+  demux.getPin(PIN_D).connectRecipient(dReceiver);
 
   TEST_CASES.forEach(({ input, sel, a, b, c, d }) => {
     test(`In: ${boolToBin(input)}, Sel: ${booleanToBinArray(

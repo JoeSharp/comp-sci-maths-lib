@@ -29,7 +29,7 @@ class And extends Chip {
     this.not = new Not();
 
     // Internal Wiring
-    this.nand.getPin(PIN_OUTPUT).connect(this.not.getPin(PIN_INPUT));
+    this.nand.getPin(PIN_OUTPUT).connectRecipient(this.not.getPin(PIN_INPUT));
 
     // External wiring
     this.createPin(PIN_A, this.nand.getPin(PIN_A));

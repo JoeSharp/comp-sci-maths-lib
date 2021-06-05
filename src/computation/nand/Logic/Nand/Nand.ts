@@ -10,7 +10,7 @@ class Nand extends Chip {
   output: BinaryPin;
 
   constructor() {
-    super("Nand", [PIN_A, PIN_B], [PIN_OUTPUT]);
+    super("Nand-Native", [PIN_A, PIN_B], [PIN_OUTPUT]);
 
     this.a = new BinaryPin().withNewValueObserver(() => this.updateValue());
     this.b = new BinaryPin().withNewValueObserver(() => this.updateValue());
@@ -25,6 +25,7 @@ class Nand extends Chip {
   }
 
   updateValue(force: boolean = false) {
+    // This is the only logical expression we calculate natively, everything else is combinations of this!!!
     const newValue = !(this.a.lastOutput && this.b.lastOutput);
     this.output.send(newValue, force);
   }

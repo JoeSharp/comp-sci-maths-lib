@@ -5,8 +5,8 @@ describe("NAND - Splitter", () => {
     const receiver1 = new BinaryPin();
     const receiver2 = new BinaryPin();
     const splitter: BinaryPin = new BinaryPin();
-    splitter.connect(receiver1);
-    splitter.connect(receiver2);
+    splitter.connectRecipient(receiver1);
+    splitter.connectRecipient(receiver2);
 
     splitter.send(true);
     expect(receiver1.lastOutput).toBe(true);

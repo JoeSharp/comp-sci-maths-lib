@@ -169,9 +169,9 @@ class ALU extends Chip {
     this.out.getBus(PIN_OUTPUT).connect(this.zrLsb.getBus(PIN_INPUT), 0, 7); // preOut1
     this.out.getBus(PIN_OUTPUT).connect(this.zrMsb.getBus(PIN_INPUT), 8, 15); // preOut2
 
-    this.zrLsb.getPin(PIN_OUTPUT).connect(this.nzr.getPin(PIN_A));
-    this.zrMsb.getPin(PIN_OUTPUT).connect(this.nzr.getPin(PIN_B));
-    this.nzr.getPin(PIN_OUTPUT).connect(this.zr.getPin(PIN_INPUT));
+    this.zrLsb.getPin(PIN_OUTPUT).connectRecipient(this.nzr.getPin(PIN_A));
+    this.zrMsb.getPin(PIN_OUTPUT).connectRecipient(this.nzr.getPin(PIN_B));
+    this.nzr.getPin(PIN_OUTPUT).connectRecipient(this.zr.getPin(PIN_INPUT));
 
     // External Wiring
     this.createBus(PIN_X, this.xZero.getBus(PIN_A));

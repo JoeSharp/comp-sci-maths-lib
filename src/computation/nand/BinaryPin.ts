@@ -23,7 +23,7 @@ export class BinaryPin {
     return this;
   }
 
-  connect(...receivers: BinaryPin[]): BinaryPin {
+  connectRecipient(...receivers: BinaryPin[]): BinaryPin {
     receivers.forEach((r) => this.receivers.push(r));
     this.newOutputObserver();
     return this;

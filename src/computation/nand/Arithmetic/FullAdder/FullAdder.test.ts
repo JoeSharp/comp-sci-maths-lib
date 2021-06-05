@@ -37,8 +37,8 @@ describe("Full Adder", () => {
   const adder = new FullAdder();
   const sumReceiver = new BinaryPin();
   const carryReceiver = new BinaryPin();
-  adder.getPin(PIN_SUM).connect(sumReceiver);
-  adder.getPin(PIN_CARRY).connect(carryReceiver);
+  adder.getPin(PIN_SUM).connectRecipient(sumReceiver);
+  adder.getPin(PIN_CARRY).connectRecipient(carryReceiver);
 
   TEST_CASES.forEach(({ a, b, c, sum, carry }) => {
     test(getTestName({ a, b, c, sum, carry }), () => {

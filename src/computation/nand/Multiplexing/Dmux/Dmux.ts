@@ -31,7 +31,7 @@ class Dmux extends Chip {
     this.inAndSel = new And();
 
     // Internal Wiring
-    this.notSel.getPin(PIN_OUTPUT).connect(this.inAndNotSel.getPin(PIN_B));
+    this.notSel.getPin(PIN_OUTPUT).connectRecipient(this.inAndNotSel.getPin(PIN_B));
 
     // External Wiring
     this.createPin(

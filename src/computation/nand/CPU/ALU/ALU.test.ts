@@ -509,8 +509,8 @@ describe("ALU", () => {
   const zrReceiver = new BinaryPin();
   const ngReceiver = new BinaryPin();
   alu.getBus(PIN_OUTPUT).connect(outReceivers);
-  alu.getPin(PIN_NG).connect(ngReceiver);
-  alu.getPin(PIN_ZR).connect(zrReceiver);
+  alu.getPin(PIN_NG).connectRecipient(ngReceiver);
+  alu.getPin(PIN_ZR).connectRecipient(zrReceiver);
 
   TEST_CASES.forEach((testCase) => {
     const { x, y, zx, nx, zy, ny, f, no, out, zr, ng } = testCase;

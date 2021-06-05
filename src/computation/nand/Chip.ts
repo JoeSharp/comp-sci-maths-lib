@@ -1,6 +1,5 @@
 import BinaryPin from "./BinaryPin";
 import BinaryBus from "./BinaryBus";
-import { HdlPinOrBus } from "./HDL/types";
 
 class Chip {
   name: string;
@@ -33,7 +32,7 @@ class Chip {
 
     // Multiple Outputs, create a splitter
     if (pins.length > 1) {
-      this.pins[name] = new BinaryPin().connect(...pins);
+      this.pins[name] = new BinaryPin().connectRecipient(...pins);
       return;
     }
   }
@@ -52,15 +51,33 @@ class Chip {
   }
 
   getPin(name: string, index: number = 0): BinaryPin {
-    if (!(name in this.pins) && !(name in this.buses))
-      throw new Error(`Pin ${name} doesn't exist on ${this.name}`);
+    // Are we asking for a single pin, and we don't already have a bus?
+    if (!(name in this.buses) && index === 0) {
+      // Do we have a pin already?
+      if (!(name in this.pins)) {
+        this.pins[name] = new BinaryPin();
+      }
 
-    if (name in this.pins) {
       return this.pins[name];
     }
-    if (name in this.buses) {
-      return this.buses[name].getPin(index);
+    
+    // At this point, we need a bus
+
+    // Do we need to replace an existing pin with a bus?
+    if (index > 0 && (name in this.pins)) {
+      const existingPin = this.pins[name];
+      delete this.pins.name;
+      const bus = new BinaryBus([existingPin]);
+      this.buses[name] = bus;
     }
+
+    // If we literally haven't heard of this bus before, just create an empty one
+    if (!(name in this.buses)) {
+      this.buses[name] = new BinaryBus([]);
+    }
+
+    // Request this specific pin from the named bus
+    return this.buses[name].getPin(index);
   }
 }
 

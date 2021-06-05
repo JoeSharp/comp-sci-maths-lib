@@ -45,7 +45,7 @@ const TEST_CASES: TestCase[] = [
 describe("Or 8 Way", () => {
   const or = new Or8Way();
   const nandReceiver = new BinaryPin();
-  or.getPin(PIN_OUTPUT).connect(nandReceiver);
+  or.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
   // const hdlChip = loadTestChip('01/Or8Way.hdl');
   // const hdlChipReceiver = new BinaryPin();

@@ -42,12 +42,21 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
         expect(pinD.width).toBe(1);
     })
 
-    test("IO Lines - Output", () => {
+    test("IO Lines - Output (pin)", () => {
         const ioLine = parseIOLine("OUT out;");
         expect(ioLine.direction).toBe('OUT');
         expect(ioLine.pinsAndBuses).toHaveLength(1);
         const [pinOut] = ioLine.pinsAndBuses;
         expect(pinOut.name).toBe('out');
+    });
+
+    test("IO Lines - Output (bus)", () => {
+        const ioLine = parseIOLine("OUT out[16];");
+        expect(ioLine.direction).toBe('OUT');
+        expect(ioLine.pinsAndBuses).toHaveLength(1);
+        const [pinOut] = ioLine.pinsAndBuses;
+        expect(pinOut.name).toBe('out');
+        expect(pinOut.width).toBe(16);
     });
 
     test("Code Line", () => {
@@ -114,7 +123,25 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
         expect(pinLoad.outputName).toBe('la');
     })
 
-    test('Code File', () => {
+    test('Code File - And16', () => {
+        const data = readFileSync('src/computation/nand/NandTestScript/testData/01/And16.hdl', 'utf8');
+        const hdlFile = parseHdlFile(data);
+        expect(hdlFile.name).toBe('And16');
+
+        expect(hdlFile.inputSpec.pinsAndBuses).toHaveLength(2);
+        const [pinA, pinB] = hdlFile.inputSpec.pinsAndBuses;
+        expect(pinA.name).toBe('a');
+        expect(pinA.width).toBe(16);
+        expect(pinB.name).toBe('b');
+        expect(pinB.width).toBe(16);
+
+        expect(hdlFile.outputSpec.pinsAndBuses).toHaveLength(1);
+        const [pinOut] = hdlFile.outputSpec.pinsAndBuses;
+        expect(pinOut.name).toBe('out');
+        expect(pinOut.width).toBe(16);
+    });
+
+    test('Code File - Or', () => {
         const data = readFileSync('src/computation/nand/NandTestScript/testData/01/Or.hdl', 'utf8');
         const hdlFile = parseHdlFile(data);
         expect(hdlFile.name).toBe('Or');

@@ -34,11 +34,11 @@ const OR_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("OR", () => {
   const nandReceiver = new BinaryPin();
   const or = new Or();
-  or.getPin(PIN_OUTPUT).connect(nandReceiver);
+  or.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
   const hdlChip = loadTestChip('01/Or.hdl');
   const hdlChipReceiver = new BinaryPin();
-  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
+  hdlChip.getPin(PIN_OUTPUT).connectRecipient(hdlChipReceiver);
 
   OR_TEST_CASES.forEach(({ a, b, expected }) => {
     [

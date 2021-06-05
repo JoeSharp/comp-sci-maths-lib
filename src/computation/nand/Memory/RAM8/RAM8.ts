@@ -70,7 +70,7 @@ class RAM8 extends Chip {
 
     [PIN_A, PIN_B, PIN_C, PIN_D, PIN_E, PIN_F, PIN_G, PIN_H].forEach(
       (pin, i) => {
-        this.demux.getPin(pin).connect(this.registers[i].getPin(PIN_LOAD));
+        this.demux.getPin(pin).connectRecipient(this.registers[i].getPin(PIN_LOAD));
         this.registers[i].getBus(PIN_OUTPUT).connect(this.mux.getBus(pin));
       }
     );

@@ -91,10 +91,10 @@ class Add16 extends Chip {
     const adders = [this.halfAdd0, ...fullAdders];
 
     // Internal wiring
-    this.halfAdd0.getPin(PIN_CARRY).connect(this.adder1.getPin(PIN_C));
+    this.halfAdd0.getPin(PIN_CARRY).connectRecipient(this.adder1.getPin(PIN_C));
     fullAdders.forEach((fullAdder, i) => {
       if (i < fullAdders.length - 1) {
-        fullAdder.getPin(PIN_CARRY).connect(fullAdders[i + 1].getPin(PIN_C));
+        fullAdder.getPin(PIN_CARRY).connectRecipient(fullAdders[i + 1].getPin(PIN_C));
       }
     });
 

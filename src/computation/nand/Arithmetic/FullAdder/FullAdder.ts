@@ -32,9 +32,9 @@ class FullAdder extends Chip {
     this.carryOr = new Or();
 
     // Internal Wiring
-    this.addAB.getPin(PIN_SUM).connect(this.addABC.getPin(PIN_A));
-    this.addAB.getPin(PIN_CARRY).connect(this.carryOr.getPin(PIN_A));
-    this.addABC.getPin(PIN_CARRY).connect(this.carryOr.getPin(PIN_B));
+    this.addAB.getPin(PIN_SUM).connectRecipient(this.addABC.getPin(PIN_A));
+    this.addAB.getPin(PIN_CARRY).connectRecipient(this.carryOr.getPin(PIN_A));
+    this.addABC.getPin(PIN_CARRY).connectRecipient(this.carryOr.getPin(PIN_B));
 
     // External Wiring
     this.createPin(PIN_A, this.addAB.getPin(PIN_A));

@@ -38,10 +38,10 @@ class Xor extends Chip {
     this.outOr = new Or();
 
     // Internal Wiring
-    this.notA.getPin(PIN_OUTPUT).connect(this.notaAndB.getPin(PIN_A));
-    this.notB.getPin(PIN_OUTPUT).connect(this.aAndNotB.getPin(PIN_B));
-    this.aAndNotB.getPin(PIN_OUTPUT).connect(this.outOr.getPin(PIN_A));
-    this.notaAndB.getPin(PIN_OUTPUT).connect(this.outOr.getPin(PIN_B));
+    this.notA.getPin(PIN_OUTPUT).connectRecipient(this.notaAndB.getPin(PIN_A));
+    this.notB.getPin(PIN_OUTPUT).connectRecipient(this.aAndNotB.getPin(PIN_B));
+    this.aAndNotB.getPin(PIN_OUTPUT).connectRecipient(this.outOr.getPin(PIN_A));
+    this.notaAndB.getPin(PIN_OUTPUT).connectRecipient(this.outOr.getPin(PIN_B));
 
     // External Wiring
     this.createPin(

@@ -47,8 +47,8 @@ describe("Dmux", () => {
     const dmux = new Dmux();
     const receiverA = new BinaryPin();
     const receiverB = new BinaryPin();
-    dmux.getPin(PIN_A).connect(receiverA);
-    dmux.getPin(PIN_B).connect(receiverB);
+    dmux.getPin(PIN_A).connectRecipient(receiverA);
+    dmux.getPin(PIN_B).connectRecipient(receiverB);
 
     test(`Input: ${input}, Sel: ${sel}, A: ${expectedA}, B: ${expectedB}`, () => {
       dmux.getPin(PIN_INPUT).send(input);

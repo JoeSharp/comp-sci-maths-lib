@@ -2,7 +2,7 @@ export interface HdlParameter {
     inputName: string;
     outputName: string;
     outputFrom: number;
-    outputTo?: number;
+    outputTo: number;
 }
 
 export type DIRECTION = "IN" | "OUT";

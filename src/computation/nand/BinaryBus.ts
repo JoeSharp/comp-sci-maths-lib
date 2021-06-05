@@ -25,10 +25,9 @@ class BinaryBus {
   }
 
   getPin(index: number = 0) {
-    if (index > this.pins.length) {
-      throw new Error(
-        `Attempting to get bus pin ${index} with only ${this.pins.length} available`
-      );
+    // Is this a pin we have seen before?
+    if (index > this.pins.length || !this.pins[index]) {
+      this.pins[index] = new BinaryPin();
     }
 
     return this.pins[index];
@@ -41,7 +40,7 @@ class BinaryBus {
       );
     }
 
-    this.pins[index].connect(pin);
+    this.pins[index].connectRecipient(pin);
     return this;
   }
 
@@ -59,7 +58,7 @@ class BinaryBus {
         );
       }
       if (index <= endIndex) {
-        this.pins[index].connect(pin);
+        this.pins[index].connectRecipient(pin);
       }
     });
     return this;

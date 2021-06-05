@@ -34,13 +34,13 @@ class Mux extends Chip {
     this.aAndNotSelOrBAndSel = new Or();
 
     // Internal Wiring
-    this.notSel.getPin(PIN_OUTPUT).connect(this.aAndNotSel.getPin(PIN_B));
+    this.notSel.getPin(PIN_OUTPUT).connectRecipient(this.aAndNotSel.getPin(PIN_B));
     this.bAndSel
       .getPin(PIN_OUTPUT)
-      .connect(this.aAndNotSelOrBAndSel.getPin(PIN_B));
+      .connectRecipient(this.aAndNotSelOrBAndSel.getPin(PIN_B));
     this.aAndNotSel
       .getPin(PIN_OUTPUT)
-      .connect(this.aAndNotSelOrBAndSel.getPin(PIN_A));
+      .connectRecipient(this.aAndNotSelOrBAndSel.getPin(PIN_A));
 
     // External Wiring
     this.createPin(PIN_A, this.aAndNotSel.getPin(PIN_A));

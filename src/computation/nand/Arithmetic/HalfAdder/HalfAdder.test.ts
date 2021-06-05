@@ -25,8 +25,8 @@ describe("Half Adder", () => {
   const halfAdder = new HalfAdder();
   const sumReceiver = new BinaryPin();
   const carryReceiver = new BinaryPin();
-  halfAdder.getPin(PIN_SUM).connect(sumReceiver);
-  halfAdder.getPin(PIN_CARRY).connect(carryReceiver);
+  halfAdder.getPin(PIN_SUM).connectRecipient(sumReceiver);
+  halfAdder.getPin(PIN_CARRY).connectRecipient(carryReceiver);
 
   TEST_CASES.forEach(({ a, b, sum, carry }) => {
     test(getTestName({ a, b, sum, carry }), () => {

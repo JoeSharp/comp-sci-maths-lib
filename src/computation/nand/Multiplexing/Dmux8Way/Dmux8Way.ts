@@ -52,11 +52,11 @@ class Dmux8Way extends Chip {
     this.dmuxEFGH = new Dmux4Way();
 
     // Internal Wiring
-    this.notSel2.getPin(PIN_OUTPUT).connect(this.inAndNotSel2.getPin(PIN_B));
+    this.notSel2.getPin(PIN_OUTPUT).connectRecipient(this.inAndNotSel2.getPin(PIN_B));
     this.inAndNotSel2
       .getPin(PIN_OUTPUT)
-      .connect(this.dmuxABCD.getPin(PIN_INPUT));
-    this.inAndSel2.getPin(PIN_OUTPUT).connect(this.dmuxEFGH.getPin(PIN_INPUT));
+      .connectRecipient(this.dmuxABCD.getPin(PIN_INPUT));
+    this.inAndSel2.getPin(PIN_OUTPUT).connectRecipient(this.dmuxEFGH.getPin(PIN_INPUT));
 
     // External Wiring
     this.createPin(

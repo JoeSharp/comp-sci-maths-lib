@@ -226,14 +226,14 @@ describe("DMux 8 Way", () => {
   const receiverF = new BinaryPin();
   const receiverG = new BinaryPin();
   const receiverH = new BinaryPin();
-  dmux.getPin(PIN_A).connect(receiverA);
-  dmux.getPin(PIN_B).connect(receiverB);
-  dmux.getPin(PIN_C).connect(receiverC);
-  dmux.getPin(PIN_D).connect(receiverD);
-  dmux.getPin(PIN_E).connect(receiverE);
-  dmux.getPin(PIN_F).connect(receiverF);
-  dmux.getPin(PIN_G).connect(receiverG);
-  dmux.getPin(PIN_H).connect(receiverH);
+  dmux.getPin(PIN_A).connectRecipient(receiverA);
+  dmux.getPin(PIN_B).connectRecipient(receiverB);
+  dmux.getPin(PIN_C).connectRecipient(receiverC);
+  dmux.getPin(PIN_D).connectRecipient(receiverD);
+  dmux.getPin(PIN_E).connectRecipient(receiverE);
+  dmux.getPin(PIN_F).connectRecipient(receiverF);
+  dmux.getPin(PIN_G).connectRecipient(receiverG);
+  dmux.getPin(PIN_H).connectRecipient(receiverH);
 
   TEST_CASES.forEach(({ input, sel, a, b, c, d, e, f, g, h }) => {
     test(`in: ${boolToBin(input)}, sel: ${booleanToBinArray(sel)}, abcdefgh: ${[

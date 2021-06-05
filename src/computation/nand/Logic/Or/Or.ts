@@ -34,8 +34,8 @@ class Or extends Chip {
     this.nandNotANotB = new Nand();
 
     // Internal Wiring
-    this.nandNotA.getPin(PIN_OUTPUT).connect(this.nandNotANotB.getPin(PIN_A));
-    this.nandNotB.getPin(PIN_OUTPUT).connect(this.nandNotANotB.getPin(PIN_B));
+    this.nandNotA.getPin(PIN_OUTPUT).connectRecipient(this.nandNotANotB.getPin(PIN_A));
+    this.nandNotB.getPin(PIN_OUTPUT).connectRecipient(this.nandNotANotB.getPin(PIN_B));
 
     // External Wiring
     this.createPin(PIN_A, this.nandNotA.getPin(PIN_INPUT));

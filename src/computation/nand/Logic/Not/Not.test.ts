@@ -6,11 +6,11 @@ import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 describe("NOT", () => {
   const nandReceiver = new BinaryPin();
   const not = new Not();
-  not.getPin(PIN_OUTPUT).connect(nandReceiver);
+  not.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
   const hdlChip = loadTestChip('01/Not.hdl');
   const hdlChipReceiver = new BinaryPin();
-  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
+  hdlChip.getPin(PIN_OUTPUT).connectRecipient(hdlChipReceiver);
 
   [
     { testName: 'nand', chip: not, receiver: nandReceiver },
@@ -20,10 +20,10 @@ describe("NOT", () => {
 
       chip.getPin(PIN_INPUT).send(false);
       expect(receiver.lastOutput).toBe(true);
-  
+
       chip.getPin(PIN_INPUT).send(true);
       expect(receiver.lastOutput).toBe(false);
-  
+
       chip.getPin(PIN_INPUT).send(false);
       expect(receiver.lastOutput).toBe(true);
     });

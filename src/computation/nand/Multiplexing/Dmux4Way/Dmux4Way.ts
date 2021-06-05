@@ -48,9 +48,9 @@ class Dmux4Way extends Chip {
     this.dmuxCD = new Dmux(); // in=true
 
     // Internal Wiring
-    this.notSel1.getPin(PIN_OUTPUT).connect(this.inAndNotSel1.getPin(PIN_B));
-    this.inAndNotSel1.getPin(PIN_OUTPUT).connect(this.dmuxAB.getPin(PIN_INPUT));
-    this.inAndSel1.getPin(PIN_OUTPUT).connect(this.dmuxCD.getPin(PIN_INPUT));
+    this.notSel1.getPin(PIN_OUTPUT).connectRecipient(this.inAndNotSel1.getPin(PIN_B));
+    this.inAndNotSel1.getPin(PIN_OUTPUT).connectRecipient(this.dmuxAB.getPin(PIN_INPUT));
+    this.inAndSel1.getPin(PIN_OUTPUT).connectRecipient(this.dmuxCD.getPin(PIN_INPUT));
 
     // External Wiring
     this.createPin(

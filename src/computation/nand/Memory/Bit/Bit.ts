@@ -36,8 +36,8 @@ class Bit extends Chip {
     this.dff = new DataFlipFlop(clock);
 
     // Internal Wiring
-    this.dff.getPin(PIN_OUTPUT).connect(this.mux.getPin(PIN_A)); // t1
-    this.mux.getPin(PIN_OUTPUT).connect(this.dff.getPin(PIN_INPUT)); // w1
+    this.dff.getPin(PIN_OUTPUT).connectRecipient(this.mux.getPin(PIN_A)); // t1
+    this.mux.getPin(PIN_OUTPUT).connectRecipient(this.dff.getPin(PIN_INPUT)); // w1
 
     // External Wiring
     this.createPin(PIN_INPUT, this.mux.getPin(PIN_B));

@@ -27,7 +27,7 @@ export const parseHdlFile = (input: string): HdlChip => {
   };
 };
 
-const OPEN_LINE_REGEX = /(CHIP)\s+(?<chipName>[A-Za-z]+)\s({)/;
+const OPEN_LINE_REGEX = /(CHIP)\s+(?<chipName>[A-Za-z0-9]+)\s({)/;
 export const parseOpeningLine = (input: string): string => {
   const openLineMatch = input.trim().match(OPEN_LINE_REGEX);
   if (openLineMatch === null) throw new Error("HDL Opening Line Invalid");
@@ -35,7 +35,7 @@ export const parseOpeningLine = (input: string): string => {
 };
 
 const IO_LINE_REGEX = /(?<direction>IN|OUT)\s(?<pins>(?:[a-zA-Z]+(?:\[[0-9]*\])?(?:,\s){0,1})*);{1}/;
-const BUS_NAME_WIDTH_REGEX = /(?<name>[a-zA-Z])+(?:\[(?<width>[0-9]*)\])/
+const BUS_NAME_WIDTH_REGEX = /(?<name>[a-zA-Z]+)(?:\[(?<width>[0-9]*)\])/
 export const parseIOLine = (input: string): HdlIOLine => {
   const ioLineMatch = input.trim().match(IO_LINE_REGEX);
 
@@ -82,10 +82,12 @@ export const parseCodeLine = (input: string): HdlCodeLine => {
     .map(([inputName, outputSpec]) => {
       let singleIndexMatch = outputSpec.match(BUS_SINGLE_INDEX_REGEX);
       if (!!singleIndexMatch) {
+        const singleIndex = parseInt(singleIndexMatch.groups.index);
         return {
           inputName,
           outputName: singleIndexMatch.groups.name,
-          outputFrom: parseInt(singleIndexMatch.groups.index)
+          outputFrom: singleIndex,
+          outputTo: singleIndex
         }
       }
 
@@ -99,7 +101,7 @@ export const parseCodeLine = (input: string): HdlCodeLine => {
         }
       }
 
-      return { inputName, outputName: outputSpec, outputFrom: 0 }
+      return { inputName, outputName: outputSpec, outputFrom: 0, outputTo: 0 }
     });
 
   return {

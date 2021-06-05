@@ -10,7 +10,7 @@ describe("D-Type Flip Flop", () => {
     const clock = new Clock();
     const dff = new DataFlipFlop(clock);
 
-    dff.getPin(PIN_OUTPUT).connect(receiver);
+    dff.getPin(PIN_OUTPUT).connectRecipient(receiver);
     expect(callCount).toBe(0);
 
     // Send some values, but no clock

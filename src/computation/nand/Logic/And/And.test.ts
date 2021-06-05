@@ -30,11 +30,11 @@ const AND_TEST_CASES: TwoInOneOutTestCase[] = [
 describe("AND", () => {
   const nandReceiver = new BinaryPin();
   const myAnd = new And();
-  myAnd.getPin(PIN_OUTPUT).connect(nandReceiver);
+  myAnd.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
   const hdlChip = loadTestChip('01/And.hdl');
   const hdlChipReceiver = new BinaryPin();
-  hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
+  hdlChip.getPin(PIN_OUTPUT).connectRecipient(hdlChipReceiver);
 
   AND_TEST_CASES.forEach(({ a, b, expected }) => {
     [
