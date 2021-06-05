@@ -80,7 +80,7 @@ describe("MUX 16", () => {
       mux16.getPin(PIN_SELECTOR).send(sel);
 
       expected.forEach((e, i) =>
-        expect(receivers.inputBus[i].lastOutput).toBe(e)
+        expect(receivers.pins[i].lastOutput).toBe(e)
       );
     });
   });

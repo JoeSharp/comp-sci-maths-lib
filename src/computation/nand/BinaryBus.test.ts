@@ -15,15 +15,15 @@ describe("Bus Fork", () => {
 
     chip.send(word1);
     receiverList.forEach((rs: BinaryBus) =>
-      rs.inputBus.forEach((r, i) => expect(r.lastOutput).toBe(word1[i]))
+      rs.pins.forEach((r, i) => expect(r.lastOutput).toBe(word1[i]))
     );
     chip.send(word2);
     receiverList.forEach((rs) =>
-      rs.inputBus.forEach((r, i) => expect(r.lastOutput).toBe(word2[i]))
+      rs.pins.forEach((r, i) => expect(r.lastOutput).toBe(word2[i]))
     );
     chip.send(word3);
     receiverList.forEach((rs) =>
-      rs.inputBus.forEach((r, i) => expect(r.lastOutput).toBe(word3[i]))
+      rs.pins.forEach((r, i) => expect(r.lastOutput).toBe(word3[i]))
     );
   });
 });

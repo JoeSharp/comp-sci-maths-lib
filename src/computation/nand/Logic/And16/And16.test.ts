@@ -58,7 +58,7 @@ describe("AND 16", () => {
       and16.getBus(PIN_B).send(b);
 
       expected.forEach((e, i) =>
-        expect(receivers.inputBus[i].lastOutput).toBe(e)
+        expect(receivers.pins[i].lastOutput).toBe(e)
       );
     });
   });

@@ -71,7 +71,7 @@ describe("Add 16", () => {
     test(testName, () => {
       add16.getBus(PIN_A).send(a);
       add16.getBus(PIN_B).send(b);
-      receivers.inputBus.forEach((r, i) =>
+      receivers.pins.forEach((r, i) =>
         expect(r.lastOutput).toBe(expected[i])
       );
     });

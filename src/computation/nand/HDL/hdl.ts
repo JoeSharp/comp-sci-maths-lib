@@ -43,7 +43,7 @@ export const parseIOLine = (input: string): HdlIOLine => {
 
   const direction = ioLineMatch.groups.direction as DIRECTION;
   const allInputs = ioLineMatch.groups.pins.split(",").map((l) => l.trim());
-  const pins: HdlPinOrBus[] = allInputs
+  const pinsAndBuses: HdlPinOrBus[] = allInputs
     .map((m) => {
       const busMatch = m.match(BUS_NAME_WIDTH_REGEX);
       if (!!busMatch) {
@@ -61,7 +61,7 @@ export const parseIOLine = (input: string): HdlIOLine => {
 
   return {
     direction,
-    pins,
+    pinsAndBuses,
   };
 };
 
@@ -99,7 +99,7 @@ export const parseCodeLine = (input: string): HdlCodeLine => {
         }
       }
 
-      return { inputName, outputName: outputSpec }
+      return { inputName, outputName: outputSpec, outputFrom: 0 }
     });
 
   return {

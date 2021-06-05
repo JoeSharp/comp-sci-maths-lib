@@ -13,10 +13,10 @@ class Chip {
     [name: string]: BinaryBus;
   };
 
-  constructor(name: string, inputs: HdlPinOrBus[], outputs: HdlPinOrBus[]) {
+  constructor(name: string, inputs: string[], outputs: string[]) {
     this.name = name;
-    this.inputs = inputs.map(i => i.name);
-    this.outputs = outputs.map(o => o.name);
+    this.inputs = inputs;
+    this.outputs = outputs;
     this.pins = {};
     this.buses = {};
   }
@@ -51,10 +51,16 @@ class Chip {
     return this.buses[name];
   }
 
-  getPin(name: string): BinaryPin {
-    if (!(name in this.pins))
+  getPin(name: string, index: number = 0): BinaryPin {
+    if (!(name in this.pins) && !(name in this.buses))
       throw new Error(`Pin ${name} doesn't exist on ${this.name}`);
-    return this.pins[name];
+
+    if (name in this.pins) {
+      return this.pins[name];
+    }
+    if (name in this.buses) {
+      return this.buses[name].getPin(index);
+    }
   }
 }
 

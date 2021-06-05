@@ -1,7 +1,7 @@
 export interface HdlParameter {
     inputName: string;
     outputName: string;
-    outputFrom?: number;
+    outputFrom: number;
     outputTo?: number;
 }
 
@@ -14,7 +14,7 @@ export interface HdlPinOrBus {
 
 export interface HdlIOLine {
     direction: DIRECTION,
-    pins: HdlPinOrBus[];
+    pinsAndBuses: HdlPinOrBus[];
 }
 
 export interface HdlCodeLine {

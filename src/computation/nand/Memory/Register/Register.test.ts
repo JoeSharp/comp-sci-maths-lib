@@ -23,14 +23,14 @@ describe("Register", () => {
       if (lastWord.length === word.length) {
         register.getPin(PIN_LOAD).send(false);
         clock.ticktock();
-        receivers.inputBus.forEach((r, i) =>
+        receivers.pins.forEach((r, i) =>
           expect(r.lastOutput).toBe(lastWord[i])
         );
       }
 
       register.getPin(PIN_LOAD).send(true);
       clock.ticktock();
-      receivers.inputBus.forEach((r, i) => expect(r.lastOutput).toBe(word[i]));
+      receivers.pins.forEach((r, i) => expect(r.lastOutput).toBe(word[i]));
       lastWord = word;
     }
   });

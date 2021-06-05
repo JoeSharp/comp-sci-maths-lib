@@ -104,7 +104,7 @@ describe("Mux 4 way 16", () => {
       mux.getBus(PIN_D).send(binaryToBoolArray(d));
       mux.getBus(PIN_SELECTOR).send(binaryToBoolArray(sel));
       const expectedArr = binaryToBoolArray(expected);
-      receivers.inputBus.forEach((r, i) =>
+      receivers.pins.forEach((r, i) =>
         expect(r.lastOutput).toBe(expectedArr[i])
       );
     });

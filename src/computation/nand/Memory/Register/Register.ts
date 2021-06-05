@@ -46,7 +46,7 @@ class Register extends Chip {
       .fill(null)
       .map(() => new Bit(clock));
 
-    this.inputBus = new BinaryBus();
+    this.pins = new BinaryBus();
     this.outputBus = new BinaryBus();
 
     // External Wiring

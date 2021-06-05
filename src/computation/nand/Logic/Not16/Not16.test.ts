@@ -46,7 +46,7 @@ describe("NOT 16", () => {
       not16.getBus(PIN_INPUT).send(input);
 
       expected.forEach((e, i) =>
-        expect(receivers.inputBus[i].lastOutput).toBe(e)
+        expect(receivers.pins[i].lastOutput).toBe(e)
       );
     });
   });
