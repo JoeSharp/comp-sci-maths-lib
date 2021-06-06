@@ -1,5 +1,4 @@
-import { Optional } from "../../../../types";
-import { BinaryPin } from "../../BinaryPin";
+import BinaryPin from "../../BinaryPin";
 import Chip from "../../Chip";
 
 import { PIN_A, PIN_B, PIN_OUTPUT } from "../../types";

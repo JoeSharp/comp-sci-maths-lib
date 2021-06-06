@@ -1,4 +1,4 @@
-import { BinaryPin } from "./BinaryPin";
+import BinaryPin from "./BinaryPin";
 import { WORD_LENGTH } from "./types";
 
 export const createPinArray = (width: number = WORD_LENGTH): BinaryPin[] =>

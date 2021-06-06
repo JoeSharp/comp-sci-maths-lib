@@ -1,5 +1,5 @@
 import Not from ".";
-import { BinaryPin } from "../../BinaryPin";
+import BinaryPin from "../../BinaryPin";
 import loadTestChip from "../../HDL/loadTestChip";
 import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 

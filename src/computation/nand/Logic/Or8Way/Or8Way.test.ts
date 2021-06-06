@@ -8,7 +8,7 @@ import {
   binaryToBoolArray,
   booleanToBinArray,
 } from "../../../../dataRepresentation/numberBases/simpleBinary";
-import { BinaryPin } from "../../BinaryPin";
+import BinaryPin from "../../BinaryPin";
 import loadTestChip from "../../HDL/loadTestChip";
 import { PIN_INPUT, PIN_OUTPUT } from "../../types";
 import Or8Way from "./Or8Way";

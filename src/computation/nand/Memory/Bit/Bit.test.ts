@@ -2,34 +2,59 @@ import BinaryPin from "../../BinaryPin";
 import Clock from "../../Clock";
 import { PIN_INPUT, PIN_LOAD, PIN_OUTPUT } from "../../types";
 import Bit from "./Bit";
+import SimpleCounter from '../../SimpleCounter';
+import loadTestChip from "../../HDL/loadTestChip";
 
 describe("D-Type Flip Flop", () => {
-  test("1-bit Register", () => {
-    let callCount = 0;
-    const receiver = new BinaryPin().withNewValueObserver(() => callCount++);
-    const clock = new Clock();
-    const register = new Bit(clock);
-    register.getPin(PIN_OUTPUT).connectRecipient(receiver);
+    const nandCounter = new SimpleCounter();
+    const nandReceiver = new BinaryPin().withNewValueObserver(() => nandCounter.increment());
+    const nandClock = new Clock();
+    const nandChip = new Bit(nandClock);
+    nandChip.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
-    // expect(receiver.lastOutput).toBeUndefined(); // first call
-    register.getPin(PIN_INPUT).send(false);
-    register.getPin(PIN_INPUT).send(true);
-    register.getPin(PIN_INPUT).send(false);
-    register.getPin(PIN_LOAD).send(true);
-    expect(callCount).toBe(0);
-    clock.ticktock();
-    expect(callCount).toBe(1);
-    expect(receiver.lastOutput).toBe(false); // first call
-    register.getPin(PIN_INPUT).send(true);
-    clock.ticktock();
-    expect(receiver.lastOutput).toBe(true); // second time
-    register.getPin(PIN_LOAD).send(false);
-    register.getPin(PIN_INPUT).send(false);
-    expect(callCount).toBe(2); // from before
-    clock.ticktock();
-    expect(receiver.lastOutput).toBe(true); // third call
-    register.getPin(PIN_LOAD).send(true);
-    clock.ticktock();
-    expect(receiver.lastOutput).toBe(false); // fourth call
+    const hdlCounter = new SimpleCounter();
+    const hdlReceiver = new BinaryPin().withNewValueObserver(() => hdlCounter.increment());
+    const hdlClock = new Clock();
+    const hdlChip = loadTestChip('03/a/Bit.hdl');
+    hdlChip.getPin(PIN_OUTPUT).connectRecipient(hdlReceiver);
+
+    [{
+      testName: 'NAND',
+      chip: nandChip,
+      receiver: nandReceiver,
+      clock: nandClock,
+      counter: nandCounter,
+    }, 
+    // {
+    //   testName: 'HDL',
+    //   chip: hdlChip,
+    //   receiver: hdlReceiver,
+    //   clock: hdlClock,
+    //   counter: hdlCounter
+    // }
+  ].forEach(({ testName, chip, receiver, clock, counter }) => {
+      test(`1-bit Register ${testName}`, () => {
+      // expect(receiver.lastOutput).toBeUndefined(); // first call
+      chip.getPin(PIN_INPUT).send(false);
+      chip.getPin(PIN_INPUT).send(true);
+      chip.getPin(PIN_INPUT).send(false);
+      chip.getPin(PIN_LOAD).send(true);
+      expect(counter.getCount()).toBe(0);
+      clock.ticktock();
+      expect(counter.getCount()).toBe(1);
+      expect(receiver.lastOutput).toBe(false); // first call
+      chip.getPin(PIN_INPUT).send(true);
+      clock.ticktock();
+      expect(receiver.lastOutput).toBe(true); // second time
+      chip.getPin(PIN_LOAD).send(false);
+      chip.getPin(PIN_INPUT).send(false);
+      expect(counter.getCount()).toBe(2); // from before
+      clock.ticktock();
+      expect(receiver.lastOutput).toBe(true); // third call
+      chip.getPin(PIN_LOAD).send(true);
+      clock.ticktock();
+      expect(receiver.lastOutput).toBe(false); // fourth call
+
+    })
   });
 });
