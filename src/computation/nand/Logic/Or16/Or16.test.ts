@@ -5,6 +5,7 @@ import {
 } from "../../../../dataRepresentation/numberBases/simpleBinary";
 import { PIN_OUTPUT, PIN_A, PIN_B } from "../../types";
 import BinaryBus from "../../BinaryBus";
+import loadTestChip from "../../HDL/loadTestChip";
 
 interface TestCase {
   a: boolean[];
@@ -47,19 +48,28 @@ const TEST_CASES: TestCase[] = [
 
 describe("OR 16", () => {
   const or16 = new Or16();
-  const receivers = new BinaryBus();
-  or16.getBus(PIN_OUTPUT).connect(receivers);
+  const nandReceivers = new BinaryBus();
+  or16.getBus(PIN_OUTPUT).connect(nandReceivers);
+
+  const hdlChip = loadTestChip('01/Or16.hdl');
+  const hdlChipReceiver = new BinaryBus();
+  hdlChip.getBus(PIN_OUTPUT).connect(hdlChipReceiver);
 
   TEST_CASES.forEach(({ a, b, expected }) => {
-    test(`${booleanToBinArray(a)} AND ${booleanToBinArray(
-      b
-    )} = ${booleanToBinArray(expected)}`, () => {
-      or16.getBus(PIN_A).send(a);
-      or16.getBus(PIN_B).send(b);
+    [
+      { testName: 'nand', chip: or16, receivers: nandReceivers },
+      { testName: 'hdl', chip: hdlChip, receivers: hdlChipReceiver }
+    ].forEach(({ testName, chip, receivers }) => {
+      test(`${booleanToBinArray(a)} AND ${booleanToBinArray(
+        b
+      )} = ${booleanToBinArray(expected)} ${testName}`, () => {
+        chip.getBus(PIN_A).send(a);
+        chip.getBus(PIN_B).send(b);
 
-      expected.forEach((e, i) =>
-        expect(receivers.pins[i].lastOutput).toBe(e)
-      );
-    });
+        expected.forEach((e, i) =>
+          expect(receivers.pins[i].lastOutput).toBe(e)
+        );
+      });
+    })
   });
 });

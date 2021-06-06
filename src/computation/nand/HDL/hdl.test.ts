@@ -72,6 +72,29 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
         expect(outNotA.outputName).toBe('notA');
     });
 
+    test('Code Line (or 8 way)', () => {
+        
+        const { chipName, parameters } = parseCodeLine('Or(a=in[0], b=in[1], out=or1);');
+        expect(chipName).toBe('Or');
+        expect(parameters).toHaveLength(3);
+
+        const [inA, inB, out] = parameters;
+        expect(inA.inputName).toBe('a');
+        expect(inA.outputName).toBe('in');
+        expect(inA.outputFrom).toBe(0);
+        expect(inA.outputTo).toBe(0);
+
+        expect(inB.inputName).toBe('b');
+        expect(inB.outputName).toBe('in');
+        expect(inB.outputFrom).toBe(1);
+        expect(inB.outputTo).toBe(1);
+
+        expect(out.inputName).toBe('out');
+        expect(out.outputName).toBe('or1');
+        expect(out.outputFrom).toBe(0);
+        expect(out.outputTo).toBe(0);
+    })
+
     test("Code Line (spaces)", () => {
         const { chipName, parameters } = parseCodeLine('Not (in=a, out=notA);');
         expect(chipName).toBe('Not');

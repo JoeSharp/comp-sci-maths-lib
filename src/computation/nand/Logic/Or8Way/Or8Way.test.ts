@@ -47,14 +47,14 @@ describe("Or 8 Way", () => {
   const nandReceiver = new BinaryPin();
   or.getPin(PIN_OUTPUT).connectRecipient(nandReceiver);
 
-  // const hdlChip = loadTestChip('01/Or8Way.hdl');
-  // const hdlChipReceiver = new BinaryPin();
-  // hdlChip.getPin(PIN_OUTPUT).connect(hdlChipReceiver);
+  const hdlChip = loadTestChip('01/Or8Way.hdl');
+  const hdlChipReceiver = new BinaryPin();
+  hdlChip.getPin(PIN_OUTPUT).connectRecipient(hdlChipReceiver);
 
   TEST_CASES.forEach(({ input, expected }) => {
     [
       { testName: 'nand', chip: or, receiver: nandReceiver },
-      // { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
+      { testName: 'hdl', chip: hdlChip, receiver: hdlChipReceiver }
     ].forEach(({ testName, chip, receiver }) => {
       test(`${booleanToBinArray(input)} = ${expected} ${testName}`, () => {
         chip.getBus(PIN_INPUT).send(input);
