@@ -66,8 +66,8 @@ export const parseIOLine = (input: string): HdlIOLine => {
 };
 
 const codeLineRegex = /(?<chipName>[A-Za-z0-9]+)\s?\((?<parameters>(?:[a-zA-Z]+=[a-zA-Z]+(?:\[[0-9]+(?:..[0-9]+)?\])?(?:,\s)?)+)\);/;
-const BUS_SINGLE_INDEX_REGEX = /(?<name>[a-zA-Z]+)(?:\[(?<index>[0-9])+)\]/
-const BUS_RANGE_REGEX = /(?<name>[a-zA-Z]+)(?:\[(?<from>[0-9])+..(?<to>[0-9]+)\])/
+const BUS_SINGLE_INDEX_REGEX = /(?<name>[a-zA-Z]+)(?:\[(?<index>[0-9]+)+)\]/
+const BUS_RANGE_REGEX = /(?<name>[a-zA-Z]+)(?:\[(?<from>[0-9]+)+..(?<to>[0-9]+)\])/
 export const parseCodeLine = (input: string): HdlCodeLine => {
   const codeLineMatch = input.trim().match(codeLineRegex);
 

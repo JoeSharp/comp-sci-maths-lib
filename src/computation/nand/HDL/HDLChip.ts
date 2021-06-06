@@ -3,34 +3,10 @@ import Chip from "../Chip";
 import { HdlChip } from "./types";
 import chipFactory from "../chipFactory";
 import BinaryPin from "../BinaryPin";
+import BinaryBus from "../BinaryBus";
 
 class HDLChip extends Chip {
     subChips: Chip[];
-
-    // CHIP Or {
-    //     IN a, b;
-    //     OUT out;
-
-    //     PARTS:
-    //     // Put your code here:
-    //     Not(in=a, out=notA);
-    //     Not(in=b, out=notB);
-    //     Nand(a=notA, b=notB, out=out);
-    // }
-
-    // this.nandNotA = new Not();
-    // this.nandNotB = new Not();
-
-    // this.nandNotANotB = new Nand();
-
-    // // Internal Wiring
-    // this.nandNotA.getPin(PIN_OUTPUT).connectRecipient(this.nandNotANotB.getPin(PIN_A));
-    // this.nandNotB.getPin(PIN_OUTPUT).connectRecipient(this.nandNotANotB.getPin(PIN_B));
-
-    // // External Wiring
-    // this.createPin(PIN_A, this.nandNotA.getPin(PIN_INPUT));
-    // this.createPin(PIN_B, this.nandNotB.getPin(PIN_INPUT));
-    // this.createPin(PIN_OUTPUT, this.nandNotANotB.getPin(PIN_OUTPUT));
 
     constructor(hdl: HdlChip, clock: Clock) {
         super(hdl.name,
@@ -78,7 +54,21 @@ class HDLChip extends Chip {
                 });
                 this.createPin(name, ...receivers);
             } else {
-
+                let busReceivers: BinaryPin[] = [];
+                // For each pin...
+                for (let p=0; p < width; p++) {
+                    this.subChips.forEach((chip, i) => {
+                        const {parameters} = hdl.codeLines[i];
+                        parameters.forEach(({inputName, outputName, outputFrom, outputTo}) => {
+                            if (outputName === name) {
+                                if (p >= outputFrom && p <= outputTo) {
+                                    busReceivers[p] = chip.getPin(inputName);
+                                }
+                            }
+                        })
+                    });
+                }
+                this.createBus(name, new BinaryBus(busReceivers));
             }
         });
     }

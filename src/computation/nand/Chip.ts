@@ -50,8 +50,16 @@ class Chip {
     return this.buses[name];
   }
 
-  getPin(name: string): BinaryPin {
-    return this.pins[name];
+  getPin(name: string, index: number = 0): BinaryPin {
+    if (name in this.pins && index === 0) {
+      return this.pins[name];
+    }
+
+    if (name in this.buses) {
+      return this.buses[name].getPin(index);
+    }
+
+    throw new Error(`Could not find pin called ${name} at ${index} on ${this.name}`)
   }
 }
 

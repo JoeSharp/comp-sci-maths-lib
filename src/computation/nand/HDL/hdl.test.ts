@@ -86,7 +86,7 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
     });
 
     test('Code Line (buses)', () => {
-        const {chipName, parameters} = parseCodeLine('And(a=aa[4], b=bb[5], out=outout[6]);');
+        const {chipName, parameters} = parseCodeLine('And(a=aa[4], b=bb[15], out=outout[6]);');
         expect(chipName).toBe('And');
         expect(parameters).toHaveLength(3);
         const [pinA, pinB, pinOut] = parameters;
@@ -96,7 +96,7 @@ describe('Hardware Description Lanuage (Hack HDL)', () => {
 
         expect(pinB.inputName).toBe('b');
         expect(pinB.outputName).toBe('bb');
-        expect(pinB.outputFrom).toBe(5);
+        expect(pinB.outputFrom).toBe(15);
 
         expect(pinOut.inputName).toBe('out');
         expect(pinOut.outputName).toBe('outout');
